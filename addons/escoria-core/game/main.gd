@@ -1,43 +1,57 @@
+# Escoria main room handling and scene switcher
 extends Node
 
 # This script is basically the scene-switcher.
 
 # Global id of the last scene the player was before current scene
-var last_scene_global_id
-# Current scene room being displayed
-var current_scene
+var last_scene_global_id: String
 
+# Current scene room being displayed
+var current_scene: Node
+
+# The Escoria context currently in wait state
 var wait_level
 
+# FIXME Document this variable
 var screen_ofs = Vector2(0, 0)
 
-# ESCBackgroundMusic node
+# Reference to the ESCBackgroundMusic node
 onready var bg_music = $bg_music
+
+# Reference to the scene transition node
 onready var scene_transition = $layers/curtain/scene_transition
 
 
-# Set the new current scene
+# Connect the wait timer event
+func _ready() -> void:
+	$layers/wait_timer.connect("timeout", self, "_on_wait_finished")
+
+
+# Set current scene
 #
 # #### Parameters
 #
-# - p_scene: Current scene to set
-func set_scene(p_scene: Node):
+# - p_scene: Scene to set
+# - run_events: Play the events in the setup node
+# - *Returns*: A dictionary of ESC events
+func set_scene(p_scene: Node, run_events=true) -> Dictionary:
 	if !p_scene:
 		escoria.logger.report_errors("main", ["Trying to set empty scene"])
 	
 	if current_scene != null:
 		clear_scene()
-		
+
 	add_child(p_scene) 
 	move_child(p_scene, 0)
-	
+
 	current_scene = p_scene
 	check_game_scene_methods()
 
 	set_camera_limits()
 
 
-func clear_scene():
+# Cleanup the current scene
+func clear_scene() -> void:
 	if current_scene == null:
 		return
 
@@ -48,14 +62,32 @@ func clear_scene():
 	current_scene.free()
 	current_scene = null
 
-func wait(params : Array, level):
+
+# Carry out the ESC `wait` command
+#
+# #### Parameters
+#
+# * params: An array with the wait arguments. The first argument is the number
+#   of seconds to wait
+# * level: The scene that is waiting
+func wait(params : Array, level: Node) -> void:
 	wait_level = level
 	$layers/wait_timer.set_wait_time(float(params[0]))
 	$layers/wait_timer.set_one_shot(true)
 	$layers/wait_timer.start()
 
 
-func set_camera_limits(camera_limit_id : int = 0):
+# Triggered, when the wait has finished
+func _on_wait_finished() -> void:
+	escoria.esc_level_runner.finished(wait_level)
+
+
+# Set the camera limits
+#
+# #### Parameters
+#
+# * camera_limits_id: The id of the room's camera limits to set
+func set_camera_limits(camera_limit_id : int = 0) -> void:
 	var limits = {}
 	var scene_camera_limits = current_scene.camera_limits[camera_limit_id]
 	if scene_camera_limits.size.x == 0 and scene_camera_limits.size.y == 0:
@@ -93,10 +125,9 @@ func set_camera_limits(camera_limit_id : int = 0):
 	current_scene.game.get_node("camera").set_offset(screen_ofs * 2)
 
 
-"""
-The game.tscn scene's root node script MUST implement the following methods.
-If they do not exist, stop immediately. Implement them, even if empty
-"""
+# Sanity check that the game.tscn scene's root node script MUST
+# implement the following methods. If they do not exist, stop immediately.
+# Implement them, even if empty
 func check_game_scene_methods():
 	assert(current_scene.game.has_method("left_click_on_bg"))
 	assert(current_scene.game.has_method("right_click_on_bg"))
