@@ -21,24 +21,24 @@ to the backers of the Dog Mendonça Kickstarter campaign.
 
 The rewrite is currently ongoing and certain features of Escoria are missing or require optimization:
 
-* Implement on sound volume management
+* [ ] Implement on sound volume management
 
-* Implement load/save games
+* [ ] Implement load/save games
 
-* Implement switching player characters
+* [ ] Implement switching player characters
 
-* allow switching UI without restarting the game
+* [ ] allow switching UI without restarting the game
 
-* Analyze, wether this Is still required?
+* [ ] Analyze, wether this Is still required?
 
   ```python
   	scenes_cache_list.push_back(ProjectSettings.get_setting("escoria/main/curtain"))
   	scenes_cache_list.push_back(ProjectSettings.get_setting("escoria/main/hud"))
   ```
 
-* Analyze, what this setting does: `escoria/internals/save_data`
+* [ ] Analyze, what this setting does: `escoria/internals/save_data`
 
-* Implement a speech volume
+* [ ] Implement a speech volume
 
 ## Documentation
 
