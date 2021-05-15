@@ -1,8 +1,13 @@
+# The escorie main script
 extends Node
 
 # Scripts
 onready var main = $main
+
+# The escoria inputs manager
 onready var inputs_manager = $inputs_manager
+
+# Several utilities
 onready var utils = load("res://addons/escoria-core/game/core-scripts/utils/utils.gd").new()
 onready var save_data = load("res://addons/escoria-core/game/core-scripts/save_data/save_data.gd").new()
 
@@ -32,24 +37,10 @@ var command_registry: ESCCommandRegistry
 
 var resource_cache: ResourceCache
 
-# INSTANCES
-var main_menu_instance
-
-## Dialog player instantiator. This instance is called directly for dialogs.
-var dialog_player 
-## Inventory scene
-var inventory
-
-# Game variables
-var room_terrain
-
-enum GAME_STATE {
-	DEFAULT,
-	DIALOG,
-	WAIT
-}
+# The current state of the game
 onready var current_state = GAME_STATE.DEFAULT
 
+# The game resolution
 onready var game_size = get_viewport().size
 
 # These are settings that the player can affect and save/load later
@@ -64,7 +55,7 @@ var settings_default : Dictionary = {
 	"speech_enabled": ProjectSettings.get_setting("escoria/sound/speech_enabled"),
 	# Master volume (max is 1.0)
 	"master_volume": ProjectSettings.get_setting("escoria/sound/master_volume"),
-	# Music volume (max is 1.0)
+	# Music volume (max is 1.0)
 	"music_volume": ProjectSettings.get_setting("escoria/sound/music_volume"),
 	# Sound effects volume (max is 1.0)
 	"sfx_volume": ProjectSettings.get_setting("escoria/sound/sfx_volume"),
@@ -101,8 +92,6 @@ func _ready():
 	escoria._on_settings_loaded(escoria.settings)
 
 
-##################################################################################
-
 # Called by Main menu "start new game"
 func new_game():
 	var script = self.esc_compiler.load_esc_file(
@@ -112,19 +101,69 @@ func new_game():
 	var rc = yield(event_manager, "event_finished")
 	while rc[1] != "start":
 		rc = yield(event_manager, "event_finished")
-	
+
 	if rc[0] != ESCExecution.RC_OK:
 		self.logger.report_errors(
 			"Start event of the start script returned unsuccessful: %d" % rc[0],
 			[]
 		)
 		return
-	
 
-"""
-Generic action function that runs an action on an element of the room (eg player walk)
-action: type of the action ()
-"""
+
+# Register an object to the matching manager. (A dialog player as the
+# main dialog player, an item in the ESC runner, etc.)
+#
+# #### Parameters
+#
+# - object: The object to register
+func register_object(object : Object):
+	var object_id
+	if object.get("global_id"):
+		object_id = object.global_id
+	else:
+		object_id = object.name
+
+	if object is ESCDialogsPlayer:
+		dialog_player = object
+
+	if object is ESCPlayer:
+		$esc_runner.register_object(object_id, object, true)
+
+	if object is Position2D:
+		$esc_runner.register_object(object_id, object, true)
+
+	if object is ESCItem:
+		$esc_runner.register_object(object_id, object, true)
+
+	if object is ESCTerrain:
+		room_terrain = object
+
+#	if object is ESCBackground:
+#		$esc_runner.register_object(object_id, object, true)
+
+	if object is ESCCamera:
+		$esc_runner.register_object(object_id, object, true)
+
+	if object is ESCInventory:
+		inventory = object
+
+	if object is ESCTooltip:
+		if main.current_scene:
+			main.current_scene.game.tooltip_node = object
+
+	if object is ESCBackgroundMusic:
+		$esc_runner.register_object(object_id, object, true)
+
+	if object is ESCBackgroundSound:
+		$esc_runner.register_object(object_id, object, true)
+
+
+# Run a generic action
+#
+# #### Parameters
+#
+# - action: type of the action to run
+# - params: Parameters for the action
 func do(action : String, params : Array = []) -> void:
 	if current_state == GAME_STATE.DEFAULT:
 		match action:
@@ -134,7 +173,7 @@ func do(action : String, params : Array = []) -> void:
 				# Check moving object.
 				if not self.object_manager.has(params[0]):
 					self.logger.report_errors(
-						"escoria.gd:do()", 
+						"escoria.gd:do()",
 						[
 							"Walk action requested on inexisting object: %s "\
 									 % params[0]
@@ -158,7 +197,7 @@ func do(action : String, params : Array = []) -> void:
 				elif params[1] is String:
 					if not self.object_manager.has(params[1]):
 						self.logger.report_errors(
-							"escoria.gd:do()", 
+							"escoria.gd:do()",
 							[
 								"Walk action requested TOWARDS " +\
 								"inexisting object: %s" % params[1]
@@ -211,26 +250,26 @@ func do(action : String, params : Array = []) -> void:
 				)
 			
 			_:
-				self.logger.report_warnings("escoria.gd:do()", 
+				self.logger.report_warnings("escoria.gd:do()",
 					["Action received:", action, "with params ", params])
 	elif current_state == GAME_STATE.WAIT:
 		pass
-		
 
 
-# PRIVATE
-func ev_left_click_on_item(obj, event, default_action = false):
-	"""
-	Event occurring when an object/item is left clicked
-	obj : object that was left clicked
-	event :
-	"""
+# Event handler when an object/item was clicked
+#
+# #### Parameters
+#
+# - ob: Object that was left clicked
+# - event: Input event that was received
+# - default_action: Run the inventory default action
+func _ev_left_click_on_item(obj, event, default_action = false):
 	if obj is String:
 		obj = object_manager.get_object(obj)
 	self.logger.info(obj.global_id + " left-clicked with event ", [event])
 	
 	var need_combine = false
-	# Check if current_action and current_tool are already set
+	# Check if current_action and current_tool are already set
 	if self.action_manager.current_action:
 		if self.action_manager.current_tool:
 			if self.action_manager.current_action in self.action_manager\
@@ -318,14 +357,14 @@ func ev_left_click_on_item(obj, event, default_action = false):
 				# If apply_interact, perform combine between items
 				if need_combine:
 					self.action_manager.activate(
-						self.action_manager.current_action, 
-						self.action_manager.current_tool, 
+						self.action_manager.current_action,
+						self.action_manager.current_tool,
 						obj
 					)
 						
 				else:
 					self.action_manager.activate(
-						self.action_manager.current_action, 
+						self.action_manager.current_action,
 						obj
 					)
 		
