@@ -17,10 +17,26 @@ This framework was initially developed for the adventure game
 and later streamlined for broader usages and open sourced as promised
 to the backers of the Dog Mendonça Kickstarter campaign.
 
+## Roadmap
+
+The rewrite is currently ongoing and certain features of Escoria are missing or require optimization:
+
+* Analyze, wether this Is still required?
+
+  ```python
+  	scenes_cache_list.push_back(ProjectSettings.get_setting("escoria/main/curtain"))
+  	scenes_cache_list.push_back(ProjectSettings.get_setting("escoria/main/hud"))
+  ```
+
+* Analyze, what this setting does: `escoria/internals/save_data`
+
+* Implement a speech volume
+
 ## Documentation
 
 * Getting started
 * [Architecture](docs/architecture.md)
+* [Configuration](docs/configuration.md)
 
 ## Licensing
 
