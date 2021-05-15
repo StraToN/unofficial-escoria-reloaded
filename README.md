@@ -46,6 +46,8 @@ The rewrite is currently ongoing and certain features of Escoria are missing or 
 
 * [ ] The `_hover_stack_pop` method in `main_scene` doesn't pop (=remove the last element from the stack) but rather erases the given item from the stack. This may either be a hidden bug or a naming issue
 
+* [ ] The variable `screen_ofs` of main.gd is always set to Vector2(0, 0). Either it's unused or its function has yet to be documented
+
 ### Future features
 
 * [ ] Integrated ESC editor
