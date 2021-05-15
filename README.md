@@ -21,13 +21,15 @@ to the backers of the Dog Mendonça Kickstarter campaign.
 
 The rewrite is currently ongoing and certain features of Escoria are missing or require optimization:
 
+### Basic features
+
 * [ ] Implement on sound volume management
-
+* [ ] Implement a speech volume
 * [ ] Implement load/save games
-
 * [ ] Implement switching player characters
-
 * [ ] allow switching UI without restarting the game
+
+### Optimizations
 
 * [ ] Analyze, wether this Is still required?
 
@@ -40,12 +42,14 @@ The rewrite is currently ongoing and certain features of Escoria are missing or 
 
 * [ ] Analyze, wether the custom type `ESCItemsInventory`is still required. It currently seems unused
 
-* [ ] Implement a speech volume
+* [ ] Add the currently unfocused inventory item to the `inventory_item_unfocused` signal of `ESCInventoryItem`
+
+* [ ] The `_hover_stack_pop` method in `main_scene` doesn't pop (=remove the last element from the stack) but rather erases the given item from the stack. This may either be a hidden bug or a naming issue
+
+### Future features
 
 * [ ] Integrated ESC editor
-
 * [ ] Graphical visualizer of room links
-
 * [ ] Optimize character angles and animation helper
 
 ## Documentation
