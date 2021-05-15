@@ -38,7 +38,15 @@ The rewrite is currently ongoing and certain features of Escoria are missing or 
 
 * [ ] Analyze, what this setting does: `escoria/internals/save_data`
 
+* [ ] Analyze, wether the custom type `ESCItemsInventory`is still required. It currently seems unused
+
 * [ ] Implement a speech volume
+
+* [ ] Integrated ESC editor
+
+* [ ] Graphical visualizer of room links
+
+* [ ] Optimize character angles and animation helper
 
 ## Documentation
 
