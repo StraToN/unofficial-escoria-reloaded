@@ -17,3 +17,7 @@ The Escoria autoload scene holds various nodes that take vital parts of the engi
 ### Main
 
 `escoria.main` is the main scene manager used in Escoria that allows for switching scenes with transitions
+
+## The Godot main scene of Escoria
+
+The scene, that Godot loads when starting a game (the [*main scene*](https://docs.godotengine.org/en/stable/getting_started/step_by_step/exporting.html#setting-a-main-scene)) is set to `addons/escoria-core/game/main_scene.tscn` and basically instantiates the configured main menu scene and starts it.
