@@ -48,6 +48,16 @@ The rewrite is currently ongoing and certain features of Escoria are missing or 
 
 * [ ] The variable `screen_ofs` of main.gd is always set to Vector2(0, 0). Either it's unused or its function has yet to be documented
 
+* [ ] `res://addons/escoria-core/game/core-scripts/behaviors/interactive.gd` seems unused
+
+* [ ] At some places (e.g. with the Movable class), nodes are instantiated by creating a node and setting the node's script to the respective class. This can be optimized by just using e.g. var movable_node = Movable.new()
+
+* [ ] Instead of using a dictionary for walk_context, use a real class
+
+* [ ] Should we keep defining the animations in a script instead of a real object? Providing a script as a parameter to a function seems weird
+
+* [ ] Fix all TODO and FIXME places in the code
+
 ### Future features
 
 * [ ] Integrated ESC editor

@@ -8,11 +8,15 @@ Escoria is based on an autoload scene available as [`escoria`](api/escoria.gd.md
 
 In addition to this, various classes are defined in the respective class files and build up the various resources used in Escoria.
 
-* `addons/escoria-core/game/inputs_manager`: The central component in Escoria to receive, handle and deliver input events
+* [Movable](api/Movable.md): A class that can be added to another node to handle movements on that node.
 
 ## Nodes of the Escoria autoload scene
 
 The Escoria autoload scene holds various nodes that take vital parts of the engine.
+
+### Inputs Manager
+
+The central component in Escoria to receive, handle and deliver input events.
 
 ### Main
 
