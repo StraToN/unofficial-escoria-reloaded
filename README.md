@@ -17,6 +17,13 @@ This framework was initially developed for the adventure game
 and later streamlined for broader usages and open sourced as promised
 to the backers of the Dog Mendonça Kickstarter campaign.
 
+## Documentation
+
+* Getting started
+* [Architecture](docs/architecture.md)
+* [Configuration](docs/configuration.md)
+* [ESC-Reference](api/esc.md)
+
 ## Roadmap
 
 The rewrite is currently ongoing and certain features of Escoria are missing or require optimization:
@@ -64,12 +71,6 @@ The rewrite is currently ongoing and certain features of Escoria are missing or 
 * [ ] Integrated ESC editor
 * [ ] Graphical visualizer of room links
 * [ ] Optimize character angles and animation helper
-
-## Documentation
-
-* Getting started
-* [Architecture](docs/architecture.md)
-* [Configuration](docs/configuration.md)
 
 ## Licensing
 

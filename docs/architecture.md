@@ -18,6 +18,10 @@ The Escoria autoload scene holds various nodes that take vital parts of the engi
 
 The central component in Escoria to receive, handle and deliver input events.
 
+### ESC Compiler
+
+The [ESC compiler](api/esc_compiler.gd.md) compiles files in the [ESC language](../esc.md) into a list of events that can be run by the ESC runner
+
 ### Main
 
 `escoria.main` is the main scene manager used in Escoria that allows for switching scenes with transitions
