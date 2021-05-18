@@ -22,7 +22,7 @@ to the backers of the Dog Mendonça Kickstarter campaign.
 * Getting started
 * [Architecture](docs/architecture.md)
 * [Configuration](docs/configuration.md)
-* [ESC-Reference](api/esc.md)
+* [ESC language documentation](api/esc.md)
 
 ## Roadmap
 
@@ -64,6 +64,8 @@ The rewrite is currently ongoing and certain features of Escoria are missing or 
 * [ ] Should we keep defining the animations in a script instead of a real object? Providing a script as a parameter to a function seems weird
 
 * [ ] Fix all TODO and FIXME places in the code
+
+* [ ] Reimplement all missing ESC commands
 
 ### Future features
 
