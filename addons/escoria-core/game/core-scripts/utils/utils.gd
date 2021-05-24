@@ -8,3 +8,10 @@ func _get_deg_from_rad(rad_angle : float):
 			deg = 0.0
 	return deg
 
+
+# Get the content of a reg exp group by name
+func _get_re_group(re_match: RegExMatch, group: String) -> String:
+	if group in re_match.names:
+		return re_match.strings[re_match.names[group]]
+	else:
+		return ""

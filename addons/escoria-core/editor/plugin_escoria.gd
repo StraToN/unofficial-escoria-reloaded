@@ -168,6 +168,17 @@ func set_escoria_debug_settings():
 	if !ProjectSettings.has_setting("escoria/debug/development_lang"):
 		ProjectSettings.set_setting("escoria/debug/development_lang", "en")
 		
+	# Assure log level preference
+	if not ProjectSettings.has_setting("escoria/debug/log_level"):
+		ProjectSettings.set_setting("escoria/debug/log_level", 0)
+		var property_info = {
+			"name": "escoria/debug/log_level",
+			"type": TYPE_INT,
+			"hint": PROPERTY_HINT_ENUM,
+			"hint_string": "ERROR,WARNING,INFO,DEBUG"
+		}
+		ProjectSettings.add_property_info(property_info)
+		
 
 func set_escoria_internal_settings():
 	if !ProjectSettings.has_setting("escoria/internals/save_data"):

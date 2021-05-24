@@ -154,24 +154,24 @@ func add_level(p_event, p_root : bool):
 	p_event: the ESCEvent
 	p_root: bool 
 	"""
-	levels_stack.push_back(instance_level(p_event, p_root))
+#	levels_stack.push_back(instance_level(p_event, p_root))
 	return esctypes.EVENT_LEVEL_STATE.CALL
 
-func instance_level(p_event : esctypes.ESCEvent, p_root : bool):
-	var new_level = {
-		"ip": 0,								# Current instruction id
-		"instructions": p_event.ev_level,		# List of instructions (commands)
-		"waiting": false,						# If true, wait for current command to be finished (esc_runner_level.finished())
-		"break_stop": p_root,					
-		"labels": {},
-		"flags": p_event.ev_flags
-	}
-
-	for i in range(p_event.ev_level.size()):
-		if p_event.ev_level[i].name == "label":
-			var lname = p_event.ev_level[i].params[0]
-			new_level.labels[lname] = i
-	return new_level
+#func instance_level(p_event : esctypes.ESCEvent, p_root : bool):
+#	var new_level = {
+#		"ip": 0,								# Current instruction id
+#		"instructions": p_event.ev_level,		# List of instructions (commands)
+#		"waiting": false,						# If true, wait for current command to be finished (esc_runner_level.finished())
+#		"break_stop": p_root,					
+#		"labels": {},
+#		"flags": p_event.ev_flags
+#	}
+#
+#	for i in range(p_event.ev_level.size()):
+#		if p_event.ev_level[i].name == "label":
+#			var lname = p_event.ev_level[i].params[0]
+#			new_level.labels[lname] = i
+#	return new_level
 
 func run():
 	if levels_stack.size() == 0:

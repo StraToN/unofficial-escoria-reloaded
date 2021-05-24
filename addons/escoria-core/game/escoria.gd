@@ -1,7 +1,7 @@
 extends Node
 
 # Scripts
-onready var esc_compiler = $esc_compiler
+onready var esc_compiler = ESCCompiler.new()
 onready var logger = load("res://addons/escoria-core/game/core-scripts/log/logging.gd").new()
 onready var main = $main
 onready var esc_runner = $esc_runner
