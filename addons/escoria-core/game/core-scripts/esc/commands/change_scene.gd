@@ -1,31 +1,115 @@
-# change_scene path run_events
+# `change_scene path run_events`
+#
 # Loads a new scene, specified by "path". The `run_events` variable is a 
 # boolean (default true) which you never want to set manually! It's there only 
 # to benefit save games, so they don't conflict with the scene's events.
+#
 # @ESC
 extends ESCBaseCommand
 class_name ChangeSceneCommand
 
 
+# An array of scenes that have already been loaded
+var readied_scenes: Array = []
+
+
 # Return the descriptor of the arguments of this command
 func configure() -> ESCCommandArgumentDescriptor:
-	return ESCCommandArgumentDescriptor.new(1, [TYPE_STRING, TYPE_BOOL])
+	return ESCCommandArgumentDescriptor.new(
+		1, 
+		[TYPE_STRING, TYPE_BOOL],
+		[null, true]
+	)
+	
+	
+# Validate wether the given arguments match the command descriptor
+func validate(arguments: Array) -> bool:
+	if not ResourceLoader.exists(arguments[0]):
+		escoria.logger.report_errors(
+			"change_scene: Invalid scene", 
+			["Scene %s was not found" % arguments[0]]
+		)
+		return false
+	if not ResourceLoader.exists(
+		ProjectSettings.get_setting("escoria/ui/game_scene")
+	):
+		escoria.logger.report_errors(
+			"change_scene: Game scene not found", 
+			[
+				"The path set in 'ui/game_scene' was not found: %s" % \
+						ProjectSettings.get_setting("escoria/ui/game_scene")
+			]
+		)
+		return false
+	return .validate(arguments)
 
 
 # Run the command
 func run(current_context: Dictionary, command_params: Array) -> int:
-	# Savegames must have events disabled, so saving the game adds a false to params
-	var run_events = true
-	if command_params.size() == 2:
-		run_events = bool(command_params[1])
+	escoria.logger.info("Changing scene to %s (run_events = %s)" % [
+		command_params[0], 
+		command_params[1]
+	])
 	
-	# looking for localized string format in scene. this should be somewhere else
-	var sep = command_params[0].find(":\"")
-	if sep >= 0:
-		var path = command_params[0].substr(sep + 2, command_params[0].length() - (sep + 2))
-		escoria.esc_runner.call_deferred("change_scene", [path], current_context, run_events)
+	escoria.main.scene_transition.fade_out()
+	yield(escoria.main.scene_transition, "transition_done")
+	
+	var res_room = escoria.resource_cache.get_resource(command_params[0])
+	var res_game = escoria.resource_cache.get_resource(
+		ProjectSettings.get_setting("escoria/ui/game_scene")
+	)
+		
+	# Load game scene
+	var game_scene = res_game.instance()
+	if !game_scene:
+		escoria.logger.report_errors(
+			"esc_runner.gd:change_scene()", 
+			[
+				"Failed loading scene %s" % \
+						ProjectSettings.get_setting("escoria/ui/game_scene")
+			]
+		)
+	
+	# Load room scene
+	var room_scene = res_room.instance()
+	if room_scene:
+		room_scene.add_child(game_scene)
+		room_scene.move_child(game_scene, 0)
+		escoria.main.set_scene(room_scene)
+		
+		if "esc_script" in room_scene and room_scene.esc_script \
+				and command_params[1]:
+			
+			var script = escoria.esc_compiler.load_esc_file(
+				room_scene.esc_script
+			)
+		
+			if script.events.has("setup"):
+				escoria.esc_event_manager.queue_event(script.events["setup"])
+				yield(script.events["setup"], "event_finished")
+			
+			# If scene was never visited, add "ready" event to the events stack
+			if not command_params[0] in self.readied_scenes \
+					and "ready" in script.events:
+				escoria.esc_event_manager.queue_event(script.events["ready"])
+				yield(script.events["ready"], "event_finished")
+				
+		escoria.main.scene_transition.fade_in()
+		yield(escoria.main.scene_transition, "transition_done")
+
+		self.readied_scenes.append(command_params[0])
+		
+		# Clear queued resources
+		escoria.resource_cache.clear()
+		
+		escoria.inputs_manager.hotspot_focused = ""
 	else:
-		escoria.esc_runner.call_deferred("change_scene", command_params, current_context, run_events)
-	
-	current_context.waiting = true
-	return esctypes.EVENT_LEVEL_STATE.YIELD
+		escoria.logger.report_errors(
+			"esc_runner.gd:change_scene()", 
+			[
+				"Failed loading scene %s" % command_params[0]
+			]
+		)
+		return ESCEventManager.RC_ERROR
+
+	return ESCEventManager.RC_OK

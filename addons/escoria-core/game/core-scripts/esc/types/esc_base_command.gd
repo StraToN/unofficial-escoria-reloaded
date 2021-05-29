@@ -1,6 +1,6 @@
 # A base class for every ESC command.
 # Extending classes have to override the configure and run function
-extends Object
+extends Node
 class_name ESCBaseCommand
 
 
@@ -11,8 +11,8 @@ func configure() -> ESCCommandArgumentDescriptor:
 	
 
 # Validate wether the given arguments match the command descriptor
-func validate(arguments: Array):
-	self.configure().validate(get_class(), arguments)
+func validate(arguments: Array) -> bool:
+	return self.configure().validate(get_class(), arguments)
 
 
 # Run the command

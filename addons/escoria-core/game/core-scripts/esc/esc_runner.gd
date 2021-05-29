@@ -346,81 +346,6 @@ func clear_current_action():
 func clear_current_tool():
 	current_tool = null
 
-func change_scene(params, context, run_events=true):
-	escoria.logger.info("Change scene to " + params[0] + " with run_events " + str(run_events))
-#	check_cache()
-#	main.clear_scene()
-#	camera = null
-	event_queue = []
-	
-	escoria.main.scene_transition.fade_out()
-	yield(escoria.main.scene_transition, "transition_done")
-	
-	# Regular events need to be reset immediately, so we don't
-	# accidentally `yield()` on them, for performance reasons.
-	# This does not affect `stack` so execution is fine anyway.
-	if running_event and running_event.ev_name != "load":
-		emit_signal("event_done", running_event.ev_name)
-		running_event = null
-
-	var res_room = resource_cache.get_resource(params[0])
-	var res_game = resource_cache.get_resource(ProjectSettings.get_setting("escoria/ui/game_scene"))
-	if !res_room:
-		escoria.logger.report_errors("esc_runner.gd:change_scene()", 
-			["Resource not found: " + params[0]])
-	if !res_game:
-		escoria.logger.report_errors("esc_runner.gd:change_scene()", 
-			["Resource not found: " + ProjectSettings.get_setting("escoria/ui/game_scene")])
-		
-	resource_cache.clear()
-	
-	# Load game scene
-	var game_scene = res_game.instance()
-	if !game_scene:
-		escoria.logger.report_errors("esc_runner.gd:change_scene()", 
-			["Failed loading scene " + ProjectSettings.get_setting("escoria/ui/game_scene")])
-	
-	# Load room scene
-	var room_scene = res_room.instance()
-	if room_scene:
-		room_scene.add_child(game_scene)
-		room_scene.move_child(game_scene, 0)
-		var events = escoria.main.set_scene(room_scene, run_events)
-		
-		escoria.main.scene_transition.fade_in()
-		yield(escoria.main.scene_transition, "transition_done")
-		
-		# If scene was never visited, add "ready" event to the events stack
-		if !scenes_cache.has(room_scene.global_id) \
-			and "ready" in events:
-			run_event(events["ready"])
-		
-		# :setup is pretty much required in the code, but fortunately
-		# we can help out with cases where one isn't necessary otherwise
-		if not "setup" in events:
-			var fake_setup = escoria.esc_compiler.compile_str(":setup\n")
-			events["setup"] = fake_setup["setup"]
-		# Finally we add the setup on to of the events stack so that it is ran first
-		run_event(events["setup"])
-		
-		escoria.inputs_manager.hotspot_focused = ""
-		if !scenes_cache_list.has(params[0]):
-			scenes_cache_list.push_back(params[0])
-			scenes_cache[room_scene.global_id] = params[0]
-	else:
-		escoria.logger.report_errors("esc_runner.gd:change_scene()", 
-			["Failed loading scene " + params[0]])
-
-	if context != null:
-		context.waiting = false
-	
-	# Re-apply actives
-	for active in actives:
-		set_active(active, actives[active])
-	
-#	cam_target = null
-#	autosave_pending = true
-
 
 func superpose_scene(params, context, run_events=true):
 	printt("superposing scene ", params[0], " with run_events ", run_events)
@@ -590,8 +515,8 @@ func activate(p_action : String, p_param : Array):
 						do_combine = true
 					
 					if do_combine:
-						if objects_events_table[what.global_id].has(p_action + " " + combine_with.global_id):
-							run_event(objects_events_table[what.global_id][p_action + " " + combine_with.global_id])
+						if objects_events_table[what.global_id].events.has(p_action + " " + combine_with.global_id):
+							objects_events_table[what.global_id][p_action + " " + combine_with.global_id].run()
 							return esctypes.EVENT_LEVEL_STATE.RETURN
 						elif objects_events_table[combine_with.global_id].has(p_action + " " + what.global_id) \
 							and !combine_with.combine_is_one_way:

@@ -3,6 +3,10 @@ extends Object
 class_name ESCEvent
 
 
+# Emitted when the event did finish running
+signal event_finished(return_code)
+
+
 # Regex identifying an ESC event
 const REGEX = \
 	'^:(?<name>[^\\s]+)( \\|(?<flags>( ' +\
@@ -80,3 +84,7 @@ func _init(event_string: String):
 				"Event regexp didn't match"
 			]
 		)
+
+
+func run() -> void:
+	pass

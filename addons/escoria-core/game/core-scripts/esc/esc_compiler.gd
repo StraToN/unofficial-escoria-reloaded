@@ -44,6 +44,25 @@ func _init():
 			"type": TYPE_STRING_ARRAY
 		}
 		ProjectSettings.add_property_info(property_info)
+		
+		
+# Load an ESC file from a file resource
+func load_esc_file(path: String) -> ESCScript:
+	if ResourceLoader.exists(path):
+		var file = File.new()
+		file.open(path, File.READ)
+		var lines = []
+		while not file.eof_reached:
+			lines.append(file.get_line())
+		return self.compile(lines)
+	else:
+		escoria.logger.report_errors(
+			"Can not find ESC file",
+			[
+				"File %s could not be found" % path
+			]
+		)
+		return null
 
 
 # Compiles an array of ESC script strings to an ESCScript

@@ -5,9 +5,14 @@ onready var esc_compiler = ESCCompiler.new()
 onready var logger = load("res://addons/escoria-core/game/core-scripts/log/logging.gd").new()
 onready var main = $main
 onready var esc_runner = $esc_runner
+onready var esc_event_manager: ESCEventManager = ESCEventManager.new()
 onready var esc_level_runner = $esc_runner/esc_level_runner
 onready var inputs_manager = $inputs_manager
 onready var utils = load("res://addons/escoria-core/game/core-scripts/utils/utils.gd").new()
+onready var globals: ESCGlobals = ESCGlobals.new()
+onready var object_manager: ESCObjectManager = ESCObjectManager.new()
+
+var resource_cache: ResourceCache
 
 # INSTANCES
 var main_menu_instance
@@ -58,6 +63,12 @@ var settings_default : Dictionary = {
 
 func _init():
 	logger = load("res://addons/escoria-core/game/core-scripts/log/logging.gd").new()
+
+func _init():
+	self.resource_cache = ResourceCache.new()
+	self.resource_cache.start()
+
+
 
 ##################################################################################
 

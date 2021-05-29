@@ -2,9 +2,6 @@ tool
 extends Area2D
 class_name ESCItem
 
-func get_class():
-	return "ESCItem"
-
 """
 ESCItem is a Sprite that defines an item, potentially interactive
 """
