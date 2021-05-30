@@ -34,10 +34,10 @@ func validate(arguments: Array):
 
 
 # Run the command
-func run(current_context: Dictionary, command_params: Array) -> int:
+func run(command_params: Array) -> int:
 	(escoria.object_manager.get_object("camera").node as ESCCamera)\
 		.set_target(
 			command_params[0],
 			command_params[1]
 		)
-	return ESCEventManager.RC_OK
+	return ESCExecution.RC_OK

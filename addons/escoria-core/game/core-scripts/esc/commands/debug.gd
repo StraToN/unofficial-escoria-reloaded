@@ -17,6 +17,6 @@ func configure() -> ESCCommandArgumentDescriptor:
 	
 
 # Run the command
-func run(current_context: Dictionary, command_params: Array) -> int:
+func run(command_params: Array) -> int:
 	escoria.logger.debug("debug command issued", command_params)
-	return ESCEventManager.RC_OK
+	return ESCExecution.RC_OK

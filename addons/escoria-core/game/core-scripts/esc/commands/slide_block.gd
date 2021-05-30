@@ -42,9 +42,9 @@ func validate(arguments: Array):
 
 
 # Run the command
-func run(current_context: Dictionary, command_params: Array) -> int:
+func run(command_params: Array) -> int:
 	escoria.logger.report_errors(
 		"slide_block: command not implemented",
 		[]
 	)
-	return ESCEventManager.RC_ERROR
+	return ESCExecution.RC_ERROR

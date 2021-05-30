@@ -20,9 +20,9 @@ func configure() -> ESCCommandArgumentDescriptor:
 
 
 # Run the command
-func run(current_context: Dictionary, command_params: Array) -> int:
+func run(command_params: Array) -> int:
 	if command_params[0]:
 		escoria.main.current_scene.game.show_ui()
 	else:
 		escoria.main.current_scene.game.hide_ui()
-	return ESCEventManager.RC_OK
+	return ESCExecution.RC_OK

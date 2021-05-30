@@ -18,5 +18,5 @@ func configure() -> ESCCommandArgumentDescriptor:
 
 
 # Run the command
-func run(current_context: Dictionary, command_params: Array) -> int:
-	return ESCEventManager.RC_CANCEL
+func run(command_params: Array) -> int:
+	return ESCExecution.RC_CANCEL

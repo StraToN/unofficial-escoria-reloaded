@@ -45,7 +45,7 @@ func validate(arguments: Array) -> bool:
 
 
 # Run the command
-func run(current_context: Dictionary, command_params: Array) -> int:
+func run(command_params: Array) -> int:
 	escoria.logger.info("Changing scene to %s (run_events = %s)" % [
 		command_params[0], 
 		command_params[1]
@@ -110,6 +110,6 @@ func run(current_context: Dictionary, command_params: Array) -> int:
 				"Failed loading scene %s" % command_params[0]
 			]
 		)
-		return ESCEventManager.RC_ERROR
+		return ESCExecution.RC_ERROR
 
-	return ESCEventManager.RC_OK
+	return ESCExecution.RC_OK

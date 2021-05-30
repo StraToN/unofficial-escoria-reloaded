@@ -1,5 +1,5 @@
 # An ESC dialog
-extends Object
+extends ESCStatement
 class_name ESCDialog
 
 

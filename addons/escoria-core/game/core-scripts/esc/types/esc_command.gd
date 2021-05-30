@@ -1,5 +1,5 @@
 # An ESC command
-extends Object
+extends ESCStatement
 class_name ESCCommand
 
 
@@ -77,7 +77,7 @@ func _init(command_string):
 
 
 # Check, if conditions match
-func valid(global_state: Dictionary):
+func is_valid() -> bool:
 	for base_path in ProjectSettings.get("escoria/esc/command_paths"):
 		var command_path = "%s/%s.gd" % [
 			base_path,
@@ -96,11 +96,15 @@ func valid(global_state: Dictionary):
 			
 			
 	for condition in self.conditions:
-		if not (condition as ESCCondition).run(global_state):
+		if not (condition as ESCCondition).run():
 			return false
 	return true
 	
 
 # Run this command
-func run():
-	pass
+func run() -> int:
+	var command_object = escoria.command_registry.get_command(self.name)
+	if command_object == null:
+		return ESCExecution.RC_ERROR
+	else:
+		return command_object.run(self.parameters)

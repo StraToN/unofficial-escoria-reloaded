@@ -1,5 +1,5 @@
 # An option of an ESC dialog
-extends Object
+extends ESCStatement
 class_name ESCDialogOption
 
 
@@ -15,7 +15,7 @@ var option: String
 var conditions: Array = []
 
 # The list of ESC commands
-var commands: Array = []
+var statements: Array = []
 
 
 # Create a dialog option from a string
@@ -43,9 +43,20 @@ func _init(option_string: String):
 
 
 # Check, if conditions match
-func valid(global_state: Dictionary):
+func is_valid() -> bool:
 	for condition in self.conditions:
-		if not (condition as ESCCondition).run(global_state):
+		if not (condition as ESCCondition).run():
 			return false
 	return true
 
+
+# Run all the statements in this option
+func run() -> int:
+	for statement in self.statements:
+		if statement.is_valid():
+			var rc = statement.run()
+			if rc == ESCExecution.RC_REPEAT:
+				return self.run()
+			elif rc != ESCExecution.RC_OK:
+				return rc
+	return ESCExecution.RC_OK

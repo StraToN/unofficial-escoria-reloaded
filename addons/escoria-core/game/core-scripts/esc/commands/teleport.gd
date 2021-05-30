@@ -41,10 +41,10 @@ func validate(arguments: Array):
 
 
 # Run the command
-func run(current_context: Dictionary, command_params: Array) -> int:
+func run(command_params: Array) -> int:
 	(escoria.object_manager.get_object(command_params[0]).node as ESCItem) \
 		.teleport(
 			escoria.object_manager.get_object(command_params[1]).node, 
 			command_params[2]
 		)
-	return ESCEventManager.RC_OK
+	return ESCExecution.RC_OK

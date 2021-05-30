@@ -39,7 +39,7 @@ func validate(arguments: Array):
 
 
 # Run the command
-func run(current_context: Dictionary, command_params: Array) -> int:
+func run(command_params: Array) -> int:
 	var res_scene = escoria.resource_cache.get_resource(command_params[0])
 		
 	# Load room scene
@@ -58,4 +58,4 @@ func run(current_context: Dictionary, command_params: Array) -> int:
 			]
 		)
 
-	return ESCEventManager.RC_OK
+	return ESCExecution.RC_OK

@@ -35,11 +35,11 @@ func validate(arguments: Array):
 
 
 # Run the command
-func run(current_context: Dictionary, command_params: Array) -> int:
+func run(command_params: Array) -> int:
 	# HACK Countering the fact that angle_to_point() function gives
 	# angle against X axis not Y, we need to check direction using (angle-90°).
 	# Since the ESC command already gives the right angle, we add 90.
 	(escoria.object_manager.get_object(command_params[0]).node as ESCItem)\
 			.set_angle(int(command_params[1] + 90))
-	return ESCEventManager.RC_OK
+	return ESCExecution.RC_OK
 	

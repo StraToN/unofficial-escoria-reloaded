@@ -47,8 +47,8 @@ var name: String
 # Flags set to this event
 var flags: int = 0
 
-# The list of ESC commands
-var commands: Array = []
+# The list of ESC statements
+var statements: Array = []
 
 
 # Create a new event from an event line
@@ -86,5 +86,14 @@ func _init(event_string: String):
 		)
 
 
-func run() -> void:
-	pass
+# Runs all commands, groups or dialogs in this event
+# **Returns** one of the ESCEventManager return codes
+func run() -> int:
+	for statement in statements:
+		if statement.is_valid():
+			var rc = statement.run()
+			if rc == ESCExecution.RC_REPEAT:
+				return self.run()
+			elif rc != ESCExecution.RC_OK:
+				return rc
+	return ESCExecution.RC_OK

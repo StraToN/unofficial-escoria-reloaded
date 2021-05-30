@@ -74,7 +74,7 @@ func _init(comparison_string: String):
 		
 
 # Run this comparison against the globals
-func run(globals: Dictionary) -> bool:
+func run() -> bool:
 	var global_name = flag
 	
 	if self.inventory:
@@ -82,16 +82,17 @@ func run(globals: Dictionary) -> bool:
 		
 	var return_value = false
 	
-	if comparison == COMPARISON_NONE and global_name in globals:
+	if comparison == COMPARISON_NONE and\
+			escoria.globals.globals.has(global_name):
 		return_value = true
 	elif comparison == COMPARISON_EQ and\
-			globals[global_name] == comparison_value:
+			escoria.globals.globals[global_name] == comparison_value:
 		return_value = true
 	elif comparison == COMPARISON_GT and\
-			globals[global_name] > comparison_value:
+			escoria.globals.globals[global_name] > comparison_value:
 		return_value = true
 	elif comparison == COMPARISON_LT and\
-			globals[global_name] < comparison_value:
+			escoria.globals.globals[global_name] < comparison_value:
 		return_value = true
 		
 	if negated:

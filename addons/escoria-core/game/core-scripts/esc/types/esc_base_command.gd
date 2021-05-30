@@ -16,6 +16,6 @@ func validate(arguments: Array) -> bool:
 
 
 # Run the command
-func run(current_context: Dictionary, command_params: Array) -> int:
+func run(command_params: Array) -> int:
 	escoria.logger.error("Command %s did not override run." % get_class())
 	return 0

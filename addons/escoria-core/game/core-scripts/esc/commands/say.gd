@@ -22,7 +22,7 @@ func configure() -> ESCCommandArgumentDescriptor:
 
 
 # Run the command
-func run(current_context: Dictionary, command_params: Array) -> int:
+func run(command_params: Array) -> int:
 	
 	var dict : Dictionary
 	var dialog_scene_name = ProjectSettings.get_setting(
@@ -37,7 +37,7 @@ func run(current_context: Dictionary, command_params: Array) -> int:
 				"Please set a default dialog scene."
 			]
 		)
-		return ESCEventManager.RC_ERROR
+		return ESCExecution.RC_ERROR
 		
 	var file = dialog_scene_name.get_file()
 	var extension = dialog_scene_name.get_extension()
@@ -72,7 +72,7 @@ func run(current_context: Dictionary, command_params: Array) -> int:
 						"encountered."
 			]
 		)
-		return ESCEventManager.RC_ERROR
+		return ESCExecution.RC_ERROR
 		
 	escoria.dialog_player.say(command_params[0], dict)
-	return ESCEventManager.RC_OK
+	return ESCExecution.RC_OK

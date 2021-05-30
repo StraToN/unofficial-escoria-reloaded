@@ -79,6 +79,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/commands/dec_global.gd"
 }, {
+"base": "Object",
+"class": "ESCActionManager",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/esc/esc_action_manager.gd"
+}, {
 "base": "TextureRect",
 "class": "ESCBackground",
 "language": "GDScript",
@@ -104,7 +109,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/scenes/camera_player/esccamera.gd"
 }, {
-"base": "Object",
+"base": "ESCStatement",
 "class": "ESCCommand",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/types/esc_command.gd"
@@ -113,6 +118,11 @@ _global_script_classes=[ {
 "class": "ESCCommandArgumentDescriptor",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/types/esc_command_argument_descriptor.gd"
+}, {
+"base": "Object",
+"class": "ESCCommandRegistry",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/esc/esc_command_registry.gd"
 }, {
 "base": "Object",
 "class": "ESCCompiler",
@@ -124,12 +134,12 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/types/esc_condition.gd"
 }, {
-"base": "Object",
+"base": "ESCStatement",
 "class": "ESCDialog",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/types/esc_dialog.gd"
 }, {
-"base": "Object",
+"base": "ESCStatement",
 "class": "ESCDialogOption",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/types/esc_dialog_option.gd"
@@ -149,6 +159,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/esc_event_manager.gd"
 }, {
+"base": "Object",
+"class": "ESCExecution",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/esc/types/esc_execution.gd"
+}, {
 "base": "Node2D",
 "class": "ESCGame",
 "language": "GDScript",
@@ -159,7 +174,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/esc_globals.gd"
 }, {
-"base": "Object",
+"base": "ESCStatement",
 "class": "ESCGroup",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/types/esc_group.gd"
@@ -173,6 +188,11 @@ _global_script_classes=[ {
 "class": "ESCInventoryItem",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/escinventoryitem.gd"
+}, {
+"base": "Object",
+"class": "ESCInventoryManager",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/esc/esc_inventory_manager.gd"
 }, {
 "base": "Area2D",
 "class": "ESCItem",
@@ -208,6 +228,11 @@ _global_script_classes=[ {
 "class": "ESCScript",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/types/esc_script.gd"
+}, {
+"base": "Object",
+"class": "ESCStatement",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/esc/types/esc_statement.gd"
 }, {
 "base": "Navigation2D",
 "class": "ESCTerrain",
@@ -295,6 +320,11 @@ _global_script_classes=[ {
 "path": "res://addons/escoria-core/game/core-scripts/esc/commands/set_interactive.gd"
 }, {
 "base": "ESCBaseCommand",
+"class": "SetSoundStateCommand",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/esc/commands/set_sound_state.gd"
+}, {
+"base": "ESCBaseCommand",
 "class": "SetSpeedCommand",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/commands/set_speed.gd"
@@ -364,6 +394,7 @@ _global_script_class_icons={
 "CutSceneCommand": "",
 "DebugCommand": "",
 "DecGlobalCommand": "",
+"ESCActionManager": "",
 "ESCBackground": "",
 "ESCBackgroundMusic": "",
 "ESCBackgroundSound": "",
@@ -371,6 +402,7 @@ _global_script_class_icons={
 "ESCCamera": "",
 "ESCCommand": "",
 "ESCCommandArgumentDescriptor": "",
+"ESCCommandRegistry": "",
 "ESCCompiler": "",
 "ESCCondition": "",
 "ESCDialog": "",
@@ -378,11 +410,13 @@ _global_script_class_icons={
 "ESCDialogsPlayer": "",
 "ESCEvent": "",
 "ESCEventManager": "",
+"ESCExecution": "",
 "ESCGame": "",
 "ESCGlobals": "",
 "ESCGroup": "",
 "ESCInventory": "",
 "ESCInventoryItem": "",
+"ESCInventoryManager": "",
 "ESCItem": "",
 "ESCObject": "",
 "ESCObjectManager": "",
@@ -390,6 +424,7 @@ _global_script_class_icons={
 "ESCRoom": "",
 "ESCScheduledEvent": "",
 "ESCScript": "",
+"ESCStatement": "",
 "ESCTerrain": "",
 "ESCTooltip": "",
 "GameOverCommand": "",
@@ -407,6 +442,7 @@ _global_script_class_icons={
 "SetGlobalsCommand": "",
 "SetHudVisibleCommand": "",
 "SetInteractiveCommand": "",
+"SetSoundStateCommand": "",
 "SetSpeedCommand": "",
 "SetStateCommand": "",
 "SlideBlockCommand": "",
@@ -470,7 +506,8 @@ sound/music_volume=1
 sound/sfx_volume=1
 sound/speech_volume=1
 sound/master_volume=1
-debug/log_level=3
+main/command_directories=[ "res://addons/escoria-core/game/core-scripts/esc/commands" ]
+debug/log_level=0
 
 [input]
 

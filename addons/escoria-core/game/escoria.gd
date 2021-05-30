@@ -1,16 +1,32 @@
 extends Node
 
 # Scripts
-onready var esc_compiler = ESCCompiler.new()
 onready var logger = load("res://addons/escoria-core/game/core-scripts/log/logging.gd").new()
 onready var main = $main
-onready var esc_runner = $esc_runner
-onready var esc_event_manager: ESCEventManager = ESCEventManager.new()
-onready var esc_level_runner = $esc_runner/esc_level_runner
 onready var inputs_manager = $inputs_manager
 onready var utils = load("res://addons/escoria-core/game/core-scripts/utils/utils.gd").new()
-onready var globals: ESCGlobals = ESCGlobals.new()
-onready var object_manager: ESCObjectManager = ESCObjectManager.new()
+
+
+# The inventory manager instance
+var inventory_manager
+
+# The action manager instance
+var action_manager
+
+# ESC compiler instance
+var esc_compiler
+
+# ESC Event manager instance
+var esc_event_manager: ESCEventManager
+
+# ESC globals registry instance
+var globals: ESCGlobals
+
+# ESC object manager instance
+var object_manager: ESCObjectManager
+
+# ESC command registry instance
+var command_registry: ESCCommandRegistry
 
 var resource_cache: ResourceCache
 
@@ -65,6 +81,13 @@ func _init():
 	logger = load("res://addons/escoria-core/game/core-scripts/log/logging.gd").new()
 
 func _init():
+	self.inventory_manager = ESCInventoryManager.new()
+	self.action_manager = ESCActionManager.new()
+	self.esc_event_manager = ESCEventManager.new()
+	self.globals = ESCGlobals.new()
+	self.object_manager = ESCObjectManager.new()
+	self.command_registry = ESCCommandRegistry.new()
+	self.esc_compiler = ESCCompiler.new()
 	self.resource_cache = ResourceCache.new()
 	self.resource_cache.start()
 
@@ -74,8 +97,18 @@ func _init():
 
 # Called by Main menu "start new game"
 func new_game():
-	var actions = esc_compiler.load_esc_file(ProjectSettings.get_setting("escoria/main/game_start_script"))
-	$esc_runner.run_game(actions)
+	var script = self.esc_compiler.load_esc_file(
+		ProjectSettings.get_setting("escoria/main/game_start_script")
+	)
+	esc_event_manager.queue_event(script.events["start"])
+	var rc = yield(esc_event_manager, "event_finished")
+	
+	if rc != ESCExecution.RC_OK:
+		escoria.logger.report_errors(
+			"Start event of the start script returned unsuccessful:" % rc,
+			[]
+		)
+		return
 	
 	escoria.main.scene_transition.fade_in()
 	yield(escoria.main.scene_transition, "transition_done")
@@ -121,11 +154,16 @@ func register_object(object : Object):
 			main.current_scene.game.tooltip_node = object
 	
 	if object is ESCBackgroundMusic:
-		$esc_runner.register_object(object_id, object, true)
+		escoria.object_manager.register_object(
+			ESCObject.new(object_id, object),
+			true
+		)
 	
 	if object is ESCBackgroundSound:
-		$esc_runner.register_object(object_id, object, true)
-	
+		escoria.object_manager.register_object(
+			ESCObject.new(object_id, object),
+			true
+		)
 		
 		
 
@@ -137,9 +175,6 @@ func do(action : String, params : Array = []) -> void:
 	if current_state == GAME_STATE.DEFAULT:
 		match action:
 			"walk":
-				# Reset current action. 
-				esc_runner.clear_current_action()
-				
 				# Check moving object.
 				if !escoria.esc_runner.check_obj(params[0], "escoria.do(walk)"):
 					escoria.logger.report_errors("escoria.gd:do()", 
@@ -190,14 +225,22 @@ func do(action : String, params : Array = []) -> void:
 				var object_id = params[1]
 				var trigger_in_verb = params[2]
 				escoria.logger.info("escoria.do() : trigger_in " + trigger_id + " by " + object_id)
-				esc_runner.run_event(esc_runner.objects_events_table[trigger_id][trigger_in_verb])
+				escoria.esc_event_manager.queue_event(
+					object_manager.get_object(object_id).events[
+						"%s %s" % [trigger_id, trigger_in_verb]
+					]
+				)
 			
 			"trigger_out":
 				var trigger_id = params[0]
 				var object_id = params[1]
 				var trigger_out_verb = params[2]
 				escoria.logger.info("escoria.do() : trigger_out " + trigger_id + " by " + object_id)
-				esc_runner.run_event(esc_runner.objects_events_table[trigger_id][trigger_out_verb])
+				escoria.esc_event_manager.queue_event(
+					object_manager.get_object(object_id).events[
+						"%s %s" % [trigger_id, trigger_out_verb]
+					]
+				)
 			
 			_:
 				escoria.logger.report_warnings("escoria.gd:do()", 
@@ -215,25 +258,25 @@ func ev_left_click_on_item(obj, event, default_action = false):
 	event :
 	"""
 	if obj is String:
-		obj = esc_runner.objects[obj]
+		obj = object_manager.get_object(obj).node
 	escoria.logger.info(obj.global_id + " left-clicked with event ", [event])
 	
 	var need_combine = false
 	# Check if current_action and current_tool are already set
-	if esc_runner.current_action:
-		if esc_runner.current_tool:
-			if esc_runner.current_action in esc_runner.current_tool.combine_if_action_used_among:
+	if action_manager.current_action:
+		if action_manager.current_tool:
+			if action_manager.current_action in action_manager.current_tool.combine_if_action_used_among:
 				need_combine = true
 			else:
-				esc_runner.current_tool = obj
+				action_manager.current_tool = obj
 		else:
 			if default_action:
-				if esc_runner.inventory_has(obj.global_id):
-					esc_runner.current_action = obj.default_action_inventory
+				if escoria.inventory_manager.inventory_has(obj.global_id):
+					action_manager.current_action = obj.default_action_inventory
 				else:
-					esc_runner.current_action = obj.default_action
-			elif esc_runner.current_action in obj.combine_if_action_used_among:
-				esc_runner.current_tool = obj
+					action_manager.current_action = obj.default_action
+			elif action_manager.current_action in obj.combine_if_action_used_among:
+				action_manager.current_tool = obj
 				
 	
 	# Don't interact after player movement towards object (because object is inactive for example)
@@ -244,10 +287,10 @@ func ev_left_click_on_item(obj, event, default_action = false):
 	var walk_context = {"fast": event.doubleclick, "target_object" : obj}
 	
 	# If object not in inventory, player walks towards it
-	if !esc_runner.inventory_has(obj.global_id):
+	if not inventory_manager.inventory_has(obj.global_id):
 		var clicked_object_has_interact_position = false
 
-		if esc_runner.get_interactive(obj.global_id):
+		if object_manager.get_object(obj.global_id).interactive:
 #			if obj.interact_positions.default != null:
 #				destination_position = obj.interact_positions.default#.global_position
 #				clicked_object_has_interact_position = true
@@ -288,23 +331,28 @@ func ev_left_click_on_item(obj, event, default_action = false):
 	if player_global_pos == destination_position:
 		# Manage exits
 		if obj.is_exit and $esc_runner.current_action == "" or $esc_runner.current_action == "walk":
-			var params = [obj]
-			$esc_runner.activate("exit_scene", params)
-		
+			action_manager.activate("exit_scene", obj)
 		else:
 			# Manage movements towards object before activating it
 			if $esc_runner.current_action == "" or $esc_runner.current_action == "walk":
 				if destination_position != clicked_position \
-						and !esc_runner.inventory_has(obj.global_id):
-					esc_runner.activate("arrived", [obj])
+						and not inventory_manager.inventory_has(obj.global_id):
+					action_manager.activate("arrived", obj)
 			# Manage action on object
 			elif $esc_runner.current_action != "" and $esc_runner.current_action != "walk":
 				# If apply_interact, perform combine between items
 				if need_combine:
-					esc_runner.activate(esc_runner.current_action, [esc_runner.current_tool, obj])
+					action_manager.activate(
+						action_manager.current_action, 
+						action_manager.current_tool, 
+						obj
+					)
 						
 				else:
-					esc_runner.activate(esc_runner.current_action, [obj])
+					action_manager.activate(
+						action_manager.current_action, 
+						obj
+					)
 		
 #	else:
 ##		escoria.fallback("")

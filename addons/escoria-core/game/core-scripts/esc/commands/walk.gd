@@ -40,6 +40,6 @@ func validate(arguments: Array):
 
 
 # Run the command
-func run(current_context: Dictionary, command_params: Array) -> int:
+func run(command_params: Array) -> int:
 	escoria.do("walk", command_params)
-	return ESCEventManager.RC_OK
+	return ESCExecution.RC_OK

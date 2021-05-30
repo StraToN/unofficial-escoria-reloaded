@@ -48,11 +48,11 @@ func _init():
 		
 # Load an ESC file from a file resource
 func load_esc_file(path: String) -> ESCScript:
-	if ResourceLoader.exists(path):
+	if File.new().file_exists(path):
 		var file = File.new()
 		file.open(path, File.READ)
 		var lines = []
-		while not file.eof_reached:
+		while not file.eof_reached():
 			lines.append(file.get_line())
 		return self.compile(lines)
 	else:
@@ -130,7 +130,7 @@ func _compile(lines: Array) -> Array:
 					"Compiling the next %d lines into the event" % \
 							event_lines.size()
 				)
-				event.commands = self._compile(event_lines)
+				event.statements = self._compile(event_lines)
 			returned.append(event)
 		elif group_regex.search(line):
 			var group = ESCGroup.new(line)
@@ -153,7 +153,7 @@ func _compile(lines: Array) -> Array:
 					"Compiling the next %d lines into the group" % \
 							group_lines.size()
 				)
-				group.commands = self._compile(group_lines)
+				group.statements = self._compile(group_lines)
 			returned.append(group)
 		elif dialog_regex.search(line):
 			var dialog = ESCDialog.new(line)
@@ -204,7 +204,7 @@ func _compile(lines: Array) -> Array:
 					"Compiling the next %d lines into the event" % \
 							dialog_option_lines.size()
 				)
-				dialog_option.commands = self._compile(dialog_option_lines)
+				dialog_option.statements = self._compile(dialog_option_lines)
 			returned.append(dialog_option)
 		elif command_regex.search(line):
 			var command = ESCCommand.new(line)
@@ -218,4 +218,3 @@ func _compile(lines: Array) -> Array:
 				]
 			)
 	return returned
-

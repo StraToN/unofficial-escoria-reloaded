@@ -7,10 +7,10 @@ class_name ESCObject
 var global_id: String
 
 # Wether the object is active (visible to the player)
-var active: bool
+var active: bool = true
 
 # Wether the object is interactive (clickable by the player)
-var interactive: bool
+var interactive: bool = true
 
 # The state of the object. If the object has a respective animation, 
 # it will be played
@@ -20,7 +20,12 @@ var state: String = "default" setget _set_state
 var events: Dictionary = {}
 
 # The node in the scene. Can be an ESCItem or an ESCCamera
-var node
+var node: Node
+
+
+func _init(p_global_id: String, p_node: Node):
+	global_id = p_global_id
+	node = p_node
 
 
 # Set the state and start a possible animation

@@ -15,8 +15,17 @@ func _process(_delta):
 
 
 # Register the object in the manager
-func register_object(object: ESCObject) -> void:
-	objects[object.global_id] = object
+func register_object(object: ESCObject, force: bool = false) -> void:
+	if objects.has(object.global_id) and not force:
+		escoria.logger.report_errors(
+			"ESCObjectManager.register_object: Object already registered",
+			[
+				"Object with global id %s already registered" % 
+						object.global_id
+			]
+		)
+	else:
+		objects[object.global_id] = object
 
 
 # Get the object from the object registry

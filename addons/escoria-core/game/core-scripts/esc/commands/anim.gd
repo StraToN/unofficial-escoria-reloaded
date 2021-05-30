@@ -34,7 +34,7 @@ func validate(arguments: Array):
 
 
 # Run the command
-func run(current_context: Dictionary, command_params: Array) -> int:
+func run(command_params: Array) -> int:
 	var obj = escoria.object_manager.objects[command_params[0]]
 	var anim_id = command_params[1]
 	var reverse = command_params[2]
@@ -43,4 +43,4 @@ func run(current_context: Dictionary, command_params: Array) -> int:
 		animator.play_backwards(anim_id)
 	else:
 		animator.play(anim_id)
-	return ESCEventManager.RC_OK
+	return ESCExecution.RC_OK

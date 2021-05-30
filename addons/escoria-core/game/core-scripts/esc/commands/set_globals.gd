@@ -19,8 +19,8 @@ func configure() -> ESCCommandArgumentDescriptor:
 
 
 # Run the command
-func run(current_context: Dictionary, command_params: Array) -> int:
+func run(command_params: Array) -> int:
 	for global_key in escoria.globals.globals.keys:
 		if global_key.match(command_params[0]):
 			escoria.globals.globals[global_key] = command_params[1]
-	return ESCEventManager.RC_OK
+	return ESCExecution.RC_OK
