@@ -74,33 +74,33 @@ func activate(
 							target.global_id
 						]
 						if target.events.has(target_event):
-							escoria.esc_event_manager.queue_event(target.events[
+							escoria.event_manager.queue_event(target.events[
 								target_event
 							])
 							var event_returned = yield(
-								escoria.esc_event_manager, 
+								escoria.event_manager, 
 								"event_finished"
 							)
 							while event_returned[1] != target_event:
 								event_returned = yield(
-									escoria.esc_event_manager, 
+									escoria.event_manager, 
 									"event_finished"
 								)
 							return event_returned[0]
 						elif combine_with.events.has(combine_with_event)\
 								and not combine_with.node.combine_is_one_way:
-							escoria.esc_event_manager.queue_event(
+							escoria.event_manager.queue_event(
 								combine_with.events[
 									combine_with_event
 								]
 							)
 							var event_returned = yield(
-								escoria.esc_event_manager, 
+								escoria.event_manager, 
 								"event_finished"
 							)
 							while event_returned[1] != combine_with_event:
 								event_returned = yield(
-									escoria.esc_event_manager, 
+									escoria.event_manager, 
 									"event_finished"
 								)
 							return event_returned[0]
@@ -157,14 +157,14 @@ func activate(
 	
 	
 	if target.events.has(action):
-		escoria.esc_event_manager.queue_event(target.events[action])
+		escoria.event_manager.queue_event(target.events[action])
 		var event_returned = yield(
-			escoria.esc_event_manager, 
+			escoria.event_manager, 
 			"event_finished"
 		)
 		while event_returned[1] != action:
 			event_returned = yield(
-				escoria.esc_event_manager, 
+				escoria.event_manager, 
 				"event_finished"
 			)
 		return event_returned[0]

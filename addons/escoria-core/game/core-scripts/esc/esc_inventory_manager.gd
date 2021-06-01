@@ -4,14 +4,21 @@ class_name ESCInventoryManager
 
 
 # Check if the player has an inventory item
+#
+# #### Parameters
+#
+# - p_obj: Inventory item
+# **Returns** Wether the player has the inventory
 func inventory_has(p_obj) -> bool:
-	return escoria.globals.globals.has("i/"+p_obj)
+	return escoria.globals_manager.has("i/%s" % p_obj)
 
 
 # Get all inventory items
+# **Returns** The items in the inventory
 func items_in_inventory() -> Array:
 	var items = []
-	for glob in escoria.globals.globals.keys():
-		if glob.begins_with("i/") and escoria.globals.globals[glob]:
+	var filtered = escoria.globals_manager.filter("i/*")
+	for glob in filtered.keys():
+		if filtered[glob]:
 			items.append(glob.rsplit("i/", false)[0])
 	return items

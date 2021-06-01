@@ -5,7 +5,7 @@ class_name ESCCommand
 
 # Regex matching command lines
 const REGEX = \
-	'^(\\s*)(?<name>[^\\s]+)\\s(?<parameters>([^\\[]|$)+)' +\
+	'^(\\s*)(?<name>[^\\s]+)(\\s(?<parameters>([^\\[]|$)+))?' +\
 	'(\\[(?<conditions>[^\\]]+)\\])?'
 
 
@@ -18,9 +18,6 @@ var parameters: Array = []
 # A list of ESCConditions to run this command.
 # Conditions are combined using logical AND
 var conditions: Array = []
-
-# The command object that carries out the command
-var _command_object = null
 
 
 # Create a command from a command string
@@ -83,28 +80,26 @@ func is_valid() -> bool:
 			base_path,
 			self.name
 		]
-		if ResourceLoader.exists(command_path):
-			_command_object = ResourceLoader.load(command_path)
-			if not _command_object is ESCBaseCommand:
-				escoria.logger.report_errors(
-					"Invalid command object",
-					[
-						"Command object for %s doesn't extend ESCBaseCOmmand" %
-							self.name
-					]
-				)
 			
-			
-	for condition in self.conditions:
-		if not (condition as ESCCondition).run():
-			return false
-	return true
+	return .is_valid()
 	
 
 # Run this command
 func run() -> int:
+	escoria.logger.debug("Running command %s" % self.name)
 	var command_object = escoria.command_registry.get_command(self.name)
 	if command_object == null:
 		return ESCExecution.RC_ERROR
 	else:
-		return command_object.run(self.parameters)
+		var argument_descriptor = command_object.configure()
+		var prepared_arguments = argument_descriptor.prepare_arguments(
+			self.parameters
+		)
+		if argument_descriptor.validate(self.name, prepared_arguments):
+			var rc = command_object.run(prepared_arguments)
+			if rc is GDScriptFunctionState:
+				rc = yield(rc, "completed")
+			escoria.logger.debug("[%s] Return code: %d" % [self.name, rc])
+			return rc
+		else:
+			return ESCExecution.RC_ERROR

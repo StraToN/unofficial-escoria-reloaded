@@ -32,7 +32,7 @@ const ONE_LINE_HEIGHT = 16
 
 func _ready():
 	escoria.call_deferred("register_object", self)
-	escoria.esc_runner.connect("action_changed", self, "on_action_selected")
+	escoria.action_manager.connect("action_changed", self, "on_action_selected")
 	
 
 func set_color(p_color : Color):
@@ -62,7 +62,7 @@ func set_debug_mode(p_debug_mode : bool):
 	
 
 func on_action_selected() -> void:
-	current_action = escoria.esc_runner.current_action
+	current_action = escoria.action_manager.current_action
 	update_tooltip_text()
 
 

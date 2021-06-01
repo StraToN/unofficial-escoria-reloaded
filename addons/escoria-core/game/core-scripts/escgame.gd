@@ -18,7 +18,7 @@ export(EDITOR_GAME_DEBUG_DISPLAY) var editor_debug_mode = EDITOR_GAME_DEBUG_DISP
 
 
 func _ready():
-	escoria.esc_runner.connect("event_done", self, "_on_event_done")
+	escoria.event_manager.connect("event_done", self, "_on_event_done")
 
 
 func set_editor_debug_mode(p_editor_debug_mode : int) -> void:

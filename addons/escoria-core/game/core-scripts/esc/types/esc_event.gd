@@ -1,10 +1,6 @@
 # An ESC event
-extends Object
+extends ESCStatement
 class_name ESCEvent
-
-
-# Emitted when the event did finish running
-signal event_finished(return_code)
 
 
 # Regex identifying an ESC event
@@ -47,9 +43,6 @@ var name: String
 # Flags set to this event
 var flags: int = 0
 
-# The list of ESC statements
-var statements: Array = []
-
 
 # Create a new event from an event line
 func _init(event_string: String):
@@ -86,14 +79,7 @@ func _init(event_string: String):
 		)
 
 
-# Runs all commands, groups or dialogs in this event
-# **Returns** one of the ESCEventManager return codes
+# Execute this statement and return its return code
 func run() -> int:
-	for statement in statements:
-		if statement.is_valid():
-			var rc = statement.run()
-			if rc == ESCExecution.RC_REPEAT:
-				return self.run()
-			elif rc != ESCExecution.RC_OK:
-				return rc
-	return ESCExecution.RC_OK
+	escoria.logger.debug("Starting event %s" % name)
+	return .run()

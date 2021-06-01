@@ -19,7 +19,7 @@ func configure() -> ESCCommandArgumentDescriptor:
 
 # Validate wether the given arguments match the command descriptor
 func validate(arguments: Array):
-	if not escoria.globals.globals[arguments[0]] is int:
+	if not escoria.globals_manager.get(arguments[0]) is int:
 		escoria.logger.report_errors(
 			"inc_global: invalid global",
 			[
@@ -32,5 +32,8 @@ func validate(arguments: Array):
 
 # Run the command
 func run(command_params: Array) -> int:
-	escoria.globals.globals[command_params[0]] += command_params[1]
+	escoria.globals_manager.set(
+		command_params[0], 
+		escoria.globals_manager.get(command_params[0])
+	)
 	return ESCExecution.RC_OK

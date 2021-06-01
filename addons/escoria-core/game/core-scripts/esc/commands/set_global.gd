@@ -12,12 +12,12 @@ class_name SetGlobalCommand
 func configure() -> ESCCommandArgumentDescriptor:
 	return ESCCommandArgumentDescriptor.new(
 		2, 
-		[TYPE_STRING, [TYPE_INT, TYPE_BOOL]],
+		[TYPE_STRING, [TYPE_INT, TYPE_BOOL, TYPE_STRING]],
 		[null, null]
 	)
 
 
 # Run the command
 func run(command_params: Array) -> int:
-	escoria.globals.globals[command_params[0]] = command_params[1]
+	escoria.globals_manager.set(command_params[0], command_params[1])
 	return ESCExecution.RC_OK

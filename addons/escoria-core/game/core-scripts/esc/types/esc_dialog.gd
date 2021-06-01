@@ -56,3 +56,20 @@ func _init(dialog_string: String):
 				"Dialog regexp didn't match"
 			]
 		)
+
+
+func run():
+	escoria.logger.debug("Starting dialog")
+	escoria.current_state = escoria.GAME_STATE.DIALOG
+	if !escoria.dialog_player:
+		escoria.dialog_player = escoria.main.current_scene.get_node(
+			"game/ui/dialog_layer/dialog_player"
+		)
+	escoria.dialog_player.start_dialog(self)
+	var option = yield(
+		escoria.dialog_player, 
+		"option_chosen"
+	) as ESCDialogOption
+	var rc = yield(option, "completed")
+	if rc != ESCExecution.RC_CANCEL:
+		return self.run()

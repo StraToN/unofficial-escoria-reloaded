@@ -54,6 +54,8 @@ func run(command_params: Array) -> int:
 	escoria.main.scene_transition.fade_out()
 	yield(escoria.main.scene_transition, "transition_done")
 	
+	escoria.main_menu_instance.hide()
+	
 	var res_room = escoria.resource_cache.get_resource(command_params[0])
 	var res_game = escoria.resource_cache.get_resource(
 		ProjectSettings.get_setting("escoria/ui/game_scene")
@@ -61,7 +63,7 @@ func run(command_params: Array) -> int:
 		
 	# Load game scene
 	var game_scene = res_game.instance()
-	if !game_scene:
+	if not game_scene:
 		escoria.logger.report_errors(
 			"esc_runner.gd:change_scene()", 
 			[
@@ -85,14 +87,22 @@ func run(command_params: Array) -> int:
 			)
 		
 			if script.events.has("setup"):
-				escoria.esc_event_manager.queue_event(script.events["setup"])
-				yield(script.events["setup"], "event_finished")
-			
+				escoria.event_manager.queue_event(script.events["setup"])
+				var rc = yield(escoria.event_manager, "event_finished")
+				while rc[1] != "setup":
+					rc = yield(escoria.event_manager, "event_finished")
+				if rc[0] != ESCExecution.RC_OK:
+					return rc[0]
+
 			# If scene was never visited, add "ready" event to the events stack
 			if not command_params[0] in self.readied_scenes \
 					and "ready" in script.events:
-				escoria.esc_event_manager.queue_event(script.events["ready"])
-				yield(script.events["ready"], "event_finished")
+				escoria.event_manager.queue_event(script.events["ready"])
+				var rc = yield(escoria.event_manager, "event_finished")
+				while rc[1] != "ready":
+					rc = yield(escoria.event_manager, "event_finished")
+				if rc[0] != ESCExecution.RC_OK:
+					return rc[0]
 				
 		escoria.main.scene_transition.fade_in()
 		yield(escoria.main.scene_transition, "transition_done")

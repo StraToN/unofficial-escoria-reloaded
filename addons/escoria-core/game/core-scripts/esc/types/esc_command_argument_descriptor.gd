@@ -20,26 +20,48 @@ func _init(p_min_args: int = 0, p_types: Array = [], p_defaults: Array = []):
 	min_args = p_min_args
 	types = p_types
 	defaults = p_defaults
+	
+
+# Combine the default argument values with the given arguments
+func prepare_arguments(arguments: Array) -> Array:
+	var complete_arguments = defaults
+	
+	var regex_bool = RegEx.new()
+	regex_bool.compile("^true|false$")
+	var regex_float = RegEx.new()
+	regex_float.compile("^[0-9]+\\.[0-9]+$")
+	var regex_int = RegEx.new()
+	regex_int.compile("^[0-9]+$")
+	
+	for index in range(arguments.size()):
+		if regex_float.search(arguments[index]):
+			complete_arguments[index] = float(arguments[index])
+		elif regex_int.search(arguments[index]):
+			complete_arguments[index] = int(arguments[index])
+		elif regex_bool.search(arguments[index].to_lower()):
+			complete_arguments[index] = bool(arguments[index])
+		else:
+			complete_arguments[index] = str(arguments[index])
+		
+	return complete_arguments
 
 
 # Validate wether the given arguments match the command descriptor
 func validate(command: String, arguments: Array) -> bool:
-	var complete_arguments = defaults
-	
-	for index in range (arguments.size()):
-		complete_arguments[index] = arguments[index]
-	
-	if complete_arguments.size() < self.min_args:
+	if arguments.size() < self.min_args:
 		escoria.logger.report_errors(
 			"Invalid command arguments for command %s" % command,
 			[
 				"Arguments didn't match minimum size %d: %s" %
 					self.min_args,
-					complete_arguments
+					arguments
 			]
 		)
 	
-	for index in range(complete_arguments.size()):
+	for index in range(arguments.size()):
+		if arguments[index] == null:
+			# No type checking for null values
+			continue
 		var correct = false
 		var types_index = index
 		if types_index > types.size():
@@ -48,7 +70,7 @@ func validate(command: String, arguments: Array) -> bool:
 			self.types[types_index] = [self.types[index]]
 		for type in self.types[types_index]:
 			if not correct:
-				correct = self._is_type(complete_arguments[index], type)
+				correct = self._is_type(arguments[index], type)
 			
 		if not correct:
 			escoria.logger.report_errors(
@@ -57,7 +79,7 @@ func validate(command: String, arguments: Array) -> bool:
 				[
 					"Argument %d is of type %d. Expected %d" % [
 						index,
-						typeof(complete_arguments[index]),
+						typeof(arguments[index]),
 						self.types[types_index]
 					]
 				]

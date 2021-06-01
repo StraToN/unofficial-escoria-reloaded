@@ -14,9 +14,6 @@ var option: String
 # Conditions to show this dialog
 var conditions: Array = []
 
-# The list of ESC commands
-var statements: Array = []
-
 
 # Create a dialog option from a string
 func _init(option_string: String):
@@ -48,15 +45,3 @@ func is_valid() -> bool:
 		if not (condition as ESCCondition).run():
 			return false
 	return true
-
-
-# Run all the statements in this option
-func run() -> int:
-	for statement in self.statements:
-		if statement.is_valid():
-			var rc = statement.run()
-			if rc == ESCExecution.RC_REPEAT:
-				return self.run()
-			elif rc != ESCExecution.RC_OK:
-				return rc
-	return ESCExecution.RC_OK

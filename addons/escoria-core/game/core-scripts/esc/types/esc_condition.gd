@@ -10,7 +10,7 @@ enum {COMPARISON_NONE, COMPARISON_EQ, COMPARISON_GT, COMPARISON_LT}
 # Regex that matches condition lines
 const REGEX = \
 	'^(?<is_negated>!)?(?<comparison>eq|gt|lt)? ?' +\
-	'(?<is_inventory>i\/)?(?<flag>[^ ]+)( (?<comparison_value>[\\d]+))?$'
+	'(?<is_inventory>i\/)?(?<flag>[^ ]+)( (?<comparison_value>.+))?$'
 
 
 # Name of the flag compared
@@ -26,7 +26,7 @@ var inventory: bool = false
 var comparison: int = COMPARISON_NONE
 
 # The value used together with the comparison type
-var comparison_value: int = 0
+var comparison_value
 
 
 # Create a new condition from an ESC condition string
@@ -57,8 +57,9 @@ func _init(comparison_string: String):
 						]
 					)
 			if "comparison_value" in result.names:
-				self.comparison_value = int(
-					escoria.utils._get_re_group(result, "comparison_value")
+				self.comparison_value = 	escoria.utils._get_re_group(
+					result, 
+					"comparison_value"
 				)
 			if "is_inventory" in result.names:
 				self.inventory = true
@@ -83,16 +84,16 @@ func run() -> bool:
 	var return_value = false
 	
 	if comparison == COMPARISON_NONE and\
-			escoria.globals.globals.has(global_name):
+			escoria.globals_manager.has(global_name):
 		return_value = true
 	elif comparison == COMPARISON_EQ and\
-			escoria.globals.globals[global_name] == comparison_value:
+			escoria.globals_manager.get(global_name) == comparison_value:
 		return_value = true
 	elif comparison == COMPARISON_GT and\
-			escoria.globals.globals[global_name] > comparison_value:
+			escoria.globals_manager.get(global_name) > comparison_value:
 		return_value = true
 	elif comparison == COMPARISON_LT and\
-			escoria.globals.globals[global_name] < comparison_value:
+			escoria.globals_manager.get(global_name) < comparison_value:
 		return_value = true
 		
 	if negated:

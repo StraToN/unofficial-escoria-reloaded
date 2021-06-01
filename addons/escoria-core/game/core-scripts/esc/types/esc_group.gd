@@ -11,9 +11,6 @@ const REGEX = '^([^>]*)>\\s*(\\[(?<conditions>[^\\]]+)\\])?$'
 # Conditions are combined using logical AND
 var conditions: Array = []
 
-# The list of ESC commands
-var statements: Array = []
-
 
 # Construct an ESC group of an ESC script line
 func _init(group_string: String):
@@ -37,15 +34,3 @@ func _init(group_string: String):
 				"Group regexp didn't match"
 			]
 		)
-
-
-# Runs all commands in this group
-func run() -> int:
-	for statement in self.statements:
-		if statement.is_valid():
-			var rc=statement.run()
-			if rc == ESCExecution.RC_REPEAT:
-				return self.run()
-			elif rc != ESCExecution.RC_OK:
-				return rc
-	return ESCExecution.RC_OK

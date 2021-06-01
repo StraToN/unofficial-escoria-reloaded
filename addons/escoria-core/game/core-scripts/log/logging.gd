@@ -1,4 +1,6 @@
 # Logging framework for Escoria
+extends Object
+class_name ESCLogger
 
 
 # The path of the ESC file that was reported last (used for removing
@@ -10,6 +12,15 @@ var warning_path : String
 enum { LOG_ERROR, LOG_WARNING, LOG_INFO, LOG_DEBUG }
 
 
+# A map of log level names to log level ints
+var _level_map: Dictionary = {
+	"ERROR": LOG_ERROR,
+	"WARNING": LOG_WARNING,
+	"INFO": LOG_INFO,
+	"DEBUG": LOG_DEBUG,
+}
+
+
 # Log a debug message
 #
 # #### Parameters
@@ -17,7 +28,7 @@ enum { LOG_ERROR, LOG_WARNING, LOG_INFO, LOG_DEBUG }
 # * string: Text to log
 # * args: Additional information
 func debug(string : String, args = []):
-	if ProjectSettings.get("escoria/debug/log_level") >= LOG_DEBUG:
+	if _get_log_level() >= LOG_DEBUG:
 		var argsstr = str(args) if !args.empty() else ""
 		printerr("(D)\t" + string + " \t" + argsstr)
 
@@ -29,7 +40,7 @@ func debug(string : String, args = []):
 # * string: Text to log
 # * args: Additional information
 func info(string : String, args = []):
-	if ProjectSettings.get_setting("escoria/debug/log_level") >= LOG_INFO:
+	if _get_log_level() >= LOG_INFO:
 		var argsstr = []
 		if !args.empty():
 			for arg in args:
@@ -48,7 +59,7 @@ func info(string : String, args = []):
 # * string: Text to log
 # * args: Additional information
 func warning(string : String, args = []):
-	if ProjectSettings.get_setting("escoria/debug/log_level") >= LOG_WARNING:
+	if _get_log_level() >= LOG_WARNING:
 		var argsstr = str(args) if !args.empty() else ""
 		printerr("(W)\t" + string + " \t" + argsstr)
 		if ProjectSettings.get_setting("escoria/debug/terminate_on_warnings"):
@@ -63,7 +74,7 @@ func warning(string : String, args = []):
 # * string: Text to log
 # * args: Additional information
 func error(string : String, args = []):
-	if ProjectSettings.get_setting("escoria/debug/log_level") >= LOG_ERROR:
+	if _get_log_level() >= LOG_ERROR:
 		var argsstr = str(args) if !args.empty() else ""
 		printerr("(E)\t" + string + " \t" + argsstr)
 		if ProjectSettings.get_setting("escoria/debug/terminate_on_errors"):
@@ -111,3 +122,8 @@ func report_errors(p_path : String, errors : Array) -> void:
 			text += e+"\n"
 	error(text)
 
+
+# Returns the currently set log level
+# **Returns** Log level as set in the configuration
+func _get_log_level() -> int:
+	return _level_map[ProjectSettings.get_setting("escoria/debug/log_level")]

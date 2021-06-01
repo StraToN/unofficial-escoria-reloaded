@@ -45,7 +45,7 @@ func validate(arguments: Array):
 
 # Run the command
 func run(command_params: Array) -> int:
-	escoria.esc_event_manager.schedule_event(
+	escoria.event_manager.schedule_event(
 		escoria.object_manager.get_object(command_params[1])\
 			.events[command_params[2]],
 		command_params[0]

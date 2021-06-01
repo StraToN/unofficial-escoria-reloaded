@@ -25,7 +25,7 @@ func _ready():
 #	if !Engine.is_editor_hint():
 #		return
 	
-	for item_id in escoria.esc_runner.items_in_inventory():
+	for item_id in escoria.inventory_manager.items_in_inventory():
 		call_deferred("add_new_item_by_id", item_id)
 		
 	escoria.register_object(self)
@@ -37,7 +37,7 @@ func _ready():
 		items_ids_in_inventory[c.item_id] = c
 #		c.connect("pressed", escoria.inputs_manager, "_on_inventory_item_pressed", [c.item_id])
 		
-	escoria.esc_runner.connect("global_changed", self, "_on_escoria_global_changed")
+	escoria.globals_manager.connect("global_changed", self, "_on_escoria_global_changed")
 
 
 # add item to Inventory UI using its id set in its scene

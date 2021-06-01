@@ -39,7 +39,7 @@ func run(command_params: Array) -> int:
 	# HACK Countering the fact that angle_to_point() function gives
 	# angle against X axis not Y, we need to check direction using (angle-90°).
 	# Since the ESC command already gives the right angle, we add 90.
-	(escoria.object_manager.get_object(command_params[0]).node as ESCItem)\
+	escoria.object_manager.get_object(command_params[0]).node\
 			.set_angle(int(command_params[1] + 90))
 	return ESCExecution.RC_OK
 	

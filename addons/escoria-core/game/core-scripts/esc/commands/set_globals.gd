@@ -13,14 +13,15 @@ class_name SetGlobalsCommand
 func configure() -> ESCCommandArgumentDescriptor:
 	return ESCCommandArgumentDescriptor.new(
 		2, 
-		[TYPE_STRING, TYPE_STRING],
+		[TYPE_STRING, [TYPE_BOOL, TYPE_STRING, TYPE_INT]],
 		[null, null]
 	)
 
 
 # Run the command
 func run(command_params: Array) -> int:
-	for global_key in escoria.globals.globals.keys:
-		if global_key.match(command_params[0]):
-			escoria.globals.globals[global_key] = command_params[1]
+	escoria.globals_manager.set_global_wildcard(
+		command_params[0],
+		command_params[1]
+	)
 	return ESCExecution.RC_OK

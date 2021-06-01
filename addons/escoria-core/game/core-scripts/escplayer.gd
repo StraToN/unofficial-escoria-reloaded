@@ -82,7 +82,7 @@ func _ready():
 	
 	# Connect the player to the event_done signal, so we can react to a finished 
 	# ":setup" event. In this case, we need to run update_terrain()
-	escoria.esc_runner.connect("event_done", Movable, "update_terrain")
+	escoria.event_manager.connect("event_done", Movable, "update_terrain")
 	
 #	assert(is_angle_in_interval(0, [340,40])) # true
 #	assert(is_angle_in_interval(359, [340,40])) # true

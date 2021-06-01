@@ -149,7 +149,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/scenes/dialogs/dialog_player.gd"
 }, {
-"base": "Object",
+"base": "ESCStatement",
 "class": "ESCEvent",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/types/esc_event.gd"
@@ -170,9 +170,9 @@ _global_script_classes=[ {
 "path": "res://addons/escoria-core/game/core-scripts/escgame.gd"
 }, {
 "base": "Resource",
-"class": "ESCGlobals",
+"class": "ESCGlobalsManager",
 "language": "GDScript",
-"path": "res://addons/escoria-core/game/core-scripts/esc/esc_globals.gd"
+"path": "res://addons/escoria-core/game/core-scripts/esc/esc_globals_manager.gd"
 }, {
 "base": "ESCStatement",
 "class": "ESCGroup",
@@ -198,6 +198,11 @@ _global_script_classes=[ {
 "class": "ESCItem",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/escitem.gd"
+}, {
+"base": "Object",
+"class": "ESCLogger",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/log/logging.gd"
 }, {
 "base": "Node",
 "class": "ESCObject",
@@ -412,12 +417,13 @@ _global_script_class_icons={
 "ESCEventManager": "",
 "ESCExecution": "",
 "ESCGame": "",
-"ESCGlobals": "",
+"ESCGlobalsManager": "",
 "ESCGroup": "",
 "ESCInventory": "",
 "ESCInventoryItem": "",
 "ESCInventoryManager": "",
 "ESCItem": "",
+"ESCLogger": "",
 "ESCObject": "",
 "ESCObjectManager": "",
 "ESCPlayer": "",
@@ -507,7 +513,7 @@ sound/sfx_volume=1
 sound/speech_volume=1
 sound/master_volume=1
 main/command_directories=[ "res://addons/escoria-core/game/core-scripts/esc/commands" ]
-debug/log_level=0
+debug/log_level="DEBUG"
 
 [input]
 
