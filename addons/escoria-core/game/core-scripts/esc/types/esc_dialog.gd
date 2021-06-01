@@ -58,6 +58,12 @@ func _init(dialog_string: String):
 		)
 
 
+# Dialogs have no conditions, just return true
+func is_valid() -> bool:
+	return true
+
+
+# Run this dialog
 func run():
 	escoria.logger.debug("Starting dialog")
 	escoria.current_state = escoria.GAME_STATE.DIALOG

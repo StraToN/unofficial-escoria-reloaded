@@ -15,9 +15,6 @@ var screen_ofs = Vector2(0, 0)
 onready var bg_music = $bg_music
 onready var scene_transition = $layers/curtain/scene_transition
 
-func _ready():
-	$layers/wait_timer.connect("timeout", self, "_on_wait_finished")
-
 
 # Set the new current scene
 #
@@ -32,7 +29,7 @@ func set_scene(p_scene: Node):
 		clear_scene()
 		
 	add_child(p_scene) 
-	$"/root".move_child(p_scene, 0)
+	move_child(p_scene, 0)
 	
 	current_scene = p_scene
 	check_game_scene_methods()
@@ -46,8 +43,6 @@ func clear_scene():
 
 	escoria.action_manager.clear_current_action()
 	escoria.action_manager.clear_current_tool()
-#	escoria.esc_runner.hover_clear_stack()
-#	escoria.clear_inventory()
 
 	last_scene_global_id = current_scene.global_id
 	escoria.globals_manager.set_global(
@@ -64,9 +59,6 @@ func wait(params : Array, level):
 	$layers/wait_timer.set_wait_time(float(params[0]))
 	$layers/wait_timer.set_one_shot(true)
 	$layers/wait_timer.start()
-
-func _on_wait_finished():
-	escoria.esc_level_runner.finished(wait_level)
 
 
 func set_camera_limits(camera_limit_id : int = 0):

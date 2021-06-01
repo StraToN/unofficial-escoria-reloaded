@@ -11,6 +11,9 @@ class_name ESCDialogsPlayer
 # - option: The dialog option that was chosen
 signal option_chosen(option)
 
+# Emitted when a dialog line was finished
+signal dialog_line_finished
+
 
 # Wether the player is currently speaking
 var is_speaking = false
@@ -25,7 +28,7 @@ var _dialog_chooser_ui = null
 # Register the dialog player and load the dialog resources
 func _ready():
 	if !Engine.is_editor_hint():
-		escoria.register_object(self)
+		escoria.dialog_player = self
 	preload_resources(ProjectSettings.get_setting("escoria/ui/dialogs_folder"))
 
 
@@ -76,6 +79,8 @@ func say(character: String, params: Dictionary) -> void:
 	_dialog_ui = get_resource(params.ui).instance()
 	get_parent().add_child(_dialog_ui)
 	_dialog_ui.say(character, params)
+	yield(_dialog_ui, "dialog_line_finished")
+	emit_signal("dialog_line_finished")
 	
 
 # Called when a dialog line is skipped

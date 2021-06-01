@@ -69,11 +69,11 @@ func load_esc_file(path: String) -> ESCScript:
 # Compiles an array of ESC script strings to an ESCScript
 func compile(lines: Array) -> ESCScript:
 	var script = ESCScript.new()
-	var events = self._compile(lines)
-	
-	for event in events:
-		script.events[event.name] = event
-		
+	if lines.size() > 0:
+		var events = self._compile(lines)
+		for event in events:
+			script.events[event.name] = event
+			
 	return script
 
 

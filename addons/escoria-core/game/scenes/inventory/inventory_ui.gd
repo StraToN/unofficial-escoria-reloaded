@@ -28,7 +28,7 @@ func _ready():
 	for item_id in escoria.inventory_manager.items_in_inventory():
 		call_deferred("add_new_item_by_id", item_id)
 		
-	escoria.register_object(self)
+	escoria.inventory = self
 	
 	if inventory_ui_container == null or inventory_ui_container.is_empty():
 		escoria.logger.report_errors(self.get_path(), ["Items container is empty."])
@@ -44,22 +44,36 @@ func _ready():
 func add_new_item_by_id(item_id : String) -> void:
 	if item_id.begins_with("i/"):
 		item_id = item_id.rsplit("i/", false)[0]
-	if !items_ids_in_inventory.has(item_id):
-		if !escoria.esc_runner.check_obj(item_id, "add_new_item_by_id"):
-			escoria.logger.report_errors("inventory_ui.gd:add_new_item_by_id()",
-				["Item global id '"+ item_id + "' does not exist.", 
-				"Check item's id in ESCORIA_ALL_ITEMS scene."])
-		if !all_items.get_inventory_item(item_id):
-			escoria.logger.report_errors("inventory_ui.gd:add_new_item_by_id()",
-				["Item global id '"+ item_id + "' doesn't have corresponding inventory item.", 
-				"Check item's id in ESCORIA_ALL_ITEMS scene."])
+	if not items_ids_in_inventory.has(item_id):
+		if not escoria.object_manager.has(item_id):
+			escoria.logger.report_errors(
+				"inventory_ui.gd:add_new_item_by_id()",
+				[
+					"Item global id '%s' does not exist." % item_id, 
+					"Check item's id in ESCORIA_ALL_ITEMS scene."
+				]
+			)
+		if not all_items.get_inventory_item(item_id):
+			escoria.logger.report_errors(
+				"inventory_ui.gd:add_new_item_by_id()",
+				[
+					"Item global id '%s' doesn't have a " +\
+							"corresponding inventory item." % item_id, 
+					"Check item's id in ESCORIA_ALL_ITEMS scene."
+				]
+			)
 		var item_inventory_button = all_items.get_inventory_item(item_id).duplicate()
 		items_ids_in_inventory[item_id] = item_inventory_button
 		get_node(inventory_ui_container).add_item(item_inventory_button)
 		
 		# Add the item to inventory
-		if !escoria.esc_runner.objects.has(item_id):
-			escoria.esc_runner.register_object(item_id, item_inventory_button)
+		if not escoria.object_manager.has(item_id):
+			escoria.object_manager.register_object(
+				ESCObject.new(
+					item_id, 
+					item_inventory_button
+				)
+			)
 		item_inventory_button.visible = true
 			
 		item_inventory_button.connect("mouse_left_inventory_item", 
@@ -99,12 +113,9 @@ func _on_escoria_global_changed(global : String) -> void:
 		return 
 	var item = global.rsplit("i/", false)
 	if item.size() == 1:
-		if escoria.esc_runner.globals[global] == "true":
+		if escoria.globals_manager.get(global):
 			add_new_item_by_id(item[0])
-		elif escoria.esc_runner.globals[global] == "false":
-			remove_item_by_id(item[0])
 		else:
-			escoria.logger.report_warnings("inventory_ui.gd:_on_escoria_global_changed()", \
-				["Inventory global " + global + " is neither 'true' nor 'false' (was " + escoria.esc_runner.globals[global] + "). "])
+			remove_item_by_id(item[0])
 	else:
 		escoria.logger.report_errors("inventory_ui.gd:_on_escoria_global_changed()", ["Global must contain 1 item name.", "(received: " + global + ")"])

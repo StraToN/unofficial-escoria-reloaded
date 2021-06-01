@@ -38,8 +38,8 @@ func _set_state(p_state: String):
 	
 	var animation_node = null
 	
-	if node is ESCItem:
-		animation_node = (node as ESCItem).get_animation_player()
+	if node.has("get_animation_player"):
+		animation_node = node.get_animation_player()
 	
 	if animation_node:
 		animation_node.stop()

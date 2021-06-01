@@ -39,11 +39,17 @@ func _ready():
 	if player_scene:
 		player = player_scene.instance()
 		add_child(player)
-		escoria.register_object(player)
+		escoria.object_manager.register_object(ESCObject.new(
+			player.global_id,
+			player
+		))
 		game.get_node("camera").set_target(player)
 	
 	if has_node("player_start"):
-		escoria.register_object($player_start)
+		escoria.object_manager.register_object(ESCObject.new(
+			$player_start.name,
+			$player_start
+		))
 	
 	if global_id.empty():
 		global_id = name

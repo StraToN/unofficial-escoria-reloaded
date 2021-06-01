@@ -81,4 +81,5 @@ func run(command_params: Array) -> int:
 		return ESCExecution.RC_ERROR
 		
 	escoria.dialog_player.say(command_params[0], dict)
+	yield(escoria.dialog_player, "dialog_line_finished")
 	return ESCExecution.RC_OK

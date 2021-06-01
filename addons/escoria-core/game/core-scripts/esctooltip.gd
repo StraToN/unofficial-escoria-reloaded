@@ -31,7 +31,8 @@ const ONE_LINE_HEIGHT = 16
 
 
 func _ready():
-	escoria.call_deferred("register_object", self)
+	if escoria.main.current_scene:
+		escoria.main.current_scene.game.tooltip_node = self
 	escoria.action_manager.connect("action_changed", self, "on_action_selected")
 	
 

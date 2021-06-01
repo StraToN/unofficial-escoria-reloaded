@@ -34,14 +34,9 @@ func prepare_arguments(arguments: Array) -> Array:
 	regex_int.compile("^[0-9]+$")
 	
 	for index in range(arguments.size()):
-		if regex_float.search(arguments[index]):
-			complete_arguments[index] = float(arguments[index])
-		elif regex_int.search(arguments[index]):
-			complete_arguments[index] = int(arguments[index])
-		elif regex_bool.search(arguments[index].to_lower()):
-			complete_arguments[index] = bool(arguments[index])
-		else:
-			complete_arguments[index] = str(arguments[index])
+		complete_arguments[index] = escoria.utils.get_typed_value(
+			arguments[index]
+		)
 		
 	return complete_arguments
 

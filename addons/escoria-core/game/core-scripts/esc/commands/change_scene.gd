@@ -65,7 +65,7 @@ func run(command_params: Array) -> int:
 	var game_scene = res_game.instance()
 	if not game_scene:
 		escoria.logger.report_errors(
-			"esc_runner.gd:change_scene()", 
+			"ChangeSceneCommand.run: Failed loading game scene",
 			[
 				"Failed loading scene %s" % \
 						ProjectSettings.get_setting("escoria/ui/game_scene")
@@ -115,7 +115,7 @@ func run(command_params: Array) -> int:
 		escoria.inputs_manager.hotspot_focused = ""
 	else:
 		escoria.logger.report_errors(
-			"esc_runner.gd:change_scene()", 
+			"ChangeSceneCommand.run: Failed loading room scene", 
 			[
 				"Failed loading scene %s" % command_params[0]
 			]

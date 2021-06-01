@@ -4,7 +4,7 @@ extends Node
 onready var main = $main
 onready var inputs_manager = $inputs_manager
 onready var utils = load("res://addons/escoria-core/game/core-scripts/utils/utils.gd").new()
-
+onready var save_data = load("res://addons/escoria-core/game/core-scripts/save_data/save_data.gd").new()
 
 # Logger used
 var logger: ESCLogger
@@ -80,9 +80,6 @@ var settings_default : Dictionary = {
 
 
 func _init():
-	logger = load("res://addons/escoria-core/game/core-scripts/log/logging.gd").new()
-
-func _init():
 	self.logger = ESCLogger.new()
 	self.inventory_manager = ESCInventoryManager.new()
 	self.action_manager = ESCActionManager.new()
@@ -95,6 +92,13 @@ func _init():
 	self.resource_cache = ResourceCache.new()
 	self.resource_cache.start()
 
+
+func _ready():
+	save_data.start()
+	save_data.check_settings()
+	var settings = save_data.load_settings(null)
+	escoria.settings = parse_json(settings)
+	escoria._on_settings_loaded(escoria.settings)
 
 
 ##################################################################################
@@ -115,44 +119,6 @@ func new_game():
 			[]
 		)
 		return
-	
-
-"""
-Add object to the environement.
-"""
-func register_object(object : Object):
-	var object_id
-	if object.get("global_id"):
-		object_id = object.global_id
-	else:
-		object_id = object.name
-		
-	if object is ESCDialogsPlayer:
-		dialog_player = object
-	
-	if object is ESCPlayer \
-			or object is Position2D\
-			or object is ESCItem\
-			or object is ESCCamera\
-			or object is ESCBackgroundMusic\
-			or object is ESCBackgroundSound:
-		self.object_manager.register_object(
-			ESCObject.new(object_id, object),
-			true
-		)
-		
-	if object is ESCTerrain:
-		room_terrain = object
-	
-#	if object is ESCBackground:
-#		$esc_runner.register_object(object_id, object, true)
-	
-	if object is ESCInventory:
-		inventory = object
-	
-	if object is ESCTooltip:
-		if main.current_scene:
-			main.current_scene.game.tooltip_node = object
 	
 
 """
@@ -308,7 +274,7 @@ func ev_left_click_on_item(obj, event, default_action = false):
 			destination_position = event.position
 			dont_interact = true
 		
-		# Use esc_runner for this?
+		# Use ESC for this?
 		var is_already_walking = main.current_scene.player.walk_to(destination_position, walk_context)
 		
 		# Wait for the player to arrive before continuing with action.

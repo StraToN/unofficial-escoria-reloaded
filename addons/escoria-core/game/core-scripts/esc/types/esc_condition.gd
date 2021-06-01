@@ -57,9 +57,11 @@ func _init(comparison_string: String):
 						]
 					)
 			if "comparison_value" in result.names:
-				self.comparison_value = 	escoria.utils._get_re_group(
-					result, 
-					"comparison_value"
+				self.comparison_value = 	escoria.utils.get_typed_value(
+					escoria.utils._get_re_group(
+						result, 
+						"comparison_value"
+					)
 				)
 			if "is_inventory" in result.names:
 				self.inventory = true
@@ -87,13 +89,13 @@ func run() -> bool:
 			escoria.globals_manager.has(global_name):
 		return_value = true
 	elif comparison == COMPARISON_EQ and\
-			escoria.globals_manager.get(global_name) == comparison_value:
+			escoria.globals_manager.get_global(global_name) == comparison_value:
 		return_value = true
 	elif comparison == COMPARISON_GT and\
-			escoria.globals_manager.get(global_name) > comparison_value:
+			escoria.globals_manager.get_global(global_name) > comparison_value:
 		return_value = true
 	elif comparison == COMPARISON_LT and\
-			escoria.globals_manager.get(global_name) < comparison_value:
+			escoria.globals_manager.get_global(global_name) < comparison_value:
 		return_value = true
 		
 	if negated:

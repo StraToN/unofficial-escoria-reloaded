@@ -18,5 +18,5 @@ func configure() -> ESCCommandArgumentDescriptor:
 
 # Run the command
 func run(command_params: Array) -> int:
-	yield(get_tree().create_timer(command_params[0]), "timeout")
+	yield(escoria.get_tree().create_timer(command_params[0]), "timeout")
 	return ESCExecution.RC_OK
