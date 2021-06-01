@@ -17,7 +17,13 @@ func configure() -> ESCCommandArgumentDescriptor:
 	return ESCCommandArgumentDescriptor.new(
 		2, 
 		[TYPE_STRING, TYPE_STRING, TYPE_STRING, TYPE_STRING],
-		[null, null, "default", "default"]
+		[
+			null, 
+			null, 
+			ProjectSettings.get_setting("escoria/ui/default_dialog_scene")\
+					.get_file().get_basename(), 
+			"default"
+		]
 	)
 
 

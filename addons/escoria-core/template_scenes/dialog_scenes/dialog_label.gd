@@ -33,7 +33,7 @@ func say(character : String, params : Dictionary) :
 		return
 	
 	# Position the RichTextLabel on the character's dialog position, if any.
-	current_character = escoria.esc_runner.get_object(character)
+	current_character = escoria.object_manager.get_object(character).node
 	rect_position = current_character.get_node("dialog_position").get_global_transform_with_canvas().origin
 	rect_position.x -= rect_size.x / 2
 	
@@ -73,7 +73,6 @@ func _on_dialog_line_typed(object, key):
 
 func _on_dialog_finished():
 	current_character.stop_talking()
-	escoria.esc_level_runner.finished()
 	escoria.dialog_player.is_speaking = false
 	escoria.current_state = escoria.GAME_STATE.DEFAULT
 	queue_free()
