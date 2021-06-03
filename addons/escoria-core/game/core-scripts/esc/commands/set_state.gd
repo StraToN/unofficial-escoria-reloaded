@@ -1,8 +1,9 @@
-# `set_state object state`
+# `set_state object state [immediate]`
 #
 # Changes the state of an object, and executes the state animation if present. 
 # The command can be used to change the appearance of an item or a player 
 # character.
+# If `immediate` is set to true, the animation is run directly
 #
 # @ESC
 extends ESCBaseCommand
@@ -13,8 +14,8 @@ class_name SetStateCommand
 func configure() -> ESCCommandArgumentDescriptor:
 	return ESCCommandArgumentDescriptor.new(
 		2, 
-		[TYPE_STRING, TYPE_STRING],
-		[null, null]
+		[TYPE_STRING, TYPE_STRING, TYPE_BOOL],
+		[null, null, false]
 	)
 	
 
@@ -33,6 +34,8 @@ func validate(arguments: Array):
 
 # Run the command
 func run(command_params: Array) -> int:
-	(escoria.object_manager.objects[command_params[0]] as ESCObject).state = \
-			command_params[1]
+	(escoria.object_manager.objects[command_params[0]] as ESCObject).set_state(
+		command_params[1],
+		command_params[2]
+	)
 	return ESCExecution.RC_OK

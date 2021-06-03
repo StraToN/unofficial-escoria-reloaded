@@ -129,6 +129,8 @@ func do(action : String, params : Array = []) -> void:
 	if current_state == GAME_STATE.DEFAULT:
 		match action:
 			"walk":
+				self.action_manager.clear_current_action()
+				
 				# Check moving object.
 				if not self.object_manager.has(params[0]):
 					self.logger.report_errors(

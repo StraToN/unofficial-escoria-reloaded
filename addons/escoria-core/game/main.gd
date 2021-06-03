@@ -44,12 +44,7 @@ func clear_scene():
 	escoria.action_manager.clear_current_action()
 	escoria.action_manager.clear_current_tool()
 
-	last_scene_global_id = current_scene.global_id
-	escoria.globals_manager.set_global(
-		"ESC_LAST_SCENE", 
-		last_scene_global_id, 
-		true
-	)
+	
 	get_node("/root").remove_child(current_scene)
 	current_scene.free()
 	current_scene = null

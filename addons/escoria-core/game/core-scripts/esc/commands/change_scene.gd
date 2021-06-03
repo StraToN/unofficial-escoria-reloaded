@@ -51,6 +51,13 @@ func run(command_params: Array) -> int:
 		command_params[1]
 	])
 	
+	if escoria.main.current_scene:
+		escoria.globals_manager.set_global(
+			"ESC_LAST_SCENE", 
+			escoria.main.current_scene.global_id, 
+			true
+		)
+		
 	escoria.main.scene_transition.fade_out()
 	yield(escoria.main.scene_transition, "transition_done")
 	

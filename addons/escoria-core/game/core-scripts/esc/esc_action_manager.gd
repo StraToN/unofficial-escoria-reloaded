@@ -167,6 +167,8 @@ func activate(
 				escoria.event_manager, 
 				"event_finished"
 			)
+		if event_returned[0] == ESCExecution.RC_OK:
+			escoria.action_manager.clear_current_action()
 		return event_returned[0]
 	else:
 		escoria.logger.report_warnings(

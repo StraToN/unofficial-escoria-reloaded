@@ -14,7 +14,7 @@ var interactive: bool = true
 
 # The state of the object. If the object has a respective animation, 
 # it will be played
-var state: String = "default" setget _set_state
+var state: String = "default"
 
 # The events registered with the object
 var events: Dictionary = {}
@@ -33,21 +33,30 @@ func _init(p_global_id: String, p_node: Node):
 # #### Parameters
 #
 # - p_state: State to set
-func _set_state(p_state: String):
+# - immediate: If true, skip directly to the end
+func set_state(p_state: String, immediate: bool = false):
 	state = p_state
 	
-	var animation_node = null
+	if node.has_method("get_animation_player"):
+		var animation_node = node.get_animation_player()
 	
-	if node.has("get_animation_player"):
-		animation_node = node.get_animation_player()
-	
-	if animation_node:
-		animation_node.stop()
-		var actual_animator
-		if animation_node is AnimationPlayer:
-			actual_animator = animation_node
-		elif animation_node is AnimatedSprite:
-			actual_animator = animation_node.frames
-			
-		if actual_animator.has_animation(p_state):
-			animation_node.play(p_state)
+		if animation_node:
+			animation_node.stop()
+			var actual_animator
+			if animation_node is AnimationPlayer:
+				if animation_node.has_animation(p_state):
+					if immediate:
+						animation_node.current_animation = p_state
+						animation_node.seek(
+							animation_node.get_animation(p_state).length
+						)
+					else:
+						animation_node.play(p_state)
+			elif animation_node is AnimatedSprite:
+				if animation_node.frames.has_animation(p_state):
+					if immediate:
+						animation_node.animation = p_state
+						animation_node.frame = \
+							animation_node.frames.get_frame_count(p_state)
+					else:
+						animation_node.play(p_state)
