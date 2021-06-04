@@ -81,3 +81,4 @@ func run():
 		rc = yield(rc, "completed")
 	if rc != ESCExecution.RC_CANCEL:
 		return self.run()
+	return rc
