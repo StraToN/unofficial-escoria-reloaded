@@ -103,7 +103,7 @@ func run(command_params: Array) -> int:
 
 			# If scene was never visited, add "ready" event to the events stack
 			if not command_params[0] in self.readied_scenes \
-					and "ready" in script.events:
+					and script.events.has("ready"):
 				escoria.event_manager.queue_event(script.events["ready"])
 				var rc = yield(escoria.event_manager, "event_finished")
 				while rc[1] != "ready":

@@ -45,7 +45,7 @@ func run(command_params: Array) -> int:
 	# Load room scene
 	var scene = res_scene.instance()
 	if scene:
-		get_node("/root").add_child(scene)
+		escoria.main.get_node("/root").add_child(scene)
 		if command_params[1]:
 			var obj = escoria.object_manager.get_object(command_params[1])
 			scene.set_position(obj.get_global_position())

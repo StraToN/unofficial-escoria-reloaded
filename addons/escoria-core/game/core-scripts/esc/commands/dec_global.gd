@@ -32,8 +32,9 @@ func validate(arguments: Array):
 
 # Run the command
 func run(command_params: Array) -> int:
-	escoria.globals_manager.set(
+	escoria.globals_manager.set_global(
 		command_params[0],
-		escoria.globals_manager.get(command_params[0]) - command_params[1]
+		escoria.globals_manager.get_global(command_params[0]) - \
+				command_params[1]
 	)
 	return ESCExecution.RC_OK
