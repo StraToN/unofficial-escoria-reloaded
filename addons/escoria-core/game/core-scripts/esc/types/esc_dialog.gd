@@ -5,13 +5,13 @@ class_name ESCDialog
 
 # Regex that matches dialog lines
 const REGEX = \
-	'^([^?]*)\\?( (?<type>[^ ]+))?( (?<avatar>[^ ]+))?' +\
+	'^(\\s*)\\?( (?<type>[^ ]+))?( (?<avatar>[^ ]+))?' +\
 	'( (?<timeout>[^ ]+))?( (?<timeout_option>.+))?$'
 
 
 # A Regex that matches the end of a dialog
 const END_REGEX = \
-	'^([^!]*)!'
+	'^(?<indent>\\s*)!.*$'
 
 
 # Dialog type
@@ -38,16 +38,16 @@ func _init(dialog_string: String):
 	if dialog_regex.search(dialog_string):
 		for result in dialog_regex.search_all(dialog_string):
 			if "type" in result.names:
-				self.type = escoria.utils._get_re_group(result, "type")
+				self.type = escoria.utils.get_re_group(result, "type")
 			if "avatar" in result.names:
-				self.avatar = escoria.utils._get_re_group(result, "avatar")
+				self.avatar = escoria.utils.get_re_group(result, "avatar")
 			if "timeout" in result.names:
 				self.timeout = int(
-					escoria.utils._get_re_group(result, "timeout")
+					escoria.utils.get_re_group(result, "timeout")
 				)
 			if "timeout_option" in result.names:
 				self.timeout_option = int(
-					escoria.utils._get_re_group(result, "timeout_option")
+					escoria.utils.get_re_group(result, "timeout_option")
 				)
 	else:
 		escoria.logger.report_errors(
@@ -71,11 +71,13 @@ func run():
 		escoria.dialog_player = escoria.main.current_scene.get_node(
 			"game/ui/dialog_layer/dialog_player"
 		)
-	escoria.dialog_player.start_dialog(self)
+	escoria.dialog_player.start_dialog_choices(self)
 	var option = yield(
 		escoria.dialog_player, 
 		"option_chosen"
 	) as ESCDialogOption
-	var rc = yield(option, "completed")
+	var rc = option.run()
+	if rc is GDScriptFunctionState:
+		rc = yield(rc, "completed")
 	if rc != ESCExecution.RC_CANCEL:
 		return self.run()

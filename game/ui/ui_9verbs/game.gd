@@ -104,7 +104,9 @@ func left_double_click_on_inventory_item(_inventory_item_global_id : String, _ev
 	pass
 
 func inventory_item_focused(inventory_item_global_id : String) -> void:
-	var target_obj = escoria.object_manager.get_object(inventory_item_global_id)
+	var target_obj = escoria.object_manager.get_object(
+		inventory_item_global_id
+	).node
 	tooltip.set_target(target_obj.tooltip_name)
 	
 	if escoria.action_manager.current_action != "use" \

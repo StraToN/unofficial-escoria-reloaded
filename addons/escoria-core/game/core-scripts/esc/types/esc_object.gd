@@ -7,7 +7,7 @@ class_name ESCObject
 var global_id: String
 
 # Wether the object is active (visible to the player)
-var active: bool = true
+var active: bool = true setget _set_active
 
 # Wether the object is interactive (clickable by the player)
 var interactive: bool = true
@@ -60,3 +60,13 @@ func set_state(p_state: String, immediate: bool = false):
 							animation_node.frames.get_frame_count(p_state)
 					else:
 						animation_node.play(p_state)
+
+
+# Set the active value, thus hiding or showing the object
+#
+# #### Parameters
+#
+# - value: Value to set
+func _set_active(value: bool):
+	active = value
+	self.node.visible = value

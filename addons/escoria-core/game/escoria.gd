@@ -233,7 +233,8 @@ func ev_left_click_on_item(obj, event, default_action = false):
 	# Check if current_action and current_tool are already set
 	if self.action_manager.current_action:
 		if self.action_manager.current_tool:
-			if self.action_manager.current_action in self.action_manager.current_tool.combine_if_action_used_among:
+			if self.action_manager.current_action in self.action_manager\
+					.current_tool.node.combine_if_action_used_among:
 				need_combine = true
 			else:
 				self.action_manager.current_tool = obj

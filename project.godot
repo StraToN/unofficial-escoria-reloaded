@@ -55,11 +55,6 @@ _global_script_classes=[ {
 "path": "res://addons/escoria-core/game/core-scripts/esc/commands/change_scene.gd"
 }, {
 "base": "ESCBaseCommand",
-"class": "Command",
-"language": "GDScript",
-"path": "res://addons/escoria-core/game/core-scripts/esc/commands/queue_resource.gd"
-}, {
-"base": "ESCBaseCommand",
 "class": "CustomCommand",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/commands/custom.gd"
@@ -264,6 +259,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/commands/inc_global.gd"
 }, {
+"base": "ESCBaseCommand",
+"class": "InventoryAddCommand",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/esc/commands/inventory_add.gd"
+}, {
+"base": "ESCBaseCommand",
+"class": "InventoryRemoveCommand",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/esc/commands/inventory_remove.gd"
+}, {
 "base": "Node",
 "class": "Movable",
 "language": "GDScript",
@@ -278,6 +283,11 @@ _global_script_classes=[ {
 "class": "QueueAnimationCommand",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/commands/queue_animation.gd"
+}, {
+"base": "ESCBaseCommand",
+"class": "QueueResourceCommand",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/esc/commands/queue_resource.gd"
 }, {
 "base": "ESCBaseCommand",
 "class": "RepeatCommand",
@@ -388,6 +398,16 @@ _global_script_classes=[ {
 "class": "WalkCommand",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/commands/walk.gd"
+}, {
+"base": "ESCBaseCommand",
+"class": "WalkToPosBlockCommand",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/esc/commands/walk_to_pos_block.gd"
+}, {
+"base": "ESCBaseCommand",
+"class": "WalkToPosCommand",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/esc/commands/walk_to_pos.gd"
 } ]
 _global_script_class_icons={
 "AceeptInputCommand": "",
@@ -399,7 +419,6 @@ _global_script_class_icons={
 "CameraSetZoomHeightCommand": "",
 "CameraShiftCommand": "",
 "ChangeSceneCommand": "",
-"Command": "",
 "CustomCommand": "",
 "CutSceneCommand": "",
 "DebugCommand": "",
@@ -441,9 +460,12 @@ _global_script_class_icons={
 "EnableTerrainCommand": "",
 "GameOverCommand": "",
 "IncGlobalCommand": "",
+"InventoryAddCommand": "",
+"InventoryRemoveCommand": "",
 "Movable": "",
 "PlaySndCommand": "",
 "QueueAnimationCommand": "",
+"QueueResourceCommand": "",
 "RepeatCommand": "",
 "ResourceCache": "",
 "SayCommand": "",
@@ -465,7 +487,9 @@ _global_script_class_icons={
 "TurnToCommand": "",
 "WaitCommand": "",
 "WalkBlockCommand": "",
-"WalkCommand": ""
+"WalkCommand": "",
+"WalkToPosBlockCommand": "",
+"WalkToPosCommand": ""
 }
 
 [application]

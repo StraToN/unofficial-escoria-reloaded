@@ -17,6 +17,7 @@ func _test_basic() -> bool:
 # Fourth group
 >
 	say player "Test5"
+	say player  "Test 6"
 	"""
 	var script = escoria.esc_compiler.compile(esc.split("\n"))
 	
@@ -27,34 +28,34 @@ func _test_basic() -> bool:
 	assert(subject.size() == 1)
 	assert(subject[0] == "test")
 	
-	subject = script.events["test"].commands
+	subject = script.events["test"].statements
 	assert(subject.size() == 2)
 	
-	subject = script.events["test"].commands[0]
+	subject = script.events["test"].statements[0]
 	assert(subject is ESCGroup)
-	assert(subject.commands.size() == 4)
+	assert(subject.statements.size() == 4)
 	
-	subject = script.events["test"].commands[0].commands[0]
+	subject = script.events["test"].statements[0].statements[0]
 	assert(subject is ESCCommand)
 	assert(subject.name == "say")
 	assert(subject.parameters.size() == 2)
 	assert(subject.parameters[0] == "player")
 	assert(subject.parameters[1] == "Test")
 	
-	subject = script.events["test"].commands[0].commands[1]
+	subject = script.events["test"].statements[0].statements[1]
 	assert(subject is ESCGroup)
 	assert(subject.conditions.size() == 1)
 	assert(subject.conditions[0] is ESCCondition)
 	assert(subject.conditions[0].flag == "test")
 	
-	subject = script.events["test"].commands[0].commands[1].commands[0]
+	subject = script.events["test"].statements[0].statements[1].statements[0]
 	assert(subject is ESCCommand)
 	assert(subject.name == "say")
 	assert(subject.parameters.size() == 2)
 	assert(subject.parameters[0] == "player")
 	assert(subject.parameters[1] == "Test2 BLANK")
 	
-	subject = script.events["test"].commands[0].commands[2]
+	subject = script.events["test"].statements[0].statements[2]
 	assert(subject is ESCCommand)
 	assert(subject.name == "say")
 	assert(subject.parameters.size() == 2)
@@ -63,13 +64,18 @@ func _test_basic() -> bool:
 	assert(subject.conditions.size() == 1)
 	assert(subject.conditions[0].flag == "test2")
 	
-	subject = script.events["test"].commands[0].commands[3]
+	subject = script.events["test"].statements[0].statements[3]
 	assert(subject is ESCGroup)
-	assert(subject.commands.size() == 1)
+	assert(subject.statements.size() == 1)
 	
-	subject = script.events["test"].commands[1]
+	subject = script.events["test"].statements[1]
 	assert(subject is ESCGroup)
-	assert(subject.commands.size() == 1)
+	assert(subject.statements.size() == 2)
+	
+	subject = script.events["test"].statements[1].statements[1]
+	assert(subject is ESCCommand)
+	assert(subject.name == "say")
+	assert(subject.parameters[1] == "Test 6")
 	
 	return true
 	
@@ -89,39 +95,39 @@ say player "Test" [!eq flag 3]
 	"""
 	var script = escoria.esc_compiler.compile(esc.split("\n"))
 	
-	var subject = script.events["test"].commands[0]
+	var subject = script.events["test"].statements[0]
 	assert(subject is ESCCommand)
 	assert(subject.conditions.size() == 1)
 	
-	subject = script.events["test"].commands[0].conditions[0]
+	subject = script.events["test"].statements[0].conditions[0]
 	assert(subject.flag == "flag")
 	assert(not subject.negated)
 	assert(not subject.inventory)
 	assert(subject.comparison == ESCCondition.COMPARISON_NONE)
 	
-	subject = script.events["test"].commands[1].conditions
+	subject = script.events["test"].statements[1].conditions
 	assert(subject.size() == 2)
 	assert(subject[0].flag == "flag1")
 	assert(subject[1].flag == "flag2")
 	
-	subject = script.events["test"].commands[2].conditions
+	subject = script.events["test"].statements[2].conditions
 	assert(subject.size() == 1)
 	assert(subject[0].flag == "flag")
 	assert(subject[0].negated)
 	
-	subject = script.events["test"].commands[3].conditions
+	subject = script.events["test"].statements[3].conditions
 	assert(subject.size() == 1)
 	assert(subject[0].flag == "flag")
 	assert(subject[0].inventory)
 	
-	subject = script.events["test"].commands[4].conditions
+	subject = script.events["test"].statements[4].conditions
 	assert(subject.size() == 2)
 	assert(subject[0].flag == "flag")
 	assert(subject[0].inventory)
 	assert(subject[1].flag == "flag")
 	assert(not subject[1].inventory)
 	
-	subject = script.events["test"].commands[5].conditions
+	subject = script.events["test"].statements[5].conditions
 	assert(subject.size() == 3)
 	assert(subject[0].flag == "flag")
 	assert(subject[0].inventory)
@@ -131,13 +137,13 @@ say player "Test" [!eq flag 3]
 	assert(not subject[2].inventory)
 	assert(subject[2].negated)
 	
-	subject = script.events["test"].commands[6].conditions
+	subject = script.events["test"].statements[6].conditions
 	assert(subject.size() == 1)
 	assert(subject[0].flag == "flag")
 	assert(subject[0].comparison == ESCCondition.COMPARISON_EQ)
 	assert(subject[0].comparison_value == 3)
 	
-	subject = script.events["test"].commands[7].conditions
+	subject = script.events["test"].statements[7].conditions
 	assert(subject.size() == 2)
 	assert(subject[0].flag == "flag")
 	assert(subject[0].comparison == ESCCondition.COMPARISON_EQ)
@@ -146,7 +152,7 @@ say player "Test" [!eq flag 3]
 	assert(subject[1].comparison == ESCCondition.COMPARISON_GT)
 	assert(subject[1].comparison_value == 5)
 	
-	subject = script.events["test"].commands[8].conditions
+	subject = script.events["test"].statements[8].conditions
 	assert(subject.size() == 1)
 	assert(subject[0].flag == "flag")
 	assert(subject[0].comparison == ESCCondition.COMPARISON_EQ)
@@ -203,8 +209,16 @@ func _test_dialog() -> bool:
 ?
 	- "Option 1"
 		say player "test"
+		say player "testb"
+		say player "testb?"
 	- "Option 2" [flag]
 		say player "test2"
+		?
+			- "Suboption 1"
+				say player "test21"
+			- "Suboption 2"
+				say player "test22"
+		!
 	- "Option 3"
 		>
 			say player "test3"
@@ -212,44 +226,55 @@ func _test_dialog() -> bool:
 	"""
 	var script = escoria.esc_compiler.compile(esc.split("\n"))
 	
-	var subject = script.events["test"].commands
+	var subject = script.events["test"].statements
 	assert(subject.size() == 1)
 
 	assert(subject[0] is ESCDialog)
 	assert(subject[0].options.size() == 3)
 	
-	subject = script.events["test"].commands[0].options[0]
+	subject = script.events["test"].statements[0].options[0]
 	assert(subject is ESCDialogOption)
 	assert(subject.option == "Option 1")
 	
-	subject = script.events["test"].commands[0].options[0].commands
-	assert(subject.size() == 1)
+	subject = script.events["test"].statements[0].options[0].statements
+	assert(subject.size() == 3)
 	assert(subject[0] is ESCCommand)
 	assert(subject[0].name == "say")
 	assert(subject[0].parameters.size() == 2)
+	assert(subject[1] is ESCCommand)
+	assert(subject[1].name == "say")
+	assert(subject[1].parameters.size() == 2)
+	assert(subject[1].parameters[1] == "testb")	
+	assert(subject[2] is ESCCommand)
+	assert(subject[2].name == "say")
+	assert(subject[2].parameters.size() == 2)
+	assert(subject[2].parameters[1] == "testb?")
 	
-	subject = script.events["test"].commands[0].options[1]
+	subject = script.events["test"].statements[0].options[1]
 	assert(subject is ESCDialogOption)
 	assert(subject.option == "Option 2")
 	assert(subject.conditions.size() == 1)
 	assert(subject.conditions[0].flag == "flag")
 	
-	subject = script.events["test"].commands[0].options[1].commands
-	assert(subject.size() == 1)
+	subject = script.events["test"].statements[0].options[1].statements
+	assert(subject.size() == 2)
 	assert(subject[0] is ESCCommand)
 	assert(subject[0].name == "say")
 	assert(subject[0].parameters.size() == 2)
-	
-	subject = script.events["test"].commands[0].options[2]
+
+	assert(subject[1] is ESCDialog)
+	assert(subject[1].options.size() == 2)
+		
+	subject = script.events["test"].statements[0].options[2]
 	assert(subject is ESCDialogOption)
 	assert(subject.option == "Option 3")
 	
-	subject = script.events["test"].commands[0].options[2].commands
+	subject = script.events["test"].statements[0].options[2].statements
 	assert(subject.size() == 1)
 	assert(subject[0] is ESCGroup)
-	assert(subject[0].commands.size() == 1)
-	assert(subject[0].commands[0] is ESCCommand)
-	assert(subject[0].commands[0].parameters.size() == 2)
+	assert(subject[0].statements.size() == 1)
+	assert(subject[0].statements[0] is ESCCommand)
+	assert(subject[0].statements[0].parameters.size() == 2)
 	
 	return true
 	

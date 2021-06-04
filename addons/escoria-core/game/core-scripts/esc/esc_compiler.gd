@@ -110,7 +110,7 @@ func _compile(lines: Array) -> Array:
 			escoria.logger.debug("Line is empty or a comment. Skipping.")
 			continue
 		var indent = \
-				escoria.utils._get_re_group(
+				escoria.utils.get_re_group(
 					indent_regex.search(line), 
 					"indent"
 				).length()
@@ -140,7 +140,7 @@ func _compile(lines: Array) -> Array:
 			while lines.size() > 0:
 				var next_line = lines.pop_front()
 				var next_line_indent = \
-						escoria.utils._get_re_group(
+						escoria.utils.get_re_group(
 							indent_regex.search(next_line), 
 							"indent"
 						).length()
@@ -164,11 +164,10 @@ func _compile(lines: Array) -> Array:
 				var next_line = lines.pop_front()
 				var end_line = dialog_end_regex.search(next_line)
 				if end_line and \
-						escoria.utils._get_re_group(
+						escoria.utils.get_re_group(
 							end_line, 
 							"indent"
 						).length() == indent:
-					lines.push_front(next_line)
 					break
 				else:
 					dialog_lines.append(next_line)
@@ -191,7 +190,7 @@ func _compile(lines: Array) -> Array:
 			while lines.size() > 0:
 				var next_line = lines.pop_front()
 				var next_line_indent = \
-						escoria.utils._get_re_group(
+						escoria.utils.get_re_group(
 							indent_regex.search(next_line), 
 							"indent"
 						).length()

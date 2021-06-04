@@ -16,7 +16,7 @@ func _get_deg_from_rad(rad_angle : float):
 # - re_match: The RegExMatch object
 # - group: The name of the group
 # **Returns** The value of the named regex group in the match
-func _get_re_group(re_match: RegExMatch, group: String) -> String:
+func get_re_group(re_match: RegExMatch, group: String) -> String:
 	if group in re_match.names:
 		return re_match.strings[re_match.names[group]]
 	else:
@@ -45,3 +45,22 @@ func get_typed_value(value: String):
 		return true if value.to_lower() == "true" else false
 	else:
 		return str(value)
+
+
+# Sanitize use of whitespaces in a string. Removes double whitespaces
+# and converts tabs into space.
+#
+# #### Paramters
+#
+# - value: String to work on
+# **Returns** the string with sanitized whitespaces
+func sanitize_whitespace(value: String) -> String:
+	var tab_regex = RegEx.new()
+	tab_regex.compile("\\t")
+	var double_regex = RegEx.new()
+	double_regex.compile("\\s\\s+")
+	return double_regex.sub(
+		tab_regex.sub(value, " "), 
+		" ", 
+		true
+	)

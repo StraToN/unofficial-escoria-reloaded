@@ -124,10 +124,13 @@ func _ready():
 	
 	# Register and connect all elements to Escoria backoffice.
 	if !Engine.is_editor_hint():
-		escoria.object_manager.register_object(ESCObject.new(
-			global_id,
-			self
-		))
+		escoria.object_manager.register_object(
+			ESCObject.new(
+				global_id,
+				self
+			),
+			true
+		)
 		terrain = escoria.room_terrain
 		
 		if !is_trigger:

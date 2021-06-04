@@ -7,10 +7,10 @@ class_name ESCInventoryManager
 #
 # #### Parameters
 #
-# - p_obj: Inventory item
+# - item: Inventory item id
 # **Returns** Wether the player has the inventory
-func inventory_has(p_obj) -> bool:
-	return escoria.globals_manager.has("i/%s" % p_obj)
+func inventory_has(item: String) -> bool:
+	return escoria.globals_manager.has("i/%s" % item)
 
 
 # Get all inventory items
@@ -22,3 +22,29 @@ func items_in_inventory() -> Array:
 		if filtered[glob]:
 			items.append(glob.rsplit("i/", false)[0])
 	return items
+
+
+# Remove an item from the inventory
+#
+# #### Parameters
+#
+# - item: Inventory item id
+func remove_item(item: String):
+	if not inventory_has(item):
+		self.logger.report_errors(
+			"ESCInventoryManager.remove_item: Error removing inventory item",
+			[
+				"Trying to remove non-existent item %s" % item
+			]
+		)
+	else:
+		escoria.globals_manager.set_global("i/%s" % item, false)
+
+
+# Add an item to the inventory
+#
+# #### Parameters
+#
+# - item: Inventory item id
+func add_item(item: String):
+	escoria.globals_manager.set_global("i/%s" % item, true)

@@ -1,12 +1,19 @@
-# An ESC event
+# An event in the ESC language
+#
+# Events are triggered from various sources. Common events include
+#
+# * :setup Called every time when visiting a scene
+# * :ready Called the first time a scene is visited
+# * :use <global id> Called from the current item when it is used with the item
+#   with the global id <global id>
 extends ESCStatement
 class_name ESCEvent
 
 
 # Regex identifying an ESC event
 const REGEX = \
-	'^:(?<name>[^\\s]+)( \\|(?<flags>( ' +\
-	'(TK|NO_TT|NO_HUD|NO_SAVE|CUT_BLACK|LEAVE_BLACK)' +\
+	'^:(?<name>[^|]+)( \\|(?<flags>( ' + \
+	'(TK|NO_TT|NO_HUD|NO_SAVE|CUT_BLACK|LEAVE_BLACK)' + \
 	')+))?$'
 
 
@@ -52,9 +59,10 @@ func _init(event_string: String):
 	if event_regex.search(event_string):
 		for result in event_regex.search_all(event_string):
 			if "name" in result.names:
-				self.name = escoria.utils._get_re_group(result, "name")
+				self.name = escoria.utils.get_re_group(result, "name") \
+					.strip_edges()
 			if "flags" in result.names:
-				var _flags = escoria.utils._get_re_group(
+				var _flags = escoria.utils.get_re_group(
 						result, 
 						"flags"
 					).strip_edges().split(" ")

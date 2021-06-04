@@ -9,7 +9,7 @@
 #
 # @ESC
 extends ESCBaseCommand
-class_name Command
+class_name QueueResourceCommand
 
 
 # Return the descriptor of the arguments of this command

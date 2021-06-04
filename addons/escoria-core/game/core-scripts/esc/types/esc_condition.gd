@@ -49,7 +49,7 @@ func _init(comparison_string: String):
 			if "is_negated" in result.names:
 				self.negated = true
 			if "comparison" in result.names:
-				match escoria.utils._get_re_group(result, "comparison"):
+				match escoria.utils.get_re_group(result, "comparison"):
 					"eq": self.comparison = COMPARISON_EQ
 					"gt": self.comparison = COMPARISON_GT
 					"lt": self.comparison = COMPARISON_LT
@@ -58,7 +58,7 @@ func _init(comparison_string: String):
 								comparison_string,
 						[
 							"Comparison type %s unknown" % 
-									escoria.utils._get_re_group(
+									escoria.utils.get_re_group(
 										result, 
 										"comparison"
 									)
@@ -66,7 +66,7 @@ func _init(comparison_string: String):
 					)
 			if "comparison_value" in result.names:
 				self.comparison_value = 	escoria.utils.get_typed_value(
-					escoria.utils._get_re_group(
+					escoria.utils.get_re_group(
 						result, 
 						"comparison_value"
 					)
@@ -74,7 +74,7 @@ func _init(comparison_string: String):
 			if "is_inventory" in result.names:
 				self.inventory = true
 			if "flag" in result.names:
-				self.flag = escoria.utils._get_re_group(result, "flag")
+				self.flag = escoria.utils.get_re_group(result, "flag")
 	else:
 		escoria.logger.report_errors(
 			"Invalid comparison detected: %s" % comparison_string,

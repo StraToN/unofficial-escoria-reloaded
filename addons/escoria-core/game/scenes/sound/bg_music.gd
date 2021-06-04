@@ -11,7 +11,10 @@ export var global_id = "bg_music"
 
 func game_cleared():
 	set_state("off", true)
-	escoria.object_manager.register_object(ESCObject.new(global_id, self))
+	escoria.object_manager.register_object(
+		ESCObject.new(global_id, self), 
+		true
+	)
 
 
 func set_state(p_state, p_force = false):
@@ -37,5 +40,8 @@ func set_state(p_state, p_force = false):
 		stream.play()
 
 func _ready():
-	escoria.object_manager.register_object(ESCObject.new(global_id, self))
+	escoria.object_manager.register_object(
+		ESCObject.new(global_id, self),
+		true
+	)
 

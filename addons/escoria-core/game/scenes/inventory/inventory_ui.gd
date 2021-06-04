@@ -72,7 +72,8 @@ func add_new_item_by_id(item_id : String) -> void:
 				ESCObject.new(
 					item_id, 
 					item_inventory_button
-				)
+				),
+				true
 			)
 		item_inventory_button.visible = true
 			

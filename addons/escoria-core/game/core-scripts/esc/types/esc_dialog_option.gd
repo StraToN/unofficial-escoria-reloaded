@@ -23,9 +23,9 @@ func _init(option_string: String):
 	if option_regex.search(option_string):
 		for result in option_regex.search_all(option_string):
 			if "option" in result.names:
-				self.option = escoria.utils._get_re_group(result, "option")
+				self.option = escoria.utils.get_re_group(result, "option")
 			if "conditions" in result.names:
-				for condition_text in escoria.utils._get_re_group(
+				for condition_text in escoria.utils.get_re_group(
 							result, 
 							"conditions"
 						).split(","):

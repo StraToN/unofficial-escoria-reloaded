@@ -65,11 +65,11 @@ func activate(
 						do_combine = false
 					
 					if do_combine:
-						var target_event = "%s_%s" % [
+						var target_event = "%s %s" % [
 							action, 
 							combine_with.global_id
 						]
-						var combine_with_event = "%s_%s" % [
+						var combine_with_event = "%s %s" % [
 							action, 
 							target.global_id
 						]
@@ -106,8 +106,7 @@ func activate(
 							return event_returned[0]
 						else:
 							var errors = [
-								"Attempted to execute action %s between " + \
-								"item %s and item %s" % [
+								"Attempted to execute action %s between item %s and item %s" % [
 									action,
 									target.global_id,
 									combine_with.global_id
