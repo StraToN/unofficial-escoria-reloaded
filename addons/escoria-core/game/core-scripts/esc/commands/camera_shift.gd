@@ -13,7 +13,7 @@ class_name CameraShiftCommand
 func configure() -> ESCCommandArgumentDescriptor:
 	return ESCCommandArgumentDescriptor.new(
 		2, 
-		[TYPE_INT, TYPE_INT, TYPE_REAL, TYPE_STRING],
+		[TYPE_INT, TYPE_INT, [TYPE_INT, TYPE_REAL], TYPE_STRING],
 		[null, null, 1, "QUAD"]
 	)
 	

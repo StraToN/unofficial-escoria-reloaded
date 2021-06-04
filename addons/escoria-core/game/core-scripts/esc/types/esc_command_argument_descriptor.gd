@@ -65,10 +65,12 @@ func validate(command: String, arguments: Array) -> bool:
 				"Argument type did not match descriptor for command %s" % 
 						command,
 				[
-					"Argument %d is of type %d. Expected %d" % [
+					"Argument %d is of type %d. Expected %s" % [
 						index,
 						typeof(arguments[index]),
-						self.types[types_index]
+						PoolStringArray(
+							self.types[types_index]
+						).join(",")
 					]
 				]
 			)

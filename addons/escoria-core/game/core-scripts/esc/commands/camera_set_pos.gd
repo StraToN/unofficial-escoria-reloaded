@@ -13,7 +13,7 @@ class_name CameraSetPosCommand
 func configure() -> ESCCommandArgumentDescriptor:
 	return ESCCommandArgumentDescriptor.new(
 		3, 
-		[TYPE_REAL, TYPE_REAL, TYPE_REAL],
+		[[TYPE_REAL, TYPE_INT], TYPE_INT, TYPE_INT],
 		[null, null, null]
 	)
 

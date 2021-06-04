@@ -14,7 +14,7 @@ class_name CameraPushCommand
 func configure() -> ESCCommandArgumentDescriptor:
 	return ESCCommandArgumentDescriptor.new(
 		1, 
-		[TYPE_STRING, TYPE_REAL, TYPE_STRING],
+		[TYPE_STRING, [TYPE_REAL, TYPE_INT], TYPE_STRING],
 		[null, 1, "QUAD"]
 	)
 	
@@ -37,7 +37,7 @@ func validate(arguments: Array):
 func run(command_params: Array) -> int:
 	(escoria.object_manager.get_object("camera").node as ESCCamera)\
 		.push(
-			command_params[0],
+			escoria.object_manager.get_object(command_params[0]).node,
 			command_params[1],
 			command_params[2]
 		)

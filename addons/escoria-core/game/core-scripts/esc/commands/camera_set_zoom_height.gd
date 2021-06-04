@@ -13,7 +13,7 @@ class_name CameraSetZoomHeightCommand
 func configure() -> ESCCommandArgumentDescriptor:
 	return ESCCommandArgumentDescriptor.new(
 		1, 
-		[TYPE_INT, TYPE_REAL],
+		[TYPE_INT, [TYPE_INT, TYPE_REAL]],
 		[null, 0.0]
 	)
 

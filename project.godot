@@ -25,6 +25,11 @@ _global_script_classes=[ {
 "path": "res://addons/escoria-core/game/core-scripts/esc/commands/camera_push.gd"
 }, {
 "base": "ESCBaseCommand",
+"class": "CameraSetLimitsCommand",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/esc/commands/camera_set_limits.gd"
+}, {
+"base": "ESCBaseCommand",
 "class": "CameraSetPosCommand",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/commands/camera_set_pos.gd"
@@ -413,6 +418,7 @@ _global_script_class_icons={
 "AceeptInputCommand": "",
 "AnimCommand": "",
 "CameraPushCommand": "",
+"CameraSetLimitsCommand": "",
 "CameraSetPosCommand": "",
 "CameraSetTargetCommand": "",
 "CameraSetZoomCommand": "",

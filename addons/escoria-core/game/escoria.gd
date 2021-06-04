@@ -194,8 +194,8 @@ func do(action : String, params : Array = []) -> void:
 				var trigger_in_verb = params[2]
 				self.logger.info("escoria.do() : trigger_in " + trigger_id + " by " + object_id)
 				self.event_manager.queue_event(
-					object_manager.get_object(object_id).events[
-						"%s %s" % [trigger_id, trigger_in_verb]
+					object_manager.get_object(trigger_id).events[
+						trigger_in_verb
 					]
 				)
 			
@@ -205,8 +205,8 @@ func do(action : String, params : Array = []) -> void:
 				var trigger_out_verb = params[2]
 				self.logger.info("escoria.do() : trigger_out " + trigger_id + " by " + object_id)
 				self.event_manager.queue_event(
-					object_manager.get_object(object_id).events[
-						"%s %s" % [trigger_id, trigger_out_verb]
+					object_manager.get_object(trigger_id).events[
+						trigger_out_verb
 					]
 				)
 			
