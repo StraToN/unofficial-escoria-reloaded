@@ -19,12 +19,15 @@ func _process(delta: float) -> void:
 	if events_queue.size() > 0:
 		var running_event = events_queue.pop_front()
 		# TODO: Handle event flags
-		running_event.connect(
-			"finished", 
-			self, 
-			"_on_event_finished",
-			[running_event]
-		)
+		if not running_event.is_connected(
+			"finished", self, "_on_event_finished"
+		):
+			running_event.connect(
+				"finished", 
+				self, 
+				"_on_event_finished",
+				[running_event]
+			)
 		running_event.run()
 	for event in self.scheduled_events:
 		(event as ESCScheduledEvent).timeout -= delta

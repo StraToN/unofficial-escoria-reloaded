@@ -29,7 +29,9 @@ func _init(option_string: String):
 							result, 
 							"conditions"
 						).split(","):
-					self.conditions.append(ESCCondition.new(condition_text))
+					self.conditions.append(
+						ESCCondition.new(condition_text.strip_edges())
+					)
 	else:
 		escoria.logger.report_errors(
 			"Invalid dialog option detected: %s" % option_string,

@@ -72,7 +72,7 @@ func set_global(key: String, value, ignore_reserved: bool = false) -> void:
 				"Global key %s is reserved and can not be overridden" % key
 			]
 		)
-	_globals[key] = escoria.utils.get_typed_value(str(value))
+	_globals[key] = value
 	emit_signal("global_changed", key, _globals[key], value)
 	
 	

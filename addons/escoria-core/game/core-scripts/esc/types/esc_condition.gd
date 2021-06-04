@@ -13,6 +13,14 @@ const REGEX = \
 	'(?<is_inventory>i\/)?(?<flag>[^ ]+)( (?<comparison_value>.+))?$'
 
 
+const COMPARISON_DESCRIPTION = [
+	"Checking if %s %s %s true%s",
+	"Checking if %s %s %s equals %s",
+	"Checking if %s %s %s greater than %s",
+	"Checking if %s %s %s less than %s"
+]
+
+
 # Name of the flag compared
 var flag: String
 
@@ -78,27 +86,45 @@ func _init(comparison_string: String):
 
 # Run this comparison against the globals
 func run() -> bool:
-	var global_name = flag
+	var global_name = self.flag
+	
+	escoria.logger.debug(
+		COMPARISON_DESCRIPTION[self.comparison] % [
+			"inventory item" if self.inventory else "global value",
+			self.flag,
+			"is not" if self.negated else "is",
+			"" if self.comparison == COMPARISON_NONE else self.comparison_value
+		]
+	)
 	
 	if self.inventory:
 		global_name = "i/%s" % flag
 		
 	var return_value = false
 	
-	if comparison == COMPARISON_NONE and\
-			escoria.globals_manager.has(global_name):
+	if self.comparison == COMPARISON_NONE and \
+			escoria.globals_manager.has(global_name) and \
+			escoria.globals_manager.get_global(global_name) is bool and \
+			escoria.globals_manager.get_global(global_name):
 		return_value = true
-	elif comparison == COMPARISON_EQ and\
-			escoria.globals_manager.get_global(global_name) == comparison_value:
+	elif self.comparison == COMPARISON_EQ and \
+			escoria.globals_manager.get_global(global_name) == \
+				self.comparison_value:
 		return_value = true
-	elif comparison == COMPARISON_GT and\
-			escoria.globals_manager.get_global(global_name) > comparison_value:
+	elif self.comparison == COMPARISON_GT and \
+			escoria.globals_manager.get_global(global_name) > \
+				self.comparison_value:
 		return_value = true
-	elif comparison == COMPARISON_LT and\
-			escoria.globals_manager.get_global(global_name) < comparison_value:
+	elif self.comparison == COMPARISON_LT and \
+			escoria.globals_manager.get_global(global_name) < \
+				self.comparison_value:
 		return_value = true
 		
-	if negated:
-		return not return_value
+	if self.negated:
+		return_value = not return_value
+		
+	escoria.logger.debug(
+		"It is" if return_value else "It isn't"
+	)
 	
 	return return_value

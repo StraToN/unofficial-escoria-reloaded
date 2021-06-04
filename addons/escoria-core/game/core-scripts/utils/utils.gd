@@ -42,6 +42,6 @@ func get_typed_value(value: String):
 	elif regex_int.search(value):
 		return int(value)
 	elif regex_bool.search(value.to_lower()):
-		return bool(value.to_lower())
+		return true if value.to_lower() == "true" else false
 	else:
 		return str(value)

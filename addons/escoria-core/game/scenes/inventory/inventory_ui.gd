@@ -108,12 +108,12 @@ func remove_item_by_id(item_id : String) -> void:
 		item_inventory_button.queue_free()
 		items_ids_in_inventory.erase(item_id)
 
-func _on_escoria_global_changed(global : String) -> void:
+func _on_escoria_global_changed(global : String, old_value, new_value) -> void:
 	if !global.begins_with("i/"):
 		return 
 	var item = global.rsplit("i/", false)
 	if item.size() == 1:
-		if escoria.globals_manager.get(global):
+		if new_value:
 			add_new_item_by_id(item[0])
 		else:
 			remove_item_by_id(item[0])

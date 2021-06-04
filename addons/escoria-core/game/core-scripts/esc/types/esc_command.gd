@@ -62,7 +62,7 @@ func _init(command_string):
 							"conditions"
 						).split(","):
 					self.conditions.append(
-						ESCCondition.new(condition)
+						ESCCondition.new(condition.strip_edges())
 					)
 	else:
 		escoria.logger.report_errors(
@@ -86,7 +86,6 @@ func is_valid() -> bool:
 
 # Run this command
 func run() -> int:
-	escoria.logger.debug("Running command %s" % self.name)
 	var command_object = escoria.command_registry.get_command(self.name)
 	if command_object == null:
 		return ESCExecution.RC_ERROR
@@ -96,6 +95,10 @@ func run() -> int:
 			self.parameters
 		)
 		if argument_descriptor.validate(self.name, prepared_arguments):
+			escoria.logger.debug("Running command %s with parameters %s" % [
+				self.name,
+				prepared_arguments
+			])
 			var rc = command_object.run(prepared_arguments)
 			if rc is GDScriptFunctionState:
 				rc = yield(rc, "completed")

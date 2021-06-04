@@ -25,7 +25,7 @@ func _init(group_string: String):
 						"conditions"
 					).split(","):
 					self.conditions.append(
-						ESCCondition.new(condition)
+						ESCCondition.new(condition.strip_edges())
 					)
 	else:
 		escoria.logger.report_errors(

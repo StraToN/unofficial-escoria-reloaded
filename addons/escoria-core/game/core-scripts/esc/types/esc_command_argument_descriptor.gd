@@ -26,13 +26,6 @@ func _init(p_min_args: int = 0, p_types: Array = [], p_defaults: Array = []):
 func prepare_arguments(arguments: Array) -> Array:
 	var complete_arguments = defaults
 	
-	var regex_bool = RegEx.new()
-	regex_bool.compile("^true|false$")
-	var regex_float = RegEx.new()
-	regex_float.compile("^[0-9]+\\.[0-9]+$")
-	var regex_int = RegEx.new()
-	regex_int.compile("^[0-9]+$")
-	
 	for index in range(arguments.size()):
 		complete_arguments[index] = escoria.utils.get_typed_value(
 			arguments[index]

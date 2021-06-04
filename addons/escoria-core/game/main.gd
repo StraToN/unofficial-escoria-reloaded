@@ -44,8 +44,7 @@ func clear_scene():
 	escoria.action_manager.clear_current_action()
 	escoria.action_manager.clear_current_tool()
 
-	
-	get_node("/root").remove_child(current_scene)
+	remove_child(current_scene)
 	current_scene.free()
 	current_scene = null
 
