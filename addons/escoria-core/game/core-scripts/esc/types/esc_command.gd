@@ -79,11 +79,23 @@ func _init(command_string):
 
 # Check, if conditions match
 func is_valid() -> bool:
-	for base_path in ProjectSettings.get("escoria/esc/command_paths"):
+	var command_found = false
+	for base_path in ProjectSettings.get("escoria/esc/command_directories"):
 		var command_path = "%s/%s.gd" % [
 			base_path,
 			self.name
 		]
+		if ResourceLoader.exists(command_path):
+			command_found = true
+			
+	if not command_found:
+		escoria.logger.report_errors(
+			"Invalid command detected: %s" % self.name,
+			[
+				"Command implementation not found in any command directory"
+			]
+		)
+		return false
 			
 	return .is_valid()
 	

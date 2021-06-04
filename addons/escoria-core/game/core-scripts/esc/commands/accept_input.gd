@@ -12,7 +12,7 @@
 # @STUB
 # @ESC
 extends ESCBaseCommand
-class_name AceeptInputCommand
+class_name AcceptInputCommand
 
 
 # Return the descriptor of the arguments of this command

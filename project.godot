@@ -10,7 +10,7 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "ESCBaseCommand",
-"class": "AceeptInputCommand",
+"class": "AcceptInputCommand",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/commands/accept_input.gd"
 }, {
@@ -415,7 +415,7 @@ _global_script_classes=[ {
 "path": "res://addons/escoria-core/game/core-scripts/esc/commands/walk_to_pos.gd"
 } ]
 _global_script_class_icons={
-"AceeptInputCommand": "",
+"AcceptInputCommand": "",
 "AnimCommand": "",
 "CameraPushCommand": "",
 "CameraSetLimitsCommand": "",
