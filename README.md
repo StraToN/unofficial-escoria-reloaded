@@ -81,7 +81,6 @@ The rewrite is currently ongoing and certain features of Escoria are missing or 
 
 ### Future features
 
-* [ ] Reimplement ESC based on Command Pattern
 * [ ] Integrated ESC editor
 * [ ] Graphical visualizer of room links
 * [ ] Optimize character angles and animation helper
