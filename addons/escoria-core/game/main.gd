@@ -34,7 +34,7 @@ func _ready() -> void:
 # - p_scene: Scene to set
 # - run_events: Play the events in the setup node
 # - *Returns*: A dictionary of ESC events
-func set_scene(p_scene: Node, run_events=true) -> Dictionary:
+func set_scene(p_scene: Node, run_events=true) -> void:
 	if !p_scene:
 		escoria.logger.report_errors("main", ["Trying to set empty scene"])
 	

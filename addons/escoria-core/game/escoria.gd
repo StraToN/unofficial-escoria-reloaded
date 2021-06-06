@@ -1,6 +1,18 @@
 # The escorie main script
 extends Node
 
+
+# Current game state
+# * DEFAULT: Common game function
+# * DIALOG: Game is playing a dialog
+# * WAIT: Game is waiting
+enum GAME_STATE {
+	DEFAULT,
+	DIALOG,
+	WAIT
+}
+
+
 # Scripts
 onready var main = $main
 
@@ -35,7 +47,21 @@ var object_manager: ESCObjectManager
 # ESC command registry instance
 var command_registry: ESCCommandRegistry
 
+# Resource cache handler
 var resource_cache: ResourceCache
+
+# Instance of the main menu
+var main_menu_instance
+
+# Terrain of the current room
+var room_terrain
+
+# Dialog player instantiator. This instance is called directly for dialogs.
+var dialog_player 
+
+# Inventory scene
+var inventory
+
 
 # The current state of the game
 onready var current_state = GAME_STATE.DEFAULT
@@ -110,54 +136,6 @@ func new_game():
 		return
 
 
-# Register an object to the matching manager. (A dialog player as the
-# main dialog player, an item in the ESC runner, etc.)
-#
-# #### Parameters
-#
-# - object: The object to register
-func register_object(object : Object):
-	var object_id
-	if object.get("global_id"):
-		object_id = object.global_id
-	else:
-		object_id = object.name
-
-	if object is ESCDialogsPlayer:
-		dialog_player = object
-
-	if object is ESCPlayer:
-		$esc_runner.register_object(object_id, object, true)
-
-	if object is Position2D:
-		$esc_runner.register_object(object_id, object, true)
-
-	if object is ESCItem:
-		$esc_runner.register_object(object_id, object, true)
-
-	if object is ESCTerrain:
-		room_terrain = object
-
-#	if object is ESCBackground:
-#		$esc_runner.register_object(object_id, object, true)
-
-	if object is ESCCamera:
-		$esc_runner.register_object(object_id, object, true)
-
-	if object is ESCInventory:
-		inventory = object
-
-	if object is ESCTooltip:
-		if main.current_scene:
-			main.current_scene.game.tooltip_node = object
-
-	if object is ESCBackgroundMusic:
-		$esc_runner.register_object(object_id, object, true)
-
-	if object is ESCBackgroundSound:
-		$esc_runner.register_object(object_id, object, true)
-
-
 # Run a generic action
 #
 # #### Parameters
@@ -219,13 +197,13 @@ func do(action : String, params : Array = []) -> void:
 				if params[0] is String:
 					self.logger.info("escoria.do() : item_left_click on item ", [params[0]])
 					var item = self.object_manager.get_object(params[0])
-					ev_left_click_on_item(item, params[1])
+					_ev_left_click_on_item(item, params[1])
 					
 			"item_right_click":
 				if params[0] is String:
 					self.logger.info("escoria.do() : item_right_click on item ", [params[0]])
 					var item = self.object_manager.get_object(params[0])
-					ev_left_click_on_item(item, params[1], true)
+					_ev_left_click_on_item(item, params[1], true)
 			
 			"trigger_in":
 				var trigger_id = params[0]

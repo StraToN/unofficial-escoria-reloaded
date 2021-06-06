@@ -17,6 +17,18 @@ This framework was initially developed for the adventure game
 and later streamlined for broader usages and open sourced as promised
 to the backers of the Dog Mendonça Kickstarter campaign.
 
+## Authors
+
+In alphabetical order:
+
+* ArturM
+* Sylvain Beucler - beuc
+* Fleskevor
+* Ariel Manzur - punto (original author)
+* Julian Murgia - @StraToN
+* Dennis Ploeger - @dploeger
+* Markus Törnqvist - mjtorn
+
 ## Documentation
 
 * Getting started
