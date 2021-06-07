@@ -6,7 +6,6 @@ extends EditorPlugin
 # Autoloads to instantiate
 const autoloads = {
 	"escoria": "res://addons/escoria-core/game/escoria.tscn",
-	"esctypes": "res://addons/escoria-core/game/core-scripts/escoria_types.gd"
 }
 
 # Custom types to generate outside of Classes

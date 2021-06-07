@@ -249,6 +249,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esctooltip.gd"
 }, {
+"base": "Object",
+"class": "ESCUtils",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/utils/utils.gd"
+}, {
 "base": "ESCBaseCommand",
 "class": "EnableTerrainCommand",
 "language": "GDScript",
@@ -463,6 +468,7 @@ _global_script_class_icons={
 "ESCStatement": "",
 "ESCTerrain": "",
 "ESCTooltip": "",
+"ESCUtils": "",
 "EnableTerrainCommand": "",
 "GameOverCommand": "",
 "IncGlobalCommand": "",

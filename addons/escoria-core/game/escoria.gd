@@ -13,18 +13,11 @@ enum GAME_STATE {
 }
 
 
-# Scripts
-onready var main = $main
-
-# The escoria inputs manager
-onready var inputs_manager = $inputs_manager
-
-# Several utilities
-onready var utils = load("res://addons/escoria-core/game/core-scripts/utils/utils.gd").new()
-onready var save_data = load("res://addons/escoria-core/game/core-scripts/save_data/save_data.gd").new()
-
 # Logger used
 var logger: ESCLogger
+
+# Several utilities
+var utils: ESCUtils
 
 # The inventory manager instance
 var inventory_manager: ESCInventoryManager
@@ -62,15 +55,9 @@ var dialog_player
 # Inventory scene
 var inventory
 
-
-# The current state of the game
-onready var current_state = GAME_STATE.DEFAULT
-
-# The game resolution
-onready var game_size = get_viewport().size
-
 # These are settings that the player can affect and save/load later
 var settings : Dictionary
+
 # These are default settings
 var settings_default : Dictionary = {
 	# Text language
@@ -96,8 +83,26 @@ var settings_default : Dictionary = {
 }
 
 
+# The current state of the game
+onready var current_state = GAME_STATE.DEFAULT
+
+# The game resolution
+onready var game_size = get_viewport().size
+
+# The main scene
+onready var main = $main
+
+# The escoria inputs manager
+onready var inputs_manager = $inputs_manager
+
+# Savegame management
+onready var save_data = load("res://addons/escoria-core/game/core-scripts/save_data/save_data.gd").new()
+
+
+# Initialize various objects
 func _init():
 	self.logger = ESCLogger.new()
+	self.utils = ESCUtils.new()
 	self.inventory_manager = ESCInventoryManager.new()
 	self.action_manager = ESCActionManager.new()
 	self.event_manager = ESCEventManager.new()
@@ -110,6 +115,7 @@ func _init():
 	self.resource_cache.start()
 
 
+# Load settings
 func _ready():
 	save_data.start()
 	save_data.check_settings()
@@ -153,8 +159,8 @@ func do(action : String, params : Array = []) -> void:
 					self.logger.report_errors(
 						"escoria.gd:do()",
 						[
-							"Walk action requested on inexisting object: %s "\
-									 % params[0]
+							"Walk action requested on inexisting " + \
+							"object: %s " % params[0]
 						]
 					)
 					return
@@ -168,7 +174,10 @@ func do(action : String, params : Array = []) -> void:
 					var is_fast : bool = false
 					if params.size() > 2 and params[2] == true:
 						is_fast = true
-					var walk_context = {"fast": is_fast, "target": target_position} 
+					var walk_context = {
+						"fast": is_fast, 
+						"target": target_position
+					} 
 					moving_obj.walk_to(target_position, walk_context)
 					
 				# Walk to object from its id
@@ -185,23 +194,33 @@ func do(action : String, params : Array = []) -> void:
 					
 					var object = self.object_manager.get_object(params[1])
 					if object:
-						var target_position : Vector2 = object.node.interact_position
+						var target_position : Vector2 = \
+								object.node.interact_position
 						var is_fast : bool = false
 						if params.size() > 2 and params[2] == true:
 							is_fast = true
-						var walk_context = {"fast": is_fast, "target_object" : object} 
+						var walk_context = {
+							"fast": is_fast, 
+							"target_object" : object
+						} 
 						
 						moving_obj.walk_to(target_position, walk_context)
 							
 			"item_left_click":
 				if params[0] is String:
-					self.logger.info("escoria.do() : item_left_click on item ", [params[0]])
+					self.logger.info(
+						"escoria.do() : item_left_click on item ", 
+						[params[0]]
+					)
 					var item = self.object_manager.get_object(params[0])
 					_ev_left_click_on_item(item, params[1])
 					
 			"item_right_click":
 				if params[0] is String:
-					self.logger.info("escoria.do() : item_right_click on item ", [params[0]])
+					self.logger.info(
+						"escoria.do() : item_right_click on item ", 
+						[params[0]]
+					)
 					var item = self.object_manager.get_object(params[0])
 					_ev_left_click_on_item(item, params[1], true)
 			
@@ -209,7 +228,10 @@ func do(action : String, params : Array = []) -> void:
 				var trigger_id = params[0]
 				var object_id = params[1]
 				var trigger_in_verb = params[2]
-				self.logger.info("escoria.do() : trigger_in " + trigger_id + " by " + object_id)
+				self.logger.info("escoria.do() : trigger_in %s by %s" % [
+					trigger_id,
+					object_id
+				])
 				self.event_manager.queue_event(
 					object_manager.get_object(trigger_id).events[
 						trigger_in_verb
@@ -220,7 +242,10 @@ func do(action : String, params : Array = []) -> void:
 				var trigger_id = params[0]
 				var object_id = params[1]
 				var trigger_out_verb = params[2]
-				self.logger.info("escoria.do() : trigger_out " + trigger_id + " by " + object_id)
+				self.logger.info("escoria.do() : trigger_out %s by %s" % [
+					trigger_id,
+					object_id
+				])
 				self.event_manager.queue_event(
 					object_manager.get_object(trigger_id).events[
 						trigger_out_verb
@@ -235,6 +260,7 @@ func do(action : String, params : Array = []) -> void:
 
 
 # Event handler when an object/item was clicked
+# FIXME this method is way to complex
 #
 # #### Parameters
 #
@@ -268,9 +294,11 @@ func _ev_left_click_on_item(obj, event, default_action = false):
 				self.action_manager.current_tool = obj
 				
 	
-	# Don't interact after player movement towards object (because object is inactive for example)
+	# Don't interact after player movement towards object 
+	# (because object is inactive for example)
 	var dont_interact = false
-	var destination_position : Vector2 = main.current_scene.player.global_position
+	var destination_position : Vector2 = main.current_scene.player\
+			.global_position
 	
 	# Create walk context 
 	var walk_context = {"fast": event.doubleclick, "target_object" : obj.node}
@@ -280,11 +308,6 @@ func _ev_left_click_on_item(obj, event, default_action = false):
 		var clicked_object_has_interact_position = false
 
 		if object_manager.get_object(obj.global_id).interactive:
-#			if obj.interact_positions.default != null:
-#				destination_position = obj.interact_positions.default#.global_position
-#				clicked_object_has_interact_position = true
-#			else:
-#				destination_position = obj.position
 			if obj.node.get_interact_position() != null:
 				destination_position = obj.node.get_interact_position()
 				clicked_object_has_interact_position = true
@@ -294,14 +317,19 @@ func _ev_left_click_on_item(obj, event, default_action = false):
 			destination_position = event.position
 			dont_interact = true
 		
-		# Use ESC for this?
-		var is_already_walking = main.current_scene.player.walk_to(destination_position, walk_context)
+		# FIXME Use ESC or escoria.do for this?
+		var is_already_walking = main.current_scene.player.walk_to(
+			destination_position, 
+			walk_context
+		)
 		
 		# Wait for the player to arrive before continuing with action.
 		var context = yield(main.current_scene.player, "arrived")
+		
 		self.logger.info("Context arrived: ", [context])
+		
 		if context.has("target_object") and walk_context.has("target_object"):
-			if (context.target_object.global_id != walk_context.target_object.global_id) \
+			if context.target_object.global_id != walk_context.target_object.global_id \
 				or (context.target_object.global_id == walk_context.target_object.global_id and is_already_walking):
 				dont_interact = true
 		elif context.has("target") and walk_context.has("target"):
@@ -350,7 +378,13 @@ func _ev_left_click_on_item(obj, event, default_action = false):
 ##		escoria.fallback("")
 #		pass
 
-func _on_settings_loaded(p_settings : Dictionary):
+
+# Apply the loaded settings
+#
+# #### Parameters
+#
+# * p_settings: Loaded settings
+func _on_settings_loaded(p_settings : Dictionary) -> void:
 	escoria.logger.info("******* settings loaded", p_settings)
 	if p_settings != null:
 		settings = p_settings
@@ -363,9 +397,18 @@ func _on_settings_loaded(p_settings : Dictionary):
 
 	# TODO Apply globally
 #	AudioServer.set_fx_global_volume_scale(settings.sfx_volume)
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), linear2db(settings.master_volume))
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), linear2db(settings.sfx_volume))
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear2db(settings.music_volume))
+	AudioServer.set_bus_volume_db(
+		AudioServer.get_bus_index("Master"), 
+		linear2db(settings.master_volume)
+	)
+	AudioServer.set_bus_volume_db(
+		AudioServer.get_bus_index("SFX"),
+		linear2db(settings.sfx_volume)
+	)
+	AudioServer.set_bus_volume_db(
+		AudioServer.get_bus_index("Music"), 
+		linear2db(settings.music_volume)
+	)
 	TranslationServer.set_locale(settings.text_lang)
 #	music_volume_changed()
 

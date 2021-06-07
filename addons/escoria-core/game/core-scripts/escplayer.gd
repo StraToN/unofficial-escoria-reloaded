@@ -20,8 +20,6 @@ export var global_id : String
 var params_queue : Array 
 var terrain : ESCTerrain
 
-# If the terrain node type is scalenodes
-var terrain_is_scalenodes : bool
 var check_maps = true
 
 export(int) var speed : int = 300

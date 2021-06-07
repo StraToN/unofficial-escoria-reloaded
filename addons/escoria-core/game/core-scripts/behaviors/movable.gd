@@ -93,7 +93,7 @@ func _process(delta: float) -> void:
 		parent.set_position(pos)
 
 		if parent.task == parent.PLAYER_TASKS.WALK:
-			last_deg = escoria.utils._get_deg_from_rad(angle)
+			last_deg = escoria.utils.get_deg_from_rad(angle)
 			last_dir = _get_dir_deg(last_deg, parent.animations)
 
 			var current_animation = ""
@@ -312,10 +312,7 @@ func update_terrain(on_event_finished_name = null) -> void:
 		parent.z_index = VisualServer.CANVAS_ITEM_Z_MAX
 
 	var color
-	if parent.terrain_is_scalenodes:
-		last_scale = parent.terrain.get_terrain(pos)
-		parent.scale = last_scale
-	elif parent.check_maps:
+	if parent.check_maps:
 		color = parent.terrain.get_terrain(pos)
 		var scal = parent.terrain.get_scale_range(color.b)
 		if scal != parent.get_scale():
@@ -349,7 +346,7 @@ func update_terrain(on_event_finished_name = null) -> void:
 # - angle: The rotation angle
 # - animations: The list of character animations
 func _get_dir(angle : float, animations) -> int:
-	var deg = escoria.utils._get_deg_from_rad(angle)
+	var deg = escoria.utils.get_deg_from_rad(angle)
 	return _get_dir_deg(deg, animations)
 
 

@@ -97,10 +97,14 @@ func set_camera_limits(camera_limit_id : int = 0) -> void:
 				area = child.get_full_area_rect2()
 				break
 
-		# if the background is smaller than the viewport, we want the camera to stick centered on the background
-		if area.size.x == 0 or area.size.y == 0 or area.size < get_viewport().size:
-			escoria.logger.report_warning("main.gd:set_camera_limits()", 
-				"No limit area! Using viewport.")
+		# if the background is smaller than the viewport, we want the camera 
+		# to stick centered on the background
+		if area.size.x == 0 or area.size.y == 0 \
+				or area.size < get_viewport().size:
+			escoria.logger.report_warning(
+				"main.gd:set_camera_limits()", 
+				"No limit area! Using viewport."
+			)
 			area.size = get_viewport().size
 
 		escoria.logger.info("Setting camera limits from scene ", [area])
@@ -114,12 +118,17 @@ func set_camera_limits(camera_limit_id : int = 0) -> void:
 	else:
 		limits = {
 			"limit_left": scene_camera_limits.position.x,
-			"limit_right": scene_camera_limits.position.x + scene_camera_limits.size.x,
+			"limit_right": scene_camera_limits.position.x + \
+					scene_camera_limits.size.x,
 			"limit_top": scene_camera_limits.position.y,
-			"limit_bottom": scene_camera_limits.position.y + scene_camera_limits.size.y + screen_ofs.y * 2,
+			"limit_bottom": scene_camera_limits.position.y + \
+					scene_camera_limits.size.y + screen_ofs.y * 2,
 			"set_default": true,
 		}
-		escoria.logger.info("Setting camera limits from parameter ", [scene_camera_limits])
+		escoria.logger.info(
+			"Setting camera limits from parameter ", 
+			[scene_camera_limits]
+		)
 
 	current_scene.game.get_node("camera").set_limits(limits)
 	current_scene.game.get_node("camera").set_offset(screen_ofs * 2)

@@ -71,8 +71,6 @@ export(Script) var animations
 
 # TERRAIN
 var terrain : ESCTerrain
-# If the terrain node type is scalenodes
-var terrain_is_scalenodes : bool
 var check_maps = true
 var collision
 # If dont_apply_terrain_scaling is true, terrain scaling will not be applied and
