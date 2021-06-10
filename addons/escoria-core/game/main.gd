@@ -63,20 +63,6 @@ func clear_scene() -> void:
 	current_scene = null
 
 
-# Carry out the ESC `wait` command
-#
-# #### Parameters
-#
-# * params: An array with the wait arguments. The first argument is the number
-#   of seconds to wait
-# * level: The scene that is waiting
-func wait(params : Array, level: Node) -> void:
-	wait_level = level
-	$layers/wait_timer.set_wait_time(float(params[0]))
-	$layers/wait_timer.set_one_shot(true)
-	$layers/wait_timer.start()
-
-
 # Triggered, when the wait has finished
 func _on_wait_finished() -> void:
 	escoria.esc_level_runner.finished(wait_level)

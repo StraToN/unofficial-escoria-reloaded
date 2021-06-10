@@ -379,10 +379,6 @@ func _ev_left_click_on_item(obj, event, default_action = false):
 						self.action_manager.current_action,
 						obj
 					)
-		
-#	else:
-##		escoria.fallback("")
-#		pass
 
 
 # Apply the loaded settings
