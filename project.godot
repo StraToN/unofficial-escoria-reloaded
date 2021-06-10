@@ -197,12 +197,17 @@ _global_script_classes=[ {
 "base": "Area2D",
 "class": "ESCItem",
 "language": "GDScript",
-"path": "res://addons/escoria-core/game/core-scripts/escitem.gd"
+"path": "res://addons/escoria-core/game/core-scripts/esc_item.gd"
 }, {
 "base": "Object",
 "class": "ESCLogger",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/log/logging.gd"
+}, {
+"base": "Node",
+"class": "ESCMovable",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/behaviors/esc_movable.gd"
 }, {
 "base": "Node",
 "class": "ESCObject",
@@ -214,10 +219,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/esc_object_manager.gd"
 }, {
-"base": "KinematicBody2D",
+"base": "ESCItem",
 "class": "ESCPlayer",
 "language": "GDScript",
-"path": "res://addons/escoria-core/game/core-scripts/escplayer.gd"
+"path": "res://addons/escoria-core/game/core-scripts/esc_player.gd"
 }, {
 "base": "Node2D",
 "class": "ESCRoom",
@@ -254,6 +259,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/utils/utils.gd"
 }, {
+"base": "Object",
+"class": "ESCWalkContext",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/walk_context.gd"
+}, {
 "base": "ESCBaseCommand",
 "class": "EnableTerrainCommand",
 "language": "GDScript",
@@ -278,11 +288,6 @@ _global_script_classes=[ {
 "class": "InventoryRemoveCommand",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc/commands/inventory_remove.gd"
-}, {
-"base": "Node",
-"class": "Movable",
-"language": "GDScript",
-"path": "res://addons/escoria-core/game/core-scripts/behaviors/movable.gd"
 }, {
 "base": "ESCBaseCommand",
 "class": "PlaySndCommand",
@@ -459,6 +464,7 @@ _global_script_class_icons={
 "ESCInventoryManager": "",
 "ESCItem": "",
 "ESCLogger": "",
+"ESCMovable": "",
 "ESCObject": "",
 "ESCObjectManager": "",
 "ESCPlayer": "",
@@ -469,12 +475,12 @@ _global_script_class_icons={
 "ESCTerrain": "",
 "ESCTooltip": "",
 "ESCUtils": "",
+"ESCWalkContext": "",
 "EnableTerrainCommand": "",
 "GameOverCommand": "",
 "IncGlobalCommand": "",
 "InventoryAddCommand": "",
 "InventoryRemoveCommand": "",
-"Movable": "",
 "PlaySndCommand": "",
 "QueueAnimationCommand": "",
 "QueueResourceCommand": "",
@@ -517,7 +523,6 @@ config/icon="res://icon.png"
 [autoload]
 
 escoria="*res://addons/escoria-core/game/escoria.tscn"
-esctypes="*res://addons/escoria-core/game/core-scripts/escoria_types.gd"
 
 [display]
 

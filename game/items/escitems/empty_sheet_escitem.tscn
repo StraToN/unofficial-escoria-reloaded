@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://addons/escoria-core/game/core-scripts/escitem.gd" type="Script" id=1]
+[ext_resource path="res://addons/escoria-core/game/core-scripts/esc_item.gd" type="Script" id=1]
 [ext_resource path="res://game/rooms/room5/items/empty_sheet.png" type="Texture" id=2]
 [ext_resource path="res://game/items/inventory/empty_sheet_escinventoryitem.tscn" type="PackedScene" id=3]
 

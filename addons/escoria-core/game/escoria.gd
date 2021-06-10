@@ -174,10 +174,11 @@ func do(action : String, params : Array = []) -> void:
 					var is_fast : bool = false
 					if params.size() > 2 and params[2] == true:
 						is_fast = true
-					var walk_context = {
-						"fast": is_fast, 
-						"target": target_position
-					} 
+					var walk_context = ESCWalkContext.new(
+						null,
+						target_position,
+						is_fast
+					) 
 					moving_obj.walk_to(target_position, walk_context)
 					
 				# Walk to object from its id
@@ -199,10 +200,11 @@ func do(action : String, params : Array = []) -> void:
 						var is_fast : bool = false
 						if params.size() > 2 and params[2] == true:
 							is_fast = true
-						var walk_context = {
-							"fast": is_fast, 
-							"target_object" : object
-						} 
+						var walk_context = ESCWalkContext.new(
+							object, 
+							Vector2(), 
+							is_fast
+						)
 						
 						moving_obj.walk_to(target_position, walk_context)
 							
@@ -301,7 +303,11 @@ func _ev_left_click_on_item(obj, event, default_action = false):
 			.global_position
 	
 	# Create walk context 
-	var walk_context = {"fast": event.doubleclick, "target_object" : obj.node}
+	var walk_context = ESCWalkContext.new(
+		obj,
+		Vector2(),
+		event.doubleclick
+	)
 	
 	# If object not in inventory, player walks towards it
 	if not inventory_manager.inventory_has(obj.global_id):
@@ -317,25 +323,25 @@ func _ev_left_click_on_item(obj, event, default_action = false):
 			destination_position = event.position
 			dont_interact = true
 		
-		# FIXME Use ESC or escoria.do for this?
-		var is_already_walking = main.current_scene.player.walk_to(
+		main.current_scene.player.walk_to(
 			destination_position, 
 			walk_context
 		)
 		
 		# Wait for the player to arrive before continuing with action.
-		var context = yield(main.current_scene.player, "arrived")
+		var context: ESCWalkContext = yield(
+			main.current_scene.player,
+			"arrived"
+		)
 		
 		self.logger.info("Context arrived: ", [context])
 		
-		if context.has("target_object") and walk_context.has("target_object"):
-			if context.target_object.global_id != walk_context.target_object.global_id \
-				or (context.target_object.global_id == walk_context.target_object.global_id and is_already_walking):
-				dont_interact = true
-		elif context.has("target") and walk_context.has("target"):
-			if (context.target.global_id != walk_context.target.global_id) \
-				or (context.target.global_id == walk_context.target.global_id and is_already_walking):
-				dont_interact = true
+		if context.target_object and \
+				context.target_object.global_id != walk_context.\
+				target_object.global_id:
+			dont_interact = true
+		elif context.target_position != walk_context.target_position:
+			dont_interact = true
 	
 	# If no interaction should happen after player has arrived, leave immediately.
 	if dont_interact:
