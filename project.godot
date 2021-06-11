@@ -227,7 +227,7 @@ _global_script_classes=[ {
 "base": "Node2D",
 "class": "ESCRoom",
 "language": "GDScript",
-"path": "res://addons/escoria-core/game/core-scripts/escroom.gd"
+"path": "res://addons/escoria-core/game/core-scripts/esc_room.gd"
 }, {
 "base": "Object",
 "class": "ESCScheduledEvent",
