@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://addons/escoria-core/game/core-scripts/escterrain.gd" type="Script" id=1]
+[ext_resource path="res://addons/escoria-core/game/core-scripts/esc_terrain.gd" type="Script" id=1]
 [ext_resource path="res://game/rooms/room6/background.tscn" type="PackedScene" id=2]
 [ext_resource path="res://game/rooms/room6/l_exit.tscn" type="PackedScene" id=3]
 [ext_resource path="res://game/characters/mark/mark.tscn" type="PackedScene" id=4]

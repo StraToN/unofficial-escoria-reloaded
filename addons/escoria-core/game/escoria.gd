@@ -41,7 +41,7 @@ var object_manager: ESCObjectManager
 var command_registry: ESCCommandRegistry
 
 # Resource cache handler
-var resource_cache: ResourceCache
+var resource_cache: ESCResourceCache
 
 # Instance of the main menu
 var main_menu_instance
@@ -111,7 +111,7 @@ func _init():
 	self.object_manager = ESCObjectManager.new()
 	self.command_registry = ESCCommandRegistry.new()
 	self.esc_compiler = ESCCompiler.new()
-	self.resource_cache = ResourceCache.new()
+	self.resource_cache = ESCResourceCache.new()
 	self.resource_cache.start()
 
 
