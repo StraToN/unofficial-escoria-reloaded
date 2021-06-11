@@ -49,13 +49,16 @@ margin_right = 1008.3
 margin_bottom = 109.657
 custom_fonts/font = ExtResource( 3 )
 text = "This room demonstrates how to use a background image AND using a large image width AND setting a depth map on the ESCTerrain node"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="walkable_area" type="Navigation2D" parent="."]
 script = ExtResource( 1 )
 scales = ExtResource( 8 )
-player_doubleclick_speed_multiplier = 1.8
-debug_mode = 0
 scale_min = 0.4
+lightmap = ExtResource( 8 )
+player_doubleclick_speed_multiplier = 1.8
 
 [node name="platform" type="NavigationPolygonInstance" parent="walkable_area"]
 position = Vector2( 6.73163, -264.779 )

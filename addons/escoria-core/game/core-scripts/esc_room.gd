@@ -26,16 +26,15 @@ export(PackedScene) var player_scene
 export(Array, Rect2) var camera_limits : Array = [Rect2()] setget set_camera_limits
 
 # The editor debug display mode
-export(EditorRoomDebugDisplay) var editor_debug_mode = \
-		EditorRoomDebugDisplay.NONE setget set_editor_debug_mode
+export(int) var editor_debug_mode = EditorRoomDebugDisplay.NONE setget set_editor_debug_mode
 
 
 # The player scene instance
-var _player
+var player
 
 
 # The game scene instance
-onready var game = $game
+var game
 
 
 # Start the random number generator when the camera limits should be displayed
@@ -56,17 +55,19 @@ func _ready():
 	if Engine.is_editor_hint():
 		return
 	
+	game = $game
+	
 	if player_scene:
-		_player = player_scene.instance()
-		add_child(_player)
+		player = player_scene.instance()
+		add_child(player)
 		escoria.object_manager.register_object(
 			ESCObject.new(
-				_player.global_id,
-				_player
+				player.global_id,
+				player
 			),
 			true
 		)
-		game.get_node("camera").set_target(_player)
+		game.get_node("camera").set_target(player)
 	
 	if has_node("player_start"):
 		escoria.object_manager.register_object(

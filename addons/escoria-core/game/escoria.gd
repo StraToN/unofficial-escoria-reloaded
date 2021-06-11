@@ -299,8 +299,8 @@ func _ev_left_click_on_item(obj, event, default_action = false):
 	# Don't interact after player movement towards object 
 	# (because object is inactive for example)
 	var dont_interact = false
-	var destination_position : Vector2 = main.current_scene.player\
-			.global_position
+	var destination_position : Vector2 = main.current_scene.player.\
+			global_position
 	
 	# Create walk context 
 	var walk_context = ESCWalkContext.new(

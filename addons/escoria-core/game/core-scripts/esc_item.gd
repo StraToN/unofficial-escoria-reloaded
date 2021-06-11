@@ -146,10 +146,10 @@ func _ready():
 	connect("mouse_exited", self, "_on_mouse_exited")
 	connect("input_event", self, "manage_input")
 	
-	escoria.event_manager.connect("event_finished", self, "_update_terrain")
-	
 	# Register and connect all elements to Escoria backoffice.
-	if !Engine.is_editor_hint():
+	if not Engine.is_editor_hint():
+		escoria.event_manager.connect("event_finished", self, "_update_terrain")
+		
 		escoria.object_manager.register_object(
 			ESCObject.new(
 				global_id,

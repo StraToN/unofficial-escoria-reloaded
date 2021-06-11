@@ -209,7 +209,7 @@ func walk_to(pos : Vector2, p_walk_context: ESCWalkContext = null) -> void:
 	if task == MovableTask.NONE:
 		task = MovableTask.WALK
 	
-	walk_path = parent.terrain.get_terrain_path(parent.get_position(), pos)
+	walk_path = parent.terrain.get_simple_path(parent.get_position(), pos, true)
 	
 	if walk_path.size() == 0:
 		task = MovableTask.NONE
@@ -218,8 +218,6 @@ func walk_to(pos : Vector2, p_walk_context: ESCWalkContext = null) -> void:
 		return
 	moved = true
 	walk_destination = walk_path[walk_path.size()-1]
-	if parent.terrain.is_solid(pos):
-		walk_destination = walk_path[walk_path.size()-1]
 	path_ofs = 0
 	task = MovableTask.WALK
 	set_process(true)
@@ -309,11 +307,14 @@ func update_terrain(on_event_finished_name = null) -> void:
 	else:
 		parent.z_index = VisualServer.CANVAS_ITEM_Z_MAX
 
-	var color = parent.terrain.get_terrain(pos)
-	var scal = parent.terrain.get_scale_range(color.b)
+	var factor = parent.terrain.get_terrain(pos)
+	var scal = parent.terrain.get_scale_range(factor)
 	if scal != parent.get_scale():
 		last_scale = scal
 		parent.scale = last_scale
+		
+	var color = parent.terrain.get_light(pos)
+	parent.modulate = color
 
 	# Do not flip the entire character, because that would conflict
 	# with shadows that expect to be siblings of $texture
