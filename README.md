@@ -50,28 +50,11 @@ The rewrite is currently ongoing and certain features of Escoria are missing or 
 
 ### Optimizations
 
-* [ ] Analyze, wether this Is still required?
-
-  ```python
-  	scenes_cache_list.push_back(ProjectSettings.get_setting("escoria/main/curtain"))
-  	scenes_cache_list.push_back(ProjectSettings.get_setting("escoria/main/hud"))
-  ```
-
-* [ ] Analyze, what this setting does: `escoria/internals/save_data`
-
-* [ ] Analyze, wether the custom type `ESCItemsInventory`is still required. It currently seems unused
-
 * [ ] Add the currently unfocused inventory item to the `inventory_item_unfocused` signal of `ESCInventoryItem`
 
 * [ ] The `_hover_stack_pop` method in `main_scene` doesn't pop (=remove the last element from the stack) but rather erases the given item from the stack. This may either be a hidden bug or a naming issue
 
 * [ ] The variable `screen_ofs` of main.gd is always set to Vector2(0, 0). Either it's unused or its function has yet to be documented
-
-* [ ] `res://addons/escoria-core/game/core-scripts/behaviors/interactive.gd` seems unused
-
-* [ ] At some places (e.g. with the Movable class), nodes are instantiated by creating a node and setting the node's script to the respective class. This can be optimized by just using e.g. var movable_node = Movable.new()
-
-* [ ] Instead of using a dictionary for walk_context, use a real class
 
 * [ ] Should we keep defining the animations in a script instead of a real object? Providing a script as a parameter to a function seems weird
 
