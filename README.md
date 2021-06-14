@@ -42,10 +42,8 @@ The rewrite is currently ongoing and certain features of Escoria are missing or 
 
 ### Basic features
 
-* [ ] Implement a speech volume
 * [ ] Implement load/save games
 * [ ] Implement switching player characters
-* [ ] Allow switching UI without restarting the game
 * [ ] Visualize scaling in editor
 
 ### Optimizations
