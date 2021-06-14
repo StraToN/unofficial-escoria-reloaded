@@ -563,6 +563,7 @@ main/command_directories=[ "res://addons/escoria-core/game/core-scripts/esc/comm
 debug/log_level="DEBUG"
 platform/skip_cache=false
 platform/skip_cache.mobile=true
+ui/items_autoregister_path="res://game/items/escitems/"
 
 [input]
 

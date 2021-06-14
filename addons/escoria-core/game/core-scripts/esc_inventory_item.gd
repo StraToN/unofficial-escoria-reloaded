@@ -1,4 +1,4 @@
-# An Inventory item in an ESC game
+# The inventory representation of an ESC item if pickable
 extends TextureButton
 class_name ESCInventoryItem
 
@@ -35,9 +35,9 @@ signal inventory_item_focused(item_id)
 signal inventory_item_unfocused()
 
 
-
-# The global id of this item
-export(String) var global_id
+# Global ID of the ESCItem that uses this ESCInventoryItem
+# Will be set by ESCItem automatically
+var global_id
 
 
 # Connect input handlers
@@ -62,13 +62,25 @@ func _on_inventory_item_gui_input(event : InputEvent):
 #		var p = get_global_mouse_position()
 		if event.doubleclick:
 			if event.button_index == BUTTON_LEFT:
-				emit_signal("mouse_double_left_inventory_item", global_id, event)
+				emit_signal(
+					"mouse_double_left_inventory_item", 
+					global_id, 
+					event
+				)
 		else:
 			if event.is_pressed():
 				if event.button_index == BUTTON_LEFT:
-					emit_signal("mouse_left_inventory_item", global_id, event)
+					emit_signal(
+						"mouse_left_inventory_item", 
+						global_id, 
+						event
+					)
 				if event.button_index == BUTTON_RIGHT:
-					emit_signal("mouse_right_inventory_item", global_id, event)
+					emit_signal(
+						"mouse_right_inventory_item", 
+						global_id, 
+						event
+					)
 
 
 # Handle mouse entering the item and send the respecitve signal

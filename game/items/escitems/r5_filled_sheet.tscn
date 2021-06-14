@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/escoria-core/game/core-scripts/esc_item.gd" type="Script" id=1]
-[ext_resource path="res://game/items/inventory/filled_sheet_escinventoryitem.tscn" type="PackedScene" id=2]
+[ext_resource path="res://game/items/inventory/filled_sheet.tscn" type="PackedScene" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -15,9 +15,6 @@ combine_is_one_way = true
 use_from_inventory_only = true
 inventory_item_scene_file = ExtResource( 2 )
 dialog_color = Color( 1, 1, 1, 1 )
-interact_positions = {
-"default": Vector2( 0, 0 )
-}
 
 [node name="sprite" type="Sprite" parent="."]
 

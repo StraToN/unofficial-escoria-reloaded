@@ -132,6 +132,10 @@ var terrain: ESCTerrain
 # Reference to this items collision shape node
 var collision: Node
 
+# The representation of this item in the scene. Will
+# be loaded, if inventory_item_scene_file is set.
+var inventory_item: ESCInventoryItem = null setget ,_get_inventory_item
+
 
 # Add the movable node, connect signals, detect child nodes
 # and register this item
@@ -157,6 +161,7 @@ func _ready():
 			),
 			true
 		)
+		
 		terrain = escoria.room_terrain
 		
 		if !is_trigger:
@@ -332,3 +337,13 @@ func _detect_children() -> void:
 # Upate the terrain when an event finished
 func _update_terrain(rc: int, event_name: String) -> void:
 	movable.update_terrain(event_name)
+
+
+# Get inventory item from the inventory item scene
+# **Returns** The inventory item of this ESCitem
+func _get_inventory_item() -> ESCInventoryItem:
+	if not inventory_item and inventory_item_scene_file:
+		inventory_item = inventory_item_scene_file.instance()
+		inventory_item.global_id = self.global_id
+	return inventory_item
+		

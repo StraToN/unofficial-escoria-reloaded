@@ -89,6 +89,18 @@ func set_escoria_ui_settings():
 			"hint_string": "*.tscn, *.scn"
 		}
 		ProjectSettings.add_property_info(game_scene_property_info)
+		
+	if !ProjectSettings.has_setting("escoria/ui/items_autoregister_path"):
+		ProjectSettings.set_setting(
+			"escoria/ui/items_autoregister_path", 
+			"res://game/items/escitems/"
+		)
+		var game_scene_property_info = {
+			"name": "escoria/ui/items_autoregister_path",
+			"type": TYPE_STRING,
+			"hint": PROPERTY_HINT_DIR
+		}
+		ProjectSettings.add_property_info(game_scene_property_info)
 	
 
 # Prepare the settings in the Escoria main category
