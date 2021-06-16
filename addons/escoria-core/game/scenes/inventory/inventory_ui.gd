@@ -46,10 +46,10 @@ func add_new_item_by_id(item_id : String) -> void:
 		item_id = item_id.rsplit("i/", false)[0]
 	if not items_ids_in_inventory.has(item_id):
 		if not escoria.object_manager.has(item_id):
-			var inventory_file = "%s%s.tscn" % [
+			var inventory_file = "%s/%s.tscn" % [
 				ProjectSettings.get_setting(
 					"escoria/ui/items_autoregister_path"
-				),
+				).trim_suffix("/"),
 				item_id
 			]
 			if ResourceLoader.exists(inventory_file):
