@@ -16,7 +16,6 @@ The scene MUST contain the 2 following nodes:
 
 # Define the actual container node to add items as children of. Should be a Container.
 export(NodePath) var inventory_ui_container
-onready var all_items = $ESCORIA_ALL_ITEMS
 
 var items_ids_in_inventory : Dictionary = {} # { item_id : TextureButton}
 
