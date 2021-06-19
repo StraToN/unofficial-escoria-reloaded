@@ -85,6 +85,7 @@ Requirements:
 * git
 * Current Godot version
 * Current master of [GDScript docs maker](https://github.com/GDQuest/gdscript-docs-maker)
+* Python (>=3) if you changed the ESC commands
 
 During development, run the following to update the class list:
 
@@ -93,5 +94,11 @@ cd gdscripts-docs-maker
 rm -rf export &>/dev/null
 ./generate_reference <path to escoria> -d "addons/escoria"
 cp export/* <path to escoria>/docs/api
+```
+
+If you changed ESC commands, update the command reference by running 
+
+```
+python3 extractesc.py
 ```
 
