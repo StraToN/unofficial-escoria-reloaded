@@ -4,7 +4,7 @@ from pathlib import Path
 
 esc_commands = ""
 
-for filename in Path("docs/api").glob("*.md"):
+for filename in sorted(Path("docs/api").glob("*.md")):
     test_str = Path(filename).read_text()
     
     if re.search(r"@ESC", test_str):
@@ -18,7 +18,8 @@ for filename in Path("docs/api").glob("*.md"):
 
         matches = re.search(r"(?s)## Description[^\n]*\n\n(?P<command>[^\n]+)\n\n(?P<description>.*?)(?=\s*\n## |$)", test_str)
     
-        esc_commands += "#### %s [API-Doc](api/%s)\n\n" % (
+        esc_commands += "#### <a name=\"%s\"></a>%s [API-Doc](api/%s)\n\n" % (
+            Path(filename).name,
             matches.group("command"), 
             Path(filename).name
         )

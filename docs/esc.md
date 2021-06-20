@@ -138,36 +138,7 @@ Some commands will block execution of the event until they finish, others won't.
 ### List of commands
 
 <!-- ESCCOMMANDS -->
-#### `set_active object value` [API-Doc](api/SetActiveCommand.md)
-
-Changes the "active" state of the object, value can be true or false.
-Inactive objects are hidden in the scene.
-#### `walk_block object1 object2 [speed]` [API-Doc](api/WalkBlockCommand.md)
-
-Walks, using the walk animation, object1 towards the position of object2,
-at the speed determined by object1's "speed" property,
-unless overridden. This command is blocking.
-#### `camera_set_zoom_height pixels [time] [API-Doc](api/CameraSetZoomHeightCommand.md)
-
-Zooms the camera in/out to the desired `pixels` height.
-An optional `time` in seconds controls how long it takes for the camera
-to zoom into position.
-#### `queue_animation object animation` [API-Doc](api/QueueAnimationCommand.md)
-
-**This command is currently not fully implemented.**
-
-Similar to queue_resource, queues the resources necessary to have an
-animation loaded on an item. The resource paths are taken from the item
-placeholders.
-#### `camera_set_pos speed x y` [API-Doc](api/CameraSetPosCommand.md)
-
-Moves the camera to a position defined by "x" and "y", at the speed defined
-by "speed" in pixels per second. If speed is 0, camera is teleported to the
-position.
-#### `wait seconds` [API-Doc](api/WaitCommand.md)
-
-Blocks execution of the current script for a number of seconds specified by the "seconds" parameter.
-#### `accept_input [ALL|NONE|SKIP]` [API-Doc](api/AcceptInputCommand.md)
+#### <a name="AcceptInputCommand.md"></a>`accept_input [ALL|NONE|SKIP]` [API-Doc](api/AcceptInputCommand.md)
 
 **This command is currently not fully implemented.**
 
@@ -179,39 +150,79 @@ the menu etc. SKIP and NONE also disable autosaves.
 This allows you to create cut scenes with SKIP where the dialog can be
 skipped, but also initiate locked#### down cutscenes with accept_input
 NONE in :setup and accept_input ALL later in :ready.
-#### `walk_to_pos player x y` [API-Doc](api/WalkToPosCommand.md)
+#### <a name="AnimCommand.md"></a>`anim object name [reverse]` [API-Doc](api/AnimCommand.md)
 
-Makes the `player` walk to the position `x`/`y`.
-#### `camera_set_target speed object` [API-Doc](api/CameraSetTargetCommand.md)
+Executes the animation specificed with the "name" parameter on the object,
+without blocking. The next command in the event will be executed immediately
+after. Optional parameters:
+
+* reverse: plays the animation in reverse when true
+#### <a name="CameraPushCommand.md"></a>`camera_push target [time] [type]` [API-Doc](api/CameraPushCommand.md)
+
+Push camera to `target`. Target must have camera_pos set. If it's of type
+Camera2D, its zoom will be used as well as position. `type` is any of the
+Tween.TransitionType values without the prefix, eg. LINEAR, QUART or CIRC;
+defaults to QUART. A `time` value of 0 will set the camera immediately.
+#### <a name="CameraSetLimitsCommand.md"></a>`camera_set_limits camlimits_id` [API-Doc](api/CameraSetLimitsCommand.md)
+
+Sets the camera limits to the one defined under `camlimits_id` in ESCRoom's
+camera_limits array.
+- camlimits_id : int : id of the camera limits to apply (defined in ESCRoom's
+  camera_limits array)
+#### <a name="CameraSetPosCommand.md"></a>`camera_set_pos speed x y` [API-Doc](api/CameraSetPosCommand.md)
+
+Moves the camera to a position defined by "x" and "y", at the speed defined
+by "speed" in pixels per second. If speed is 0, camera is teleported to the
+position.
+#### <a name="CameraSetTargetCommand.md"></a>`camera_set_target speed object` [API-Doc](api/CameraSetTargetCommand.md)
 
 Configures the camera to set the target to the given `object`using `speed`
 as speed limit.
 This is the default behavior (default follow object is "player").
-#### `queue_resource path [front_of_queue]` [API-Doc](api/QueueResourceCommand.md)
-
-Queues the load of a resource in a background thread. The `path` must be a
-full path inside your game, for example "res://scenes/next_scene.tscn". The
-"front_of_queue" parameter is optional (default value false), to put the
-resource in the front of the queue. Queued resources are cleared when a
-change scene happens (but after the scene is loaded, meaning you can queue
-resources that belong to the next scene).
-#### `set_globals pattern value` [API-Doc](api/SetGlobalsCommand.md)
-
-Changes the value of multiple globals using a wildcard pattern, where "*"
-matches zero or more arbitrary characters and "?" matches any single
-character except a period (".").
-#### `camera_set_zoom magnitude [time]` [API-Doc](api/CameraSetZoomCommand.md)
+#### <a name="CameraSetZoomCommand.md"></a>`camera_set_zoom magnitude [time]` [API-Doc](api/CameraSetZoomCommand.md)
 
 Zooms the camera in/out to the desired `magnitude`. Values larger than 1 zooms
 the camera out, and smaller values zooms in, relative to the default value
 of 1. An optional `time` in seconds controls how long it takes for the camera
 to zoom into position.
-#### `change_scene path run_events` [API-Doc](api/ChangeSceneCommand.md)
+#### <a name="CameraSetZoomHeightCommand.md"></a>`camera_set_zoom_height pixels [time] [API-Doc](api/CameraSetZoomHeightCommand.md)
+
+Zooms the camera in/out to the desired `pixels` height.
+An optional `time` in seconds controls how long it takes for the camera
+to zoom into position.
+#### <a name="CameraShiftCommand.md"></a>`camera_shift x y [time] [type]` [API-Doc](api/CameraShiftCommand.md)
+
+Shift camera by `x` and `y` pixels over `time` seconds. `type` is any of the
+Tween.TransitionType values without the prefix, eg. LINEAR, QUART or CIRC;
+defaults to QUART.
+#### <a name="ChangeSceneCommand.md"></a>`change_scene path run_events` [API-Doc](api/ChangeSceneCommand.md)
 
 Loads a new scene, specified by "path". The `run_events` variable is a
 boolean (default true) which you never want to set manually! It's there only
 to benefit save games, so they don't conflict with the scene's events.
-#### `game_over continue_enabled show_credits` [API-Doc](api/GameOverCommand.md)
+#### <a name="CustomCommand.md"></a>`custom object node func_name [params]` [API-Doc](api/CustomCommand.md)
+
+Calls the function `func_name` of the node `node` of object `object` with
+the optional `params`. This is a blocking function
+#### <a name="CutSceneCommand.md"></a>`cut_scene object name [reverse]` [API-Doc](api/CutSceneCommand.md)
+
+Executes the animation specificed with the "name" parameter on the object,
+blocking. The next command in the event will be executed when the animation
+is finished playing. Optional parameters:
+
+* reverse plays the animation in reverse when true
+#### <a name="DebugCommand.md"></a>`debug string [string2 ...]` [API-Doc](api/DebugCommand.md)
+
+Takes 1 or more strings, prints them to the console.
+#### <a name="DecGlobalCommand.md"></a>`dec_global name value` [API-Doc](api/DecGlobalCommand.md)
+
+Subtracts the value from global with given "name". Value and global must
+both be integers.
+#### <a name="EnableTerrainCommand.md"></a>`enable_terrain node_name` [API-Doc](api/EnableTerrainCommand.md)
+
+Enable the ESCTerrain's NavigationPolygonInstance defined by given node name.
+Disables previously activated NavigationPolygonInstance.
+#### <a name="GameOverCommand.md"></a>`game_over continue_enabled show_credits` [API-Doc](api/GameOverCommand.md)
 
 **This command is currently not fully implemented.**
 
@@ -219,68 +230,60 @@ Ends the game. Use the "continue_enabled" parameter to enable or disable the
 continue button in the main menu afterwards. The "show_credits" parameter
 loads the ui/end_credits scene if true. You can configure it to your regular
 credits scene if you want.
-#### `walk_to_pos_block player x y` [API-Doc](api/WalkToPosBlockCommand.md)
+#### <a name="IncGlobalCommand.md"></a>`inc_global name value` [API-Doc](api/IncGlobalCommand.md)
 
-Makes the `player` walk to the position `x`/`y`. This is a blocking command.
-#### `enable_terrain node_name` [API-Doc](api/EnableTerrainCommand.md)
+Adds the value to global with given "name". Value and global must both be
+integers.
+#### <a name="InventoryAddCommand.md"></a>`inventory_add item` [API-Doc](api/InventoryAddCommand.md)
 
-Enable the ESCTerrain's NavigationPolygonInstance defined by given node name.
-Disables previously activated NavigationPolygonInstance.
-#### `repeat` [API-Doc](api/RepeatCommand.md)
+Add an item to the inventory
+#### <a name="InventoryRemoveCommand.md"></a>`inventory_remove item` [API-Doc](api/InventoryRemoveCommand.md)
 
-Restarts the execution of the current scope at the start. A scope can be a
-group or an event.
-#### `play_snd object file [loop]` [API-Doc](api/PlaySndCommand.md)
+Remove an item from the inventory.
+#### <a name="PlaySndCommand.md"></a>`play_snd object file [loop]` [API-Doc](api/PlaySndCommand.md)
 
 **This command is currently not fully implemented.**
 
 Plays the sound specificed with the "file" parameter on the object, without
 blocking. You can play background sounds, eg. during scene changes, with
 `play_snd bg_snd res://...`
-#### `walk object1 object2 [speed]` [API-Doc](api/WalkCommand.md)
+#### <a name="QueueAnimationCommand.md"></a>`queue_animation object animation` [API-Doc](api/QueueAnimationCommand.md)
 
-Walks, using the walk animation, object1 towards the position of object2,
-at the speed determined by object1's "speed" property,
-unless overridden. This command is non-blocking.
-#### `inc_global name value` [API-Doc](api/IncGlobalCommand.md)
+**This command is currently not fully implemented.**
 
-Adds the value to global with given "name". Value and global must both be
-integers.
-#### `inventory_remove item` [API-Doc](api/InventoryRemoveCommand.md)
+Similar to queue_resource, queues the resources necessary to have an
+animation loaded on an item. The resource paths are taken from the item
+placeholders.
+#### <a name="QueueResourceCommand.md"></a>`queue_resource path [front_of_queue]` [API-Doc](api/QueueResourceCommand.md)
 
-Remove an item from the inventory.
-#### `set_global name value` [API-Doc](api/SetGlobalCommand.md)
+Queues the load of a resource in a background thread. The `path` must be a
+full path inside your game, for example "res://scenes/next_scene.tscn". The
+"front_of_queue" parameter is optional (default value false), to put the
+resource in the front of the queue. Queued resources are cleared when a
+change scene happens (but after the scene is loaded, meaning you can queue
+resources that belong to the next scene).
+#### <a name="RepeatCommand.md"></a>`repeat` [API-Doc](api/RepeatCommand.md)
 
-Changes the value of the global "name" with the value. Value can be "true",
-"false" or an integer.
-#### `custom object node func_name [params]` [API-Doc](api/CustomCommand.md)
+Restarts the execution of the current scope at the start. A scope can be a
+group or an event.
+#### <a name="SayCommand.md"></a>`say object text [type] [avatar]` [API-Doc](api/SayCommand.md)
 
-Calls the function `func_name` of the node `node` of object `object` with
-the optional `params`. This is a blocking function
-#### `set_speed object speed` [API-Doc](api/SetSpeedCommand.md)
+Runs the specified string as a dialog said by the object. Blocks execution
+until the dialog finishes playing. Optional parameters:
 
-Sets how fast object moves. Speed is an integer.
-#### `camera_set_limits camlimits_id` [API-Doc](api/CameraSetLimitsCommand.md)
+* "type" determines the type of dialog UI to use. Default value is "default"
+* "avatar" determines the avatar to use for the dialog. Default value is
+  "default"
+#### <a name="SchedEventCommand.md"></a>`sched_event time object event` [API-Doc](api/SchedEventCommand.md)
 
-Sets the camera limits to the one defined under `camlimits_id` in ESCRoom's
-camera_limits array.
-- camlimits_id : int : id of the camera limits to apply (defined in ESCRoom's
-  camera_limits array)
-#### `anim object name [reverse]` [API-Doc](api/AnimCommand.md)
+Schedules the execution of an "event" found in "object" in a time in seconds.
+If another event is running at the time, execution starts when the running
+event ends.
+#### <a name="SetActiveCommand.md"></a>`set_active object value` [API-Doc](api/SetActiveCommand.md)
 
-Executes the animation specificed with the "name" parameter on the object,
-without blocking. The next command in the event will be executed immediately
-after. Optional parameters:
-
-* reverse: plays the animation in reverse when true
-#### `cut_scene object name [reverse]` [API-Doc](api/CutSceneCommand.md)
-
-Executes the animation specificed with the "name" parameter on the object,
-blocking. The next command in the event will be executed when the animation
-is finished playing. Optional parameters:
-
-* reverse plays the animation in reverse when true
-#### `set_angle object degrees` [API-Doc](api/SetAngleCommand.md)
+Changes the "active" state of the object, value can be true or false.
+Inactive objects are hidden in the scene.
+#### <a name="SetAngleCommand.md"></a>`set_angle object degrees` [API-Doc](api/SetAngleCommand.md)
 
 Turns object to a degrees angle without animations. 0 sets object facing
 forward, 90 sets it 90 degrees clockwise ("east") etc. When turning to the
@@ -288,7 +291,69 @@ destination angle, animations are played if they're defined in animations.
 
 object must be player or interactive. degrees must be between [0, 360] or an
 error is reported.
-#### `turn_to object degrees` [API-Doc](api/TurnToCommand.md)
+#### <a name="SetGlobalCommand.md"></a>`set_global name value` [API-Doc](api/SetGlobalCommand.md)
+
+Changes the value of the global "name" with the value. Value can be "true",
+"false" or an integer.
+#### <a name="SetGlobalsCommand.md"></a>`set_globals pattern value` [API-Doc](api/SetGlobalsCommand.md)
+
+Changes the value of multiple globals using a wildcard pattern, where "*"
+matches zero or more arbitrary characters and "?" matches any single
+character except a period (".").
+#### <a name="SetHudVisibleCommand.md"></a>`set_hud_visible visible` [API-Doc](api/SetHudVisibleCommand.md)
+
+If you have a cutscene like sequence where the player doesn't have control,
+and you also have HUD elements visible, use this to hide the HUD. You want
+to do that because it explicitly signals the player that there is no control
+over the game at the moment. "visible" is true or false.
+#### <a name="SetInteractiveCommand.md"></a>`set_interactive object value` [API-Doc](api/SetInteractiveCommand.md)
+
+Sets whether or not an object should be interactive.
+#### <a name="SetSoundStateCommand.md"></a>`set_sound_state player sound loop` [API-Doc](api/SetSoundStateCommand.md)
+
+Change the sound playing on `player` to `sound` with optional looping if
+`loop` is true.
+Valid players are "bg_music" and "bg_sound".
+Aside from paths to sound or music files, the values *off* and *default*.
+*default* is the default value.
+are also valid for `sound`
+#### <a name="SetSpeedCommand.md"></a>`set_speed object speed` [API-Doc](api/SetSpeedCommand.md)
+
+Sets how fast object moves. Speed is an integer.
+#### <a name="SetStateCommand.md"></a>`set_state object state [immediate]` [API-Doc](api/SetStateCommand.md)
+
+Changes the state of an object, and executes the state animation if present.
+The command can be used to change the appearance of an item or a player
+character.
+If `immediate` is set to true, the animation is run directly
+#### <a name="SlideBlockCommand.md"></a>`slide_block object1 object2 [speed]` [API-Doc](api/SlideBlockCommand.md)
+
+**This command is currently not fully implemented.**
+
+Moves object1 towards the position of object2, at the speed determined by
+object1's "speed" property, unless overridden. This command is blocking.
+It does not respect the room's navigation polygons, so you can move items
+where the player can't walk.
+#### <a name="SlideCommand.md"></a>`slide object1 object2 [speed]` [API-Doc](api/SlideCommand.md)
+
+**This command is currently not fully implemented.**
+
+Moves object1 towards the position of object2, at the speed determined by
+object1's "speed" property, unless overridden. This command is non-blocking.
+It does not respect the room's navigation polygons, so you can move items
+where the player can't walk.
+#### <a name="SpawnCommand.md"></a>`spawn path [object2]` [API-Doc](api/SpawnCommand.md)
+
+Instances a scene determined by "path", and places in the position of
+object2 (object2 is optional)
+#### <a name="StopCommand.md"></a>`stop` [API-Doc](api/StopCommand.md)
+
+Stops the event's execution.
+#### <a name="TeleportCommand.md"></a>`teleport object1 object2 [API-Doc](api/TeleportCommand.md)
+
+Sets the position of object1 to the position of object2.
+FIXME re-add the angle parameter here
+#### <a name="TurnToCommand.md"></a>`turn_to object degrees` [API-Doc](api/TurnToCommand.md)
 
 **This command is currently not fully implemented.**
 
@@ -298,92 +363,29 @@ Turns object to a degrees angle with a directions animation.
 When turning to the destination angle, animations are played if they're
 defined in animations. object must be player or interactive. degrees must
 be between [0, 360] or an error is reported.
-#### `camera_shift x y [time] [type]` [API-Doc](api/CameraShiftCommand.md)
+#### <a name="WaitCommand.md"></a>`wait seconds` [API-Doc](api/WaitCommand.md)
 
-Shift camera by `x` and `y` pixels over `time` seconds. `type` is any of the
-Tween.TransitionType values without the prefix, eg. LINEAR, QUART or CIRC;
-defaults to QUART.
-#### `slide object1 object2 [speed]` [API-Doc](api/SlideCommand.md)
+Blocks execution of the current script for a number of seconds specified by the "seconds" parameter.
+#### <a name="WalkBlockCommand.md"></a>`walk_block object1 object2 [speed]` [API-Doc](api/WalkBlockCommand.md)
 
-**This command is currently not fully implemented.**
+Walks, using the walk animation, object1 towards the position of object2,
+at the speed determined by object1's "speed" property,
+unless overridden. This command is blocking.
+#### <a name="WalkCommand.md"></a>`walk object1 object2 [speed]` [API-Doc](api/WalkCommand.md)
 
-Moves object1 towards the position of object2, at the speed determined by
-object1's "speed" property, unless overridden. This command is non-blocking.
-It does not respect the room's navigation polygons, so you can move items
-where the player can't walk.
-#### `camera_push target [time] [type]` [API-Doc](api/CameraPushCommand.md)
+Walks, using the walk animation, object1 towards the position of object2,
+at the speed determined by object1's "speed" property,
+unless overridden. This command is non-blocking.
+#### <a name="WalkToPosBlockCommand.md"></a>`walk_to_pos_block player x y` [API-Doc](api/WalkToPosBlockCommand.md)
 
-Push camera to `target`. Target must have camera_pos set. If it's of type
-Camera2D, its zoom will be used as well as position. `type` is any of the
-Tween.TransitionType values without the prefix, eg. LINEAR, QUART or CIRC;
-defaults to QUART. A `time` value of 0 will set the camera immediately.
-#### `inventory_add item` [API-Doc](api/InventoryAddCommand.md)
+Makes the `player` walk to the position `x`/`y`. This is a blocking command.
+#### <a name="WalkToPosCommand.md"></a>`walk_to_pos player x y` [API-Doc](api/WalkToPosCommand.md)
 
-Add an item to the inventory
-#### `sched_event time object event` [API-Doc](api/SchedEventCommand.md)
-
-Schedules the execution of an "event" found in "object" in a time in seconds.
-If another event is running at the time, execution starts when the running
-event ends.
-#### `set_hud_visible visible` [API-Doc](api/SetHudVisibleCommand.md)
-
-If you have a cutscene like sequence where the player doesn't have control,
-and you also have HUD elements visible, use this to hide the HUD. You want
-to do that because it explicitly signals the player that there is no control
-over the game at the moment. "visible" is true or false.
-#### `dec_global name value` [API-Doc](api/DecGlobalCommand.md)
-
-Subtracts the value from global with given "name". Value and global must
-both be integers.
-#### `set_state object state [immediate]` [API-Doc](api/SetStateCommand.md)
-
-Changes the state of an object, and executes the state animation if present.
-The command can be used to change the appearance of an item or a player
-character.
-If `immediate` is set to true, the animation is run directly
-#### `say object text [type] [avatar]` [API-Doc](api/SayCommand.md)
-
-Runs the specified string as a dialog said by the object. Blocks execution
-until the dialog finishes playing. Optional parameters:
-
-* "type" determines the type of dialog UI to use. Default value is "default"
-* "avatar" determines the avatar to use for the dialog. Default value is
-  "default"
-#### `debug string [string2 ...]` [API-Doc](api/DebugCommand.md)
-
-Takes 1 or more strings, prints them to the console.
-#### `teleport object1 object2 [API-Doc](api/TeleportCommand.md)
-
-Sets the position of object1 to the position of object2.
-FIXME re-add the angle parameter here
-#### `spawn path [object2]` [API-Doc](api/SpawnCommand.md)
-
-Instances a scene determined by "path", and places in the position of
-object2 (object2 is optional)
-#### `set_sound_state player sound loop` [API-Doc](api/SetSoundStateCommand.md)
-
-Change the sound playing on `player` to `sound` with optional looping if
-`loop` is true.
-Valid players are "bg_music" and "bg_sound".
-Aside from paths to sound or music files, the values *off* and *default*.
-*default* is the default value.
-are also valid for `sound`
-#### `set_interactive object value` [API-Doc](api/SetInteractiveCommand.md)
-
-Sets whether or not an object should be interactive.
-#### `stop` [API-Doc](api/StopCommand.md)
-
-Stops the event's execution.
-#### `slide_block object1 object2 [speed]` [API-Doc](api/SlideBlockCommand.md)
-
-**This command is currently not fully implemented.**
-
-Moves object1 towards the position of object2, at the speed determined by
-object1's "speed" property, unless overridden. This command is blocking.
-It does not respect the room's navigation polygons, so you can move items
-where the player can't walk.
+Makes the `player` walk to the position `x`/`y`.
 
 <!-- /ESCCOMMANDS -->
+
+
 
 
 
