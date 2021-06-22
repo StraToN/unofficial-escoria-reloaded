@@ -72,11 +72,50 @@ This framework (scripts, scenes) is distributed under the [MIT license](LICENCE)
 
 ### Art credits
 
+#### Logo
+
+Escoria Logo created by Livio Fania (https://liviofania.com/)
+Licence: CC-BY
+
+#### Characters
+
+- Mark spritesheet by Marco Giorgini - marcogiorgini.com 
+  Licence : CC0 Licence
+  https://opengameart.org/content/mark-2d-adventure-game-sprite
+  with some additions (talk animations) by Julian Murgia
+- Worker spritesheet based on Mark spritesheet by Marco Giorgini - marcogiorgini.com 
+  Licence: CC0 Licence
+  edited by Julian Murgia
+
+#### Items
+
+* Generic items by Kenney
+  Licence: CC0 Licence
+  https://www.kenney.nl/assets/generic-items
 
 ### Sound credits
 
+* Concrete footstep
+  Licence: CC0 Licence
+  https://www.kenney.nl/
+* “Game Menu Looping” (Licence CC-BY 4.0)
+* “Mystical Ocean Puzzle Game” (Licence CC-BY 4.0)
+  by Eric Matyas
+  www.soundimage.org
 
 ### Font
+
+These fonts are provided as an example. Please mind checking the licence before redistributing with your game.
+
+- Caslon Antique 
+  https://www.1001fonts.com/caslon-antique-font.html#license
+  Licence: Free for personal use - Free for commercial use
+  This is the font used in LucasArt's game Curse of Monkey Island.
+
+- Onesize
+  https://www.whatfontis.com/Onesize.font
+  Licence: Free for personal use
+  This is the font used in LucasArt's games The Secret of Monkey Island and Monkey Island 2: Lechuck's Revenge.
 
 ## Development
 

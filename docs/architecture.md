@@ -74,4 +74,6 @@ The scene, that Godot loads when starting a game (the [*main scene*](https://doc
 
 ## The interactivity workflow of Escoria
 
-tbd
+When the player clicks on an [`ESCItem`](api/ESCItem.md), the input manager is used to check and distribute the click to the currently running game interface. The game interface is then responsible for taking the respective action based on its workflow. This way, different user interfaces can be implemented. For a coin interface, for example, a right click would open the coin and let the player select the respective verb.
+
+The game interface will ultimatively call `escoria.do`, which is a plumbing method, that handles core functions like walking, clicking on items or visiting areas. This method will then take care of the different actions, for example moving the player to the object (or its `interact_position`) and then running the appropriate event. The event is based on the `current_action` set in the [`actions manager`](api/ESCActionManager.md) (the verb) and the `current_tool` (the selected item). If the current verb is `use` and the event has an event `:use`, the [`event manager`](api/ESCEventManager.md) will run that specific event.
