@@ -1,0 +1,78 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://addons/escoria-core/game/core-scripts/save_data/esc_savegame.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+game_version = "0.1.0"
+name = "blah"
+date = "29/6/2021 13:45"
+data = {
+"globals": {
+"bridge_closed": false,
+"button_broken": false,
+"dialog_advance": 1,
+"dialog_popup_advance": 2,
+"r2_bridge_closed": true,
+"r3_bridge_closed": true
+},
+"main": {
+"current_scene_filename": "res://game/rooms/room3/room3.tscn",
+"last_scene_global_id": ""
+},
+"objects": {
+"bg_music": {
+"active": true,
+"interactive": true,
+"state": "default"
+},
+"bg_sound": {
+"active": true,
+"interactive": true,
+"state": "default"
+},
+"camera": {
+"active": true,
+"interactive": true,
+"state": "default"
+},
+"player": {
+"active": true,
+"global_transform": Transform2D( 1, 0, 0, 1, 1037, 412 ),
+"interactive": true,
+"last_deg": 71,
+"last_dir": 2,
+"state": "default"
+},
+"player_start": {
+"active": true,
+"interactive": true,
+"state": "default"
+},
+"r3_bridge": {
+"active": true,
+"interactive": true,
+"state": "bridge_close"
+},
+"r3_button": {
+"active": true,
+"interactive": true,
+"state": "button_repaired"
+},
+"r3_l_exit": {
+"active": true,
+"interactive": true,
+"state": "default"
+},
+"r3_r_exit": {
+"active": true,
+"interactive": true,
+"state": "default"
+},
+"r3_right_platform": {
+"active": true,
+"interactive": false,
+"state": "default"
+}
+}
+}

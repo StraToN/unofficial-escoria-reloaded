@@ -276,8 +276,8 @@ func element_exited(body):
 #
 # #### Parameters
 #
-# - target: Target item to teleport to
-func teleport(target: Node) -> void:
+# - target: Target to teleport to (can be ESCObject or Vector2 or Position2D)
+func teleport(target) -> void:
 	_movable.teleport(target)
 
 
@@ -359,3 +359,4 @@ func _get_inventory_item() -> ESCInventoryItem:
 		inventory_item.global_id = self.global_id
 	return inventory_item
 		
+

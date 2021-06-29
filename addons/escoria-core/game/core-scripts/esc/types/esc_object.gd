@@ -70,3 +70,18 @@ func set_state(p_state: String, immediate: bool = false):
 func _set_active(value: bool):
 	active = value
 	self.node.visible = value
+
+
+func get_save_data() -> Dictionary:
+	var save_data : Dictionary = {} 
+	save_data["active"] = self.active
+	save_data["interactive"] = self.interactive
+	save_data["state"] = self.state
+#	save_data["events"] = self.events
+	
+	if self.node.get("is_movable") and self.node.is_movable:
+		save_data["global_transform"] = self.node.global_transform
+		save_data["last_deg"] = wrapi(self.node._movable._get_angle() + 1, 0, 360)
+		save_data["last_dir"] = self.node._movable.last_dir
+	
+	return save_data

@@ -436,3 +436,8 @@ func set_angle(deg : int, immediate = true) -> void:
 		parent.animation_sprite.play(parent.animations.idles[last_dir][0])
 	pose_scale = parent.animations.idles[last_dir][1]
 	update_terrain()
+
+
+func _get_angle() -> int:
+	return parent.animations.dir_angles[last_dir][0]
+	

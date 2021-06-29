@@ -116,6 +116,13 @@ func set_camera_limits(camera_limit_id : int = 0) -> void:
 	current_scene.game.get_node("camera").set_offset(screen_ofs * 2)
 
 
+func save_game(p_savegame_res : Resource) -> void:
+	p_savegame_res.data["main"] = {
+		"last_scene_global_id": last_scene_global_id,
+		"current_scene_filename": current_scene.filename
+	}
+
+
 # Sanity check that the game.tscn scene's root node script MUST
 # implement the following methods. If they do not exist, stop immediately.
 # Implement them, even if empty

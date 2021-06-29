@@ -96,7 +96,7 @@ onready var main = $main
 onready var inputs_manager = $inputs_manager
 
 # Savegame management
-onready var save_data = load("res://addons/escoria-core/game/core-scripts/save_data/save_data.gd").new()
+onready var save_data = $save_data
 
 
 # Initialize various objects
@@ -117,11 +117,8 @@ func _init():
 
 # Load settings
 func _ready():
-	save_data.start()
-	save_data.check_settings()
-	var settings = save_data.load_settings(null)
-	escoria.settings = parse_json(settings)
-	escoria._on_settings_loaded(escoria.settings)
+	var settings = save_data.load_settings()
+	escoria.apply_settings(escoria.settings)
 
 
 # Called by Main menu "start new game"
@@ -386,7 +383,7 @@ func _ev_left_click_on_item(obj, event, default_action = false):
 # #### Parameters
 #
 # * p_settings: Loaded settings
-func _on_settings_loaded(p_settings : Dictionary) -> void:
+func apply_settings(p_settings : Dictionary) -> void:
 	escoria.logger.info("******* settings loaded", p_settings)
 	if p_settings != null:
 		settings = p_settings
