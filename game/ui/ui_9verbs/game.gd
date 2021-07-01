@@ -135,6 +135,7 @@ func mousewheel_action(_direction : int):
 func hide_ui():
 	$ui/panel_down.hide()
 	verbs_menu.hide()
+	$ui/panel_down/verbs_layer/room_select.hide()
 	$ui/panel_down/inventory_layer/inventory_ui.hide()
 	tooltip.hide()
 
@@ -142,6 +143,7 @@ func hide_ui():
 func show_ui():
 	$ui/panel_down.show()
 	verbs_menu.show()
+	$ui/panel_down/verbs_layer/room_select.show()
 	$ui/panel_down/inventory_layer/inventory_ui.show()
 	tooltip.show()
 

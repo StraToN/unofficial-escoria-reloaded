@@ -96,7 +96,7 @@ onready var main = $main
 onready var inputs_manager = $inputs_manager
 
 # Savegame management
-onready var save_data = $save_data
+var save_data
 
 
 # Initialize various objects
@@ -113,6 +113,7 @@ func _init():
 	self.esc_compiler = ESCCompiler.new()
 	self.resource_cache = ESCResourceCache.new()
 	self.resource_cache.start()
+	self.save_data = ESCSaveDataResources.new()
 
 
 # Load settings

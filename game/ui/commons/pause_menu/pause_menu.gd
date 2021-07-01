@@ -12,6 +12,7 @@ func _on_save_game_pressed():
 
 func _on_load_game_pressed():
 	$Panel/VBoxContainer.hide()
+	$load_game.refresh_savegames()
 	$load_game.show()
 
 

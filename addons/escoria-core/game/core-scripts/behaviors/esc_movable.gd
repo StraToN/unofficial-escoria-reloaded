@@ -437,7 +437,7 @@ func set_angle(deg : int, immediate = true) -> void:
 	pose_scale = parent.animations.idles[last_dir][1]
 	update_terrain()
 
-
+# Returns the angle that corresponds to the current direction of the object.
 func _get_angle() -> int:
 	return parent.animations.dir_angles[last_dir][0]
 	

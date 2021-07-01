@@ -24,7 +24,7 @@ func _process(_delta):
 #
 # #### Parameters
 #
-# - object: Obejct to register
+# - object: Object to register
 # - force: Register the object, even if it has already been registered
 func register_object(object: ESCObject, force: bool = false) -> void:
 	if objects.has(object.global_id) and not force:

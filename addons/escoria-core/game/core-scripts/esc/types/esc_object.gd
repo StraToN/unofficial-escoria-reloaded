@@ -72,13 +72,15 @@ func _set_active(value: bool):
 	self.node.visible = value
 
 
+# Return the data of the object to be inserted in a savegame file.
 func get_save_data() -> Dictionary:
 	var save_data : Dictionary = {} 
+#	save_data["type"] = self.node.get_class()
+	
 	save_data["active"] = self.active
 	save_data["interactive"] = self.interactive
 	save_data["state"] = self.state
-#	save_data["events"] = self.events
-	
+
 	if self.node.get("is_movable") and self.node.is_movable:
 		save_data["global_transform"] = self.node.global_transform
 		save_data["last_deg"] = wrapi(self.node._movable._get_angle() + 1, 0, 360)

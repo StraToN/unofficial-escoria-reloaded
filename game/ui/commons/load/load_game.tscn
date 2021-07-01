@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://game/ui/commons/fonts/caslonantique.tres" type="DynamicFont" id=1]
-[ext_resource path="res://game/ui/commons/load/load_save_slot.tscn" type="PackedScene" id=2]
+[ext_resource path="res://game/ui/commons/load_save_slot/load_save_slot.tscn" type="PackedScene" id=2]
 [ext_resource path="res://game/ui/commons/load/load_game.gd" type="Script" id=3]
 
 [node name="load_game" type="Control"]
@@ -25,14 +25,14 @@ __meta__ = {
 }
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -268.0
-margin_top = -118.315
-margin_right = 268.0
-margin_bottom = 396.685
+anchor_left = 0.291
+anchor_top = 0.369
+anchor_right = 0.709
+anchor_bottom = 0.941
+margin_left = -0.480011
+margin_top = -1.10001
+margin_right = 0.479919
+margin_bottom = -0.900024
 scroll_horizontal_enabled = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -46,9 +46,5 @@ size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="autosave_slot" parent="ScrollContainer/slots" instance=ExtResource( 2 )]
-margin_right = 536.0
-margin_bottom = 100.0
 
 [connection signal="pressed" from="back" to="." method="_on_back_pressed"]
