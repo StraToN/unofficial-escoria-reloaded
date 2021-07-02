@@ -157,16 +157,9 @@ func _process(delta: float) -> void:
 #
 # #### Parameters
 #
-# - target: Vector2, Position2d or ESCItem
-func teleport(target, angle : Object = null) -> void:
-	if typeof(target) == TYPE_VECTOR2 :
-		escoria.logger.info(
-			"Object %s teleported at position %s with angle" %
-			[parent.global_id, str(target)],
-			[angle]
-		)
-		parent.position = target
-	elif target is Position2D:
+# - target: Position2d or ESCItem to teleport to
+func teleport(target : Node, angle : Object = null) -> void:
+	if target is Position2D:
 		escoria.logger.info(
 			"Object %s teleported at position %s with angle" %
 			[parent.global_id, str(target.position)],
@@ -185,7 +178,27 @@ func teleport(target, angle : Object = null) -> void:
 			+ str(parent.position) + " with angle ", str(angle))
 	else:
 		escoria.logger.report_errors("escitem.gd:teleport()",
-		["Target to teleport to is null or unusable (" + target + ")"])
+		["Target to teleport to is null or unusable (" + str(target) + ")"])
+
+
+# Teleports this item to the target position.
+# TODO angle is only used for logging and has no further use, so it probably
+# can be removed
+#
+# #### Parameters
+#
+# - target: Vector2 target position to teleport to 
+func teleport_to(target : Vector2, angle : Object = null) -> void:
+	if typeof(target) == TYPE_VECTOR2 :
+		escoria.logger.info(
+			"Object %s teleported at position %s with angle" %
+			[parent.global_id, str(target)],
+			[angle]
+		)
+		parent.position = target
+	else:
+		escoria.logger.report_errors("escitem.gd:teleport_to()",
+		["Target to teleport to is null or unusable (" + str(target) + ")"])
 
 
 # Walk to a given position

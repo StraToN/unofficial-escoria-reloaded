@@ -276,10 +276,19 @@ func element_exited(body):
 #
 # #### Parameters
 #
-# - target: Target to teleport to (can be ESCObject or Vector2 or Position2D)
-func teleport(target) -> void:
+# - target: Target node to teleport to
+func teleport(target : Node) -> void:
 	_movable.teleport(target)
 
+
+# Use the movable node to teleport this item to the target position
+#
+# #### Parameters
+#
+# - target: Vector2 position to teleport to
+func teleport_to(target : Vector2) -> void:
+	_movable.teleport_to(target)
+	
 
 # Use the movable node to make the item walk to the given position
 #

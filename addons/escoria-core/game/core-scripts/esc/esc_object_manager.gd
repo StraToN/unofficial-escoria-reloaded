@@ -107,9 +107,9 @@ func unregister_object(object: ESCObject) -> void:
 #
 # - p_savegame: The savegame resource
 func save_game(p_savegame : ESCSaveGame) -> void:
-	p_savegame.data["objects"] = {}
+	p_savegame.objects = {}
 	for obj_global_id in objects:
 		if !objects[obj_global_id] is ESCObject:
 			continue
-		p_savegame.data["objects"][obj_global_id] \
-			= objects[obj_global_id].get_save_data()
+		p_savegame.objects[obj_global_id] = \
+			objects[obj_global_id].get_save_data()

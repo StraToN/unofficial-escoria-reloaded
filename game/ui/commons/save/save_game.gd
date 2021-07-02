@@ -12,7 +12,7 @@ func _ready():
 
 func _on_slot_pressed(p_slot_n : int):
 	slot_pressed = p_slot_n
-	if escoria.save_data.save_game_exists(p_slot_n):
+	if escoria.save_manager.save_game_exists(p_slot_n):
 		# TODO Manage save override, ask for confirmation
 		pass
 	else:
@@ -23,7 +23,7 @@ func refresh_savegames():
 	for slot in $ScrollContainer/slots.get_children():
 		$ScrollContainer/slots.remove_child(slot)
 	
-	var saves_list = escoria.save_data.get_saves_list()
+	var saves_list = escoria.save_manager.get_saves_list()
 	for i in saves_list.size():
 		var save_data = saves_list[i+1]
 		var new_slot = slot_ui_scene.instance()
@@ -50,7 +50,7 @@ func _on_back_pressed():
 
 
 func _on_save_name_popup_savegame_name_ok(p_savename : String):
-	escoria.save_data.save_game(slot_pressed, p_savename)
+	escoria.save_manager.save_game(slot_pressed, p_savename)
 	refresh_savegames()
 	slot_pressed = null
 

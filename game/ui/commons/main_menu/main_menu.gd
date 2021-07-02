@@ -25,9 +25,6 @@ func _on_continue_pressed():
 	pass
 
 
-
-
-
 func switch_language(lang : String):
 	TranslationServer.set_locale(lang)
 
@@ -38,6 +35,7 @@ func _on_new_game_pressed():
 
 func _on_load_game_pressed():
 	$Panel/main.hide()
+	$Panel/load_game.refresh_savegames()
 	$Panel/load_game.show()
 
 

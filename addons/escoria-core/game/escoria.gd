@@ -1,6 +1,7 @@
 # The escorie main script
 extends Node
 
+const ESCORIA_VERSION = "0.1.0"
 
 # Current game state
 # * DEFAULT: Common game function
@@ -56,31 +57,7 @@ var dialog_player
 var inventory
 
 # These are settings that the player can affect and save/load later
-var settings : Dictionary
-
-# These are default settings
-var settings_default : Dictionary = {
-	# Text language
-	"text_lang": ProjectSettings.get_setting("escoria/main/text_lang"),
-	# Voice language
-	"voice_lang": ProjectSettings.get_setting("escoria/main/voice_lang"),
-	# Speech enabled
-	"speech_enabled": ProjectSettings.get_setting("escoria/sound/speech_enabled"),
-	# Master volume (max is 1.0)
-	"master_volume": ProjectSettings.get_setting("escoria/sound/master_volume"),
-	# Music volume (max is 1.0)
-	"music_volume": ProjectSettings.get_setting("escoria/sound/music_volume"),
-	# Sound effects volume (max is 1.0)
-	"sfx_volume": ProjectSettings.get_setting("escoria/sound/sfx_volume"),
-	# Voice volume (for speech only, max is 1.0)
-	"voice_volume": ProjectSettings.get_setting("escoria/sound/speech_volume"),
-	# Set fullscreen
-	"fullscreen": false,
-	# Allow dialog skipping
-	"skip_dialog": true,
-	# XXX: What is this? `achievements.gd` looks like iOS-only
-	"rate_shown": false,
-}
+var settings : ESCSaveSettings
 
 
 # The current state of the game
@@ -95,8 +72,8 @@ onready var main = $main
 # The escoria inputs manager
 onready var inputs_manager = $inputs_manager
 
-# Savegame management
-var save_data
+# Savegames and settings manager
+var save_manager: ESCSaveManager
 
 
 # Initialize various objects
@@ -113,13 +90,14 @@ func _init():
 	self.esc_compiler = ESCCompiler.new()
 	self.resource_cache = ESCResourceCache.new()
 	self.resource_cache.start()
-	self.save_data = ESCSaveDataResources.new()
+	self.save_manager = ESCSaveManager.new()
 
 
 # Load settings
 func _ready():
-	var settings = save_data.load_settings()
-	escoria.apply_settings(escoria.settings)
+	settings = ESCSaveSettings.new()
+	settings = save_manager.load_settings()
+	escoria._on_settings_loaded(escoria.settings)
 
 
 # Called by Main menu "start new game"
@@ -384,16 +362,12 @@ func _ev_left_click_on_item(obj, event, default_action = false):
 # #### Parameters
 #
 # * p_settings: Loaded settings
-func apply_settings(p_settings : Dictionary) -> void:
-	escoria.logger.info("******* settings loaded", p_settings)
+func _on_settings_loaded(p_settings : ESCSaveSettings) -> void:
+	escoria.logger.info("******* settings loaded")
 	if p_settings != null:
 		settings = p_settings
 	else:
-		settings = {}
-
-	for k in settings_default:
-		if !(k in settings):
-			settings[k] = settings_default[k]
+		settings = ESCSaveSettings.new()
 
 	# TODO Apply globally
 #	AudioServer.set_fx_global_volume_scale(settings.sfx_volume)
@@ -411,5 +385,4 @@ func apply_settings(p_settings : Dictionary) -> void:
 	)
 	TranslationServer.set_locale(settings.text_lang)
 #	music_volume_changed()
-
 

@@ -1,5 +1,5 @@
-# Saves and loads savegame files
-class_name ESCSaveDataResources
+# Saves and loads savegame and settings files
+class_name ESCSaveManager
 
 var SAVE_FOLDER: String
 const SAVE_NAME_TEMPLATE: String = "save_%03d.tres"
@@ -59,6 +59,7 @@ func save_game_exists(id: int) -> bool:
 # - p_savename: name of the savegame
 func save_game(id: int, p_savename : String):
 	var save_game := ESCSaveGame.new()
+	save_game.escoria_version = escoria.ESCORIA_VERSION
 	save_game.game_version = ProjectSettings.get_setting(
 		"escoria/main/game_version"
 	)
@@ -102,55 +103,55 @@ func load_game(id: int):
 			["Save file %s doesn't exist" % save_file_path])
 		return
 
-	var save_game: Resource = load(save_file_path)
+	var save_game: Resource = ResourceLoader.load(save_file_path)
 
 	var load_event = ESCEvent.new(":load")
 	var load_statements = []
 	
 	## GLOBALS
-	for k in save_game.data["globals"].keys():
+	for k in save_game.globals.keys():
 		load_statements.append(
 			ESCCommand.new("set_global %s \"%s\"\n" \
-				% [k, save_game.data["globals"][k]])
+				% [k, save_game.globals[k]])
 		)
 	
 	## ROOM
 	load_statements.append(
 		ESCCommand.new("change_scene %s true" \
-			% save_game.data["main"]["current_scene_filename"])
+			% save_game.main["current_scene_filename"])
 	)
 	
 	## OBJECTS
-	for object_global_id in save_game.data["objects"].keys():
-		if save_game.data["objects"][object_global_id].has("active"):
+	for object_global_id in save_game.objects.keys():
+		if save_game.objects[object_global_id].has("active"):
 			load_statements.append(ESCCommand.new("set_active %s %s" \
 				% [object_global_id, 
-				save_game.data["objects"][object_global_id]["active"]])
+				save_game.objects[object_global_id]["active"]])
 			)
 		
-		if save_game.data["objects"][object_global_id].has("interactive"):
+		if save_game.objects[object_global_id].has("interactive"):
 			load_statements.append(ESCCommand.new("set_interactive %s %s" \
 				% [object_global_id,
-				save_game.data["objects"][object_global_id]["interactive"]])
+				save_game.objects[object_global_id]["interactive"]])
 			)
 			
-		if save_game.data["objects"][object_global_id].has("state"):
+		if save_game.objects[object_global_id].has("state"):
 			load_statements.append(ESCCommand.new("set_state %s %s true" \
 				% [object_global_id,
-				save_game.data["objects"][object_global_id]["state"]])
+				save_game.objects[object_global_id]["state"]])
 			)
 			
-		if save_game.data["objects"][object_global_id].has("global_transform"):
+		if save_game.objects[object_global_id].has("global_transform"):
 			load_statements.append(ESCCommand.new("teleport_pos %s %s %s" \
 				% [object_global_id, 
-				save_game.data["objects"][object_global_id] \
+				save_game.objects[object_global_id] \
 					["global_transform"].origin.x,
-				save_game.data["objects"][object_global_id] \
+				save_game.objects[object_global_id] \
 					["global_transform"].origin.y])
 			)
 			load_statements.append(ESCCommand.new("set_angle %s %s" \
 				% [object_global_id, 
-				save_game.data["objects"][object_global_id]["last_deg"]])
+				save_game.objects[object_global_id]["last_deg"]])
 			)
 	
 	load_event.statements = load_statements
@@ -160,11 +161,18 @@ func load_game(id: int):
 # Save the game settings in the settings file.
 func save_settings():
 	var settings_res := ESCSaveSettings.new()
-	settings_res.game_version = ProjectSettings.get_setting(
-		"escoria/main/game_version"
-	)
-	settings_res.settings = escoria.settings
-	
+	settings_res.escoria_version = escoria.ESCORIA_VERSION
+	settings_res.text_lang = escoria.settings.text_lang
+	settings_res.voice_lang = escoria.settings.voice_lang
+	settings_res.speech_enabled = escoria.settings.speech_enabled
+	settings_res.master_volume = escoria.settings.master_volume
+	settings_res.music_volume = escoria.settings.music_volume
+	settings_res.sfx_volume = escoria.settings.sfx_volume
+	settings_res.voice_volume = escoria.settings.voice_volume
+	settings_res.fullscreen = escoria.settings.fullscreen
+	settings_res.skip_dialog = escoria.settings.skip_dialog
+	settings_res.rate_shown = escoria.settings.rate_shown
+
 	var directory: Directory = Directory.new()
 	if not directory.dir_exists(SETTINGS_FOLDER):
 		directory.make_dir_recursive(SETTINGS_FOLDER)
@@ -188,5 +196,5 @@ func load_settings():
 		save_settings()
 		return
 
-	var settings_file: Resource = load(save_settings_path)
-	escoria.apply_settings(settings_file.settings)
+	var settings_resource: Resource = load(save_settings_path)
+	escoria._on_settings_loaded(settings_resource)

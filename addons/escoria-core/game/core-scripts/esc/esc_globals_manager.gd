@@ -98,10 +98,10 @@ func set_global_wildcard(pattern: String, value) -> void:
 # Save the state of globals in the savegame.
 #
 # #### Parameters
-# - p_savegame: Resource of type ESCSaveGame that holds all data of the save
-func save_game(p_savegame : Resource) -> void:
-	p_savegame.data["globals"] = {}
+# - p_savegame: ESCSaveGame resource that holds all data of the save
+func save_game(p_savegame: ESCSaveGame) -> void:
+	p_savegame.globals = {}
 	for g in _globals:
 		if g in RESERVED_GLOBALS:
 			continue
-		p_savegame.data["globals"][g] = _globals[g]
+		p_savegame.globals[g] = _globals[g]

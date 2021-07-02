@@ -2,7 +2,6 @@
 tool
 extends EditorPlugin
 
-
 # Autoloads to instantiate
 const autoloads = {
 	"escoria": "res://addons/escoria-core/game/escoria.tscn",
@@ -91,6 +90,7 @@ func set_escoria_ui_settings():
 
 # Prepare the settings in the Escoria main category
 func set_escoria_main_settings():
+	
 	if !ProjectSettings.has_setting("escoria/main/game_version"):
 		ProjectSettings.set_setting("escoria/main/game_version", "")
 		var game_version_property_info = {
@@ -236,6 +236,14 @@ func set_escoria_sound_settings():
 			"hint_string": "0,1"
 		}
 		ProjectSettings.add_property_info(speech_data_property_info)
+	
+	if !ProjectSettings.has_setting("escoria/sound/speech_enabled"):
+		ProjectSettings.set_setting("escoria/sound/speech_enabled", 1)
+		var speech_enabled_property_info = {
+			"name": "escoria/sound/speech_enabled",
+			"type": TYPE_BOOL
+		}
+		ProjectSettings.add_property_info(speech_enabled_property_info)
 
 
 # Prepare the settings in the Escoria platform category and may need special

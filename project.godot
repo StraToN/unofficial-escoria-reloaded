@@ -239,15 +239,15 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/esc_room.gd"
 }, {
-"base": "Reference",
-"class": "ESCSaveDataResources",
-"language": "GDScript",
-"path": "res://addons/escoria-core/game/core-scripts/save_data/esc_save_data_resources.gd"
-}, {
 "base": "Resource",
 "class": "ESCSaveGame",
 "language": "GDScript",
 "path": "res://addons/escoria-core/game/core-scripts/save_data/esc_savegame.gd"
+}, {
+"base": "Reference",
+"class": "ESCSaveManager",
+"language": "GDScript",
+"path": "res://addons/escoria-core/game/core-scripts/save_data/esc_save_manager.gd"
 }, {
 "base": "Resource",
 "class": "ESCSaveSettings",
@@ -496,8 +496,8 @@ _global_script_class_icons={
 "ESCPlayer": "",
 "ESCResourceCache": "",
 "ESCRoom": "",
-"ESCSaveDataResources": "",
 "ESCSaveGame": "",
+"ESCSaveManager": "",
 "ESCSaveSettings": "",
 "ESCScheduledEvent": "",
 "ESCScript": "",
@@ -595,8 +595,10 @@ platform/skip_cache=false
 platform/skip_cache.mobile=true
 ui/items_autoregister_path="res://game/items/escitems/"
 main/game_version="0.1.0"
-main/savegames_path="user://saves/"
+main/savegames_path="res://saves/"
 main/settings_path="user://"
+main/escoria_version=""
+sound/speech_enabled=1
 
 [input]
 

@@ -8,7 +8,7 @@ func _ready():
 	refresh_savegames()
 
 func _on_slot_pressed(slot_id : int) -> void:
-	escoria.save_data.load_game(slot_id)
+	escoria.save_manager.load_game(slot_id)
 
 func _on_back_pressed():
 	emit_signal("back_button_pressed")
@@ -17,7 +17,7 @@ func refresh_savegames():
 	for slot in $ScrollContainer/slots.get_children():
 		$ScrollContainer/slots.remove_child(slot)
 	
-	var saves_list = escoria.save_data.get_saves_list()
+	var saves_list = escoria.save_manager.get_saves_list()
 	for i in saves_list.size():
 		var save_data = saves_list[i+1]
 		var new_slot = slot_ui_scene.instance()

@@ -33,5 +33,5 @@ func validate(arguments: Array):
 # Run the command
 func run(command_params: Array) -> int:
 	(escoria.object_manager.get_object(command_params[0]).node as ESCPlayer)\
-		.teleport(Vector2(int(command_params[1]), int(command_params[2])))
+		.teleport_to(Vector2(int(command_params[1]), int(command_params[2])))
 	return ESCExecution.RC_OK
