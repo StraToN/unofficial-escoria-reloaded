@@ -1,15 +1,22 @@
 # Saves and loads savegame and settings files
 class_name ESCSaveManager
 
-var SAVE_FOLDER: String
+# Variable containing the saves folder obtained from Project Settings
+var save_folder: String
+
+# Template for savegames filenames
 const SAVE_NAME_TEMPLATE: String = "save_%03d.tres"
 
-var SETTINGS_FOLDER: String
+# Variable containing the settings folder obtained from Project Settings
+var settings_folder: String
+
+# Template for settings filename
 const SETTINGS_TEMPLATE: String = "settings.tres"
 
+# Constructor of ESCSaveManager object.
 func _init():
-	SAVE_FOLDER = ProjectSettings.get_setting("escoria/main/savegames_path")
-	SETTINGS_FOLDER = ProjectSettings.get_setting("escoria/main/settings_path")
+	save_folder = ProjectSettings.get_setting("escoria/main/savegames_path")
+	settings_folder = ProjectSettings.get_setting("escoria/main/settings_path")
 
 # Return a list of savegames metadata (id, date, name and game version) 
 func get_saves_list() -> Dictionary:
@@ -18,11 +25,11 @@ func get_saves_list() -> Dictionary:
 	
 	var saves = {}
 	var dirsave = Directory.new()
-	if dirsave.open(SAVE_FOLDER) == OK:
+	if dirsave.open(save_folder) == OK:
 		dirsave.list_dir_begin(true, true)
 		var nextfile = dirsave.get_next()
 		while nextfile != "":
-			var save_path = SAVE_FOLDER.plus_file(nextfile)
+			var save_path = save_folder.plus_file(nextfile)
 			var file: File = File.new()
 			var save_game_res: Resource = load(save_path)
 			var save_game_data = {
@@ -31,7 +38,7 @@ func get_saves_list() -> Dictionary:
 				"game_version": save_game_res["game_version"],
 			}
 			
-			var id : int
+			var id: int
 			var matches = regex.search(nextfile)
 			if matches.strings.size() > 1:
 				id = int(matches.strings[1])
@@ -46,7 +53,7 @@ func get_saves_list() -> Dictionary:
 # ## Parameters
 # - id: integer suffix of the savegame file
 func save_game_exists(id: int) -> bool:
-	var save_file_path: String = SAVE_FOLDER.plus_file(SAVE_NAME_TEMPLATE % id)
+	var save_file_path: String = save_folder.plus_file(SAVE_NAME_TEMPLATE % id)
 	var file: File = File.new()
 	return file.file_exists(save_file_path)
 
@@ -57,7 +64,7 @@ func save_game_exists(id: int) -> bool:
 # ## Parameters
 # - id: integer suffix of the savegame file
 # - p_savename: name of the savegame
-func save_game(id: int, p_savename : String):
+func save_game(id: int, p_savename: String):
 	var save_game := ESCSaveGame.new()
 	save_game.escoria_version = escoria.ESCORIA_VERSION
 	save_game.game_version = ProjectSettings.get_setting(
@@ -80,10 +87,10 @@ func save_game(id: int, p_savename : String):
 	escoria.main.save_game(save_game)
 
 	var directory: Directory = Directory.new()
-	if not directory.dir_exists(SAVE_FOLDER):
-		directory.make_dir_recursive(SAVE_FOLDER)
+	if not directory.dir_exists(save_folder):
+		directory.make_dir_recursive(save_folder)
 
-	var save_path = SAVE_FOLDER.plus_file(SAVE_NAME_TEMPLATE % id)
+	var save_path = save_folder.plus_file(SAVE_NAME_TEMPLATE % id)
 	var error: int = ResourceSaver.save(save_path, save_game)
 	if error != OK:
 		escoria.logger.report_errors(
@@ -95,7 +102,7 @@ func save_game(id: int, p_savename : String):
 # ## Parameters
 # - id: integer suffix of the savegame file
 func load_game(id: int):
-	var save_file_path: String = SAVE_FOLDER.plus_file(SAVE_NAME_TEMPLATE % id)
+	var save_file_path: String = save_folder.plus_file(SAVE_NAME_TEMPLATE % id)
 	var file: File = File.new()
 	if not file.file_exists(save_file_path):
 		escoria.logger.report_errors(
@@ -174,10 +181,10 @@ func save_settings():
 	settings_res.rate_shown = escoria.settings.rate_shown
 
 	var directory: Directory = Directory.new()
-	if not directory.dir_exists(SETTINGS_FOLDER):
-		directory.make_dir_recursive(SETTINGS_FOLDER)
+	if not directory.dir_exists(settings_folder):
+		directory.make_dir_recursive(settings_folder)
 
-	var save_path = SETTINGS_FOLDER.plus_file(SETTINGS_TEMPLATE)
+	var save_path = settings_folder.plus_file(SETTINGS_TEMPLATE)
 	var error: int = ResourceSaver.save(save_path, settings_res)
 	if error != OK:
 		escoria.logger.report_errors(
@@ -186,7 +193,7 @@ func save_settings():
 
 # Load the game settings from the settings file
 func load_settings():
-	var save_settings_path: String = SETTINGS_FOLDER.plus_file(SETTINGS_TEMPLATE)
+	var save_settings_path: String = settings_folder.plus_file(SETTINGS_TEMPLATE)
 	var file: File = File.new()
 	if not file.file_exists(save_settings_path):
 		escoria.logger.report_warnings(

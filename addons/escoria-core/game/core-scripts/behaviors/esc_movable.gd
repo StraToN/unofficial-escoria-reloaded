@@ -32,16 +32,16 @@ var walk_context: ESCWalkContext = null
 var moved: bool
 
 # Angle degrees to the last position (TODO is that correct?)
-var last_deg : int
+var last_deg: int
 
 # Direction of the last position (TODO is that correct?)
-var last_dir : int
+var last_dir: int
 
 # Scale of the last position (TODO is that correct?)
-var last_scale : Vector2
+var last_scale: Vector2
 
 # TODO Isn't this actually the flip state of the current animation?
-var pose_scale : int
+var pose_scale: int
 
 
 var _orig_speed: float = 0.0
@@ -158,7 +158,7 @@ func _process(delta: float) -> void:
 # #### Parameters
 #
 # - target: Position2d or ESCItem to teleport to
-func teleport(target : Node, angle : Object = null) -> void:
+func teleport(target: Node, angle: Object = null) -> void:
 	if target is Position2D:
 		escoria.logger.info(
 			"Object %s teleported at position %s with angle" %
@@ -188,7 +188,7 @@ func teleport(target : Node, angle : Object = null) -> void:
 # #### Parameters
 #
 # - target: Vector2 target position to teleport to 
-func teleport_to(target : Vector2, angle : Object = null) -> void:
+func teleport_to(target: Vector2, angle: Object = null) -> void:
 	if typeof(target) == TYPE_VECTOR2 :
 		escoria.logger.info(
 			"Object %s teleported at position %s with angle" %
@@ -207,7 +207,7 @@ func teleport_to(target : Vector2, angle : Object = null) -> void:
 #
 # - pos: Position to walk to
 # - p_walk_context: Walk context to use
-func walk_to(pos : Vector2, p_walk_context: ESCWalkContext = null) -> void:
+func walk_to(pos: Vector2, p_walk_context: ESCWalkContext = null) -> void:
 	if not parent.terrain:
 		walk_stop(parent.get_position())
 		return
@@ -347,7 +347,7 @@ func update_terrain(on_event_finished_name = null) -> void:
 #
 # - angle: The rotation angle
 # - animations: The list of character animations
-func _get_dir(angle : float, animations) -> int:
+func _get_dir(angle: float, animations) -> int:
 	var deg = escoria.utils.get_deg_from_rad(angle)
 	return _get_dir_deg(deg, animations)
 
@@ -390,10 +390,10 @@ func _get_dir_deg(deg: int, animations: Script) -> int:
 # #### Parameters
 #
 # - angle: Angle to test
-# - interval : Array of size 2, containing the starting angle, and the size of
+# - interval: Array of size 2, containing the starting angle, and the size of
 #   interval
 #   eg: [90, 40] corresponds to angle between 90° and 130°
-func is_angle_in_interval(angle: float, interval : Array) -> bool:
+func is_angle_in_interval(angle: float, interval: Array) -> bool:
 	angle = wrapi(angle, 0, 360)
 	if angle == 0:
 		angle = 360
@@ -432,7 +432,7 @@ func is_angle_in_interval(angle: float, interval : Array) -> bool:
 # - immediate bool (currently unused, see TODO below)
 #	If true, direction is switched immediately. Else, successive animations are
 #	used so that the character turns to target angle.
-func set_angle(deg : int, immediate = true) -> void:
+func set_angle(deg: int, immediate = true) -> void:
 	if deg < 0 or deg > 360:
 		escoria.logger.report_errors(
 			"movable.gd:set_angle()",

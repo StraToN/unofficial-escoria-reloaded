@@ -10,7 +10,7 @@ func _ready():
 	refresh_savegames()
 
 
-func _on_slot_pressed(p_slot_n : int):
+func _on_slot_pressed(p_slot_n: int):
 	slot_pressed = p_slot_n
 	if escoria.save_manager.save_game_exists(p_slot_n):
 		# TODO Manage save override, ask for confirmation
@@ -49,7 +49,7 @@ func _on_back_pressed():
 	emit_signal("back_button_pressed")
 
 
-func _on_save_name_popup_savegame_name_ok(p_savename : String):
+func _on_save_name_popup_savegame_name_ok(p_savename: String):
 	escoria.save_manager.save_game(slot_pressed, p_savename)
 	refresh_savegames()
 	slot_pressed = null

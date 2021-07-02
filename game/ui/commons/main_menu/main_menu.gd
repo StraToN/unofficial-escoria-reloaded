@@ -25,7 +25,7 @@ func _on_continue_pressed():
 	pass
 
 
-func switch_language(lang : String):
+func switch_language(lang: String):
 	TranslationServer.set_locale(lang)
 
 

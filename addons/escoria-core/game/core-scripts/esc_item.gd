@@ -105,7 +105,7 @@ export(bool) var use_from_inventory_only = false
 
 # Scene based on ESCInventoryItem used in inventory for the object if it is 
 # picked up, that displays and handles the item
-export(PackedScene) var inventory_item_scene_file : PackedScene 
+export(PackedScene) var inventory_item_scene_file: PackedScene 
 
 # Color used for dialogs
 export(Color) var dialog_color = ColorN("white")
@@ -115,10 +115,10 @@ export(Color) var dialog_color = ColorN("white")
 export(bool) var dont_apply_terrain_scaling = false
 
 # Speed of this item ifmovable
-export(int) var speed : int = 300
+export(int) var speed: int = 300
 
 # Speed damp of this item if movable
-export(float) var v_speed_damp : float = 1.0
+export(float) var v_speed_damp: float = 1.0
 
 # Animations script (for walking, idling...)
 export(Script) var animations
@@ -224,9 +224,9 @@ func get_interact_position() -> Vector2:
 # - event: Triggered event
 # - _shape_idx: not used
 func manage_input(
-	_viewport : Viewport, 
-	event : InputEvent, 
-	_shape_idx : int
+	_viewport: Viewport, 
+	event: InputEvent, 
+	_shape_idx: int
 ) -> void:
 	if event is InputEventMouseButton:
 				
@@ -277,7 +277,7 @@ func element_exited(body):
 # #### Parameters
 #
 # - target: Target node to teleport to
-func teleport(target : Node) -> void:
+func teleport(target: Node) -> void:
 	_movable.teleport(target)
 
 
@@ -286,7 +286,7 @@ func teleport(target : Node) -> void:
 # #### Parameters
 #
 # - target: Vector2 position to teleport to
-func teleport_to(target : Vector2) -> void:
+func teleport_to(target: Vector2) -> void:
 	_movable.teleport_to(target)
 	
 
@@ -296,7 +296,7 @@ func teleport_to(target : Vector2) -> void:
 #
 # - pos: Position to walk to
 # - p_walk_context: Walk context to use
-func walk_to(pos : Vector2, p_walk_context: ESCWalkContext = null) -> void:
+func walk_to(pos: Vector2, p_walk_context: ESCWalkContext = null) -> void:
 	_movable.walk_to(pos, p_walk_context)
 
 
@@ -305,7 +305,7 @@ func walk_to(pos : Vector2, p_walk_context: ESCWalkContext = null) -> void:
 # #### Parameters
 #
 # - speed_value: Set the new speed
-func set_speed(speed_value : int) -> void:
+func set_speed(speed_value: int) -> void:
 	speed = speed_value
 	
 
@@ -319,7 +319,7 @@ func has_moved() -> bool:
 # #### Parameters
 #
 # Set the angle
-func set_angle(deg : int, immediate = true):
+func set_angle(deg: int, immediate = true):
 	_movable.set_angle(deg, immediate)
 	
 

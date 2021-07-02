@@ -106,7 +106,7 @@ func unregister_object(object: ESCObject) -> void:
 # #### Parameters
 #
 # - p_savegame: The savegame resource
-func save_game(p_savegame : ESCSaveGame) -> void:
+func save_game(p_savegame: ESCSaveGame) -> void:
 	p_savegame.objects = {}
 	for obj_global_id in objects:
 		if !objects[obj_global_id] is ESCObject:

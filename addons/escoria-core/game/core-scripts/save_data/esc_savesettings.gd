@@ -1,8 +1,6 @@
 # Resource holding game settings.
 extends Resource
-
 class_name ESCSaveSettings
-
 
 # Version of ESCORIA Framework
 export var escoria_version: String

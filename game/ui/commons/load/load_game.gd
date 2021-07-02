@@ -7,7 +7,7 @@ export(PackedScene) var slot_ui_scene
 func _ready():
 	refresh_savegames()
 
-func _on_slot_pressed(slot_id : int) -> void:
+func _on_slot_pressed(slot_id: int) -> void:
 	escoria.save_manager.load_game(slot_id)
 
 func _on_back_pressed():

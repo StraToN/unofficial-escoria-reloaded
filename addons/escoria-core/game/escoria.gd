@@ -1,6 +1,7 @@
-# The escorie main script
+# The escoria main script
 extends Node
 
+# Escoria version number
 const ESCORIA_VERSION = "0.1.0"
 
 # Current game state
@@ -57,7 +58,7 @@ var dialog_player
 var inventory
 
 # These are settings that the player can affect and save/load later
-var settings : ESCSaveSettings
+var settings: ESCSaveSettings
 
 
 # The current state of the game
@@ -124,7 +125,7 @@ func new_game():
 #
 # - action: type of the action to run
 # - params: Parameters for the action
-func do(action : String, params : Array = []) -> void:
+func do(action: String, params: Array = []) -> void:
 	if current_state == GAME_STATE.DEFAULT:
 		match action:
 			"walk":
@@ -147,7 +148,7 @@ func do(action : String, params : Array = []) -> void:
 				# Walk to Position2D.
 				if params[1] is Vector2:
 					var target_position = params[1]
-					var is_fast : bool = false
+					var is_fast: bool = false
 					if params.size() > 2 and params[2] == true:
 						is_fast = true
 					var walk_context = ESCWalkContext.new(
@@ -171,9 +172,9 @@ func do(action : String, params : Array = []) -> void:
 					
 					var object = self.object_manager.get_object(params[1])
 					if object:
-						var target_position : Vector2 = \
+						var target_position: Vector2 = \
 								object.node.interact_position
-						var is_fast : bool = false
+						var is_fast: bool = false
 						if params.size() > 2 and params[2] == true:
 							is_fast = true
 						var walk_context = ESCWalkContext.new(
@@ -187,7 +188,7 @@ func do(action : String, params : Array = []) -> void:
 			"item_left_click":
 				if params[0] is String:
 					self.logger.info(
-						"escoria.do() : item_left_click on item ", 
+						"escoria.do(): item_left_click on item ", 
 						[params[0]]
 					)
 					var item = self.object_manager.get_object(params[0])
@@ -196,7 +197,7 @@ func do(action : String, params : Array = []) -> void:
 			"item_right_click":
 				if params[0] is String:
 					self.logger.info(
-						"escoria.do() : item_right_click on item ", 
+						"escoria.do(): item_right_click on item ", 
 						[params[0]]
 					)
 					var item = self.object_manager.get_object(params[0])
@@ -206,7 +207,7 @@ func do(action : String, params : Array = []) -> void:
 				var trigger_id = params[0]
 				var object_id = params[1]
 				var trigger_in_verb = params[2]
-				self.logger.info("escoria.do() : trigger_in %s by %s" % [
+				self.logger.info("escoria.do(): trigger_in %s by %s" % [
 					trigger_id,
 					object_id
 				])
@@ -220,7 +221,7 @@ func do(action : String, params : Array = []) -> void:
 				var trigger_id = params[0]
 				var object_id = params[1]
 				var trigger_out_verb = params[2]
-				self.logger.info("escoria.do() : trigger_out %s by %s" % [
+				self.logger.info("escoria.do(): trigger_out %s by %s" % [
 					trigger_id,
 					object_id
 				])
@@ -275,7 +276,7 @@ func _ev_left_click_on_item(obj, event, default_action = false):
 	# Don't interact after player movement towards object 
 	# (because object is inactive for example)
 	var dont_interact = false
-	var destination_position : Vector2 = main.current_scene.player.\
+	var destination_position: Vector2 = main.current_scene.player.\
 			global_position
 	
 	# Create walk context 
@@ -362,7 +363,7 @@ func _ev_left_click_on_item(obj, event, default_action = false):
 # #### Parameters
 #
 # * p_settings: Loaded settings
-func _on_settings_loaded(p_settings : ESCSaveSettings) -> void:
+func _on_settings_loaded(p_settings: ESCSaveSettings) -> void:
 	escoria.logger.info("******* settings loaded")
 	if p_settings != null:
 		settings = p_settings

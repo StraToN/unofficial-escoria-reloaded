@@ -73,8 +73,11 @@ func _set_active(value: bool):
 
 
 # Return the data of the object to be inserted in a savegame file.
+#
+# **Returns**
+# A dictionary containing the data to be saved for this object. 
 func get_save_data() -> Dictionary:
-	var save_data : Dictionary = {} 
+	var save_data: Dictionary = {} 
 	save_data["active"] = self.active
 	save_data["interactive"] = self.interactive
 	save_data["state"] = self.state

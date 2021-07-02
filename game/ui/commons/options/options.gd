@@ -5,27 +5,33 @@ signal back_button_pressed
 onready var settings_changed = false
 onready var backup_settings
 
+
 func _ready():
 	initialize_options(escoria.settings)
+
 
 func show():
 	backup_settings = escoria.settings.duplicate()
 	initialize_options(backup_settings)
 	visible = true
 
+
 func initialize_options(p_settings):
 	$options/general_volume.value = p_settings["master_volume"]
 	$options/sound_volume.value = p_settings["sfx_volume"]
 	$options/music_volume.value = p_settings["music_volume"]
 
-func greyout_other_languages(except_lang : String) -> void:
+
+func greyout_other_languages(except_lang: String) -> void:
 	pass
 
-func _on_language_input(event : InputEvent, language : String):
+
+func _on_language_input(event: InputEvent, language: String):
 	if event.is_pressed():
 		TranslationServer.set_locale(language)
 		escoria.settings["text_lang"] = language
 		settings_changed = true
+
 
 func _on_sound_volume_changed(value):
 	escoria.settings["sfx_volume"] = value
